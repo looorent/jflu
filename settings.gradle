@@ -1,0 +1,5 @@
+include 'jflu-core'
+include 'jflu-producer-hibernate'
+include 'jflu-producer-rabbitmq'
+include 'jflu-producer-springmvc'
+include 'jflu-subscriber-rabbitmq'
