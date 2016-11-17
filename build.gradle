@@ -1,9 +1,11 @@
 allprojects {
-  group = "be.looorent"
-  version "0.1"
-
   apply plugin: "java"
   apply plugin: "idea"
+}
+
+subprojects {
+  group = "be.looorent"
+  version "0.1"
 
   repositories {
       mavenCentral()
@@ -17,22 +19,15 @@ allprojects {
   }
 }
 
-repositories {
-  mavenCentral()
-}
-
-
-configurations {
-  jar.enabled = false
-}
-
 project(":jflu-core") {
   dependencies {
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.8.4'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.4'
   }
 }
 
 project(":jflu-producer-hibernate") {
+  description = "JFlu Hibernate Interceptor to generate events from entities"
+
   dependencies {
     compile project(":jflu-core")
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.4.Final'
