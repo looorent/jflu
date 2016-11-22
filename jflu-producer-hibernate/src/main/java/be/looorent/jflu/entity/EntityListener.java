@@ -9,6 +9,7 @@ import org.hibernate.type.Type;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 /**
  * Must be registered as session-scoped.
@@ -17,10 +18,10 @@ import java.util.Collection;
 public class EntityListener extends EmptyInterceptor {
 
     private final Collection<Event> events;
-    private final EventPublisher publisher;
+    private final Supplier<EventPublisher> publisher;
     private final EntityEventFactory factory;
 
-    public EntityListener(EventPublisher publisher) {
+    public EntityListener(Supplier<EventPublisher> publisher) {
         if (publisher == null) {
             throw new IllegalArgumentException("publisher must not be null");
         }
@@ -33,7 +34,7 @@ public class EntityListener extends EmptyInterceptor {
     @Override
     public void afterTransactionCompletion(Transaction tx) {
         if (!tx.getRollbackOnly()) {
-            events.forEach(publisher::publish);
+            events.forEach(publisher.get()::publish);
         }
     }
 
