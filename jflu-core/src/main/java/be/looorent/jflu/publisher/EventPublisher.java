@@ -1,4 +1,6 @@
-package be.looorent.jflu;
+package be.looorent.jflu.publisher;
+
+import be.looorent.jflu.Event;
 
 import java.util.Properties;
 
@@ -9,6 +11,6 @@ public interface EventPublisher {
 
     void initialize(Properties properties);
 
-    void publish(Event event);
+    void publish(Event event) throws PublishingException;
 
 }

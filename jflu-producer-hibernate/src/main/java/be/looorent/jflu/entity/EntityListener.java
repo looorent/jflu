@@ -1,7 +1,7 @@
 package be.looorent.jflu.entity;
 
 import be.looorent.jflu.Event;
-import be.looorent.jflu.EventPublisher;
+import be.looorent.jflu.publisher.EventPublisher;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;

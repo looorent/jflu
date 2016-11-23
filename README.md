@@ -63,9 +63,20 @@ class FluRequestInterceptor extends WebMvcConfigurerAdapter {
 
 ## jflu-producer-rabbitmq
 
-This JAR defines an `EventPublisher` that work with RabbitMQ.
+This JAR defines an `EventPublisher` that work with RabbitMQ: `RabbitMQEventPublisher`.
+
+This implementation is based on the RabbitMQ Topic model.
+
+To initialize an instance of `RabbitMQEventPublisher`, several properties must be provided:
+* `rabbitmq.username`
+* `rabbitmq.password`
+* `rabbitmq.virtualHost`
+* `rabbitmq.host`
+* `rabbitmq.port`
+* `rabbitmq.exchangeName`
 
 ## jflu-subscriber-rabbitmq
 
 This JAR defines consumers and projectors to work with RabbitMQ.
+
 

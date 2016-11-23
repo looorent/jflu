@@ -37,6 +37,7 @@ project(":jflu-producer-hibernate") {
 project(":jflu-producer-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
+    compile group: 'com.rabbitmq', name: 'amqp-client', version: '3.6.5'
   }
 }
 
@@ -52,5 +53,6 @@ project(":jflu-producer-springmvc") {
 project(":jflu-subscriber-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
+
   }
 }
