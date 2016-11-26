@@ -1,6 +1,10 @@
 package be.looorent.jflu;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
@@ -10,7 +14,9 @@ public class Event {
     private final EventMetadata metadata;
     private final EventData data;
 
-    public Event(EventMetadata metadata, EventData data) {
+    @JsonCreator
+    public Event(@JsonProperty("metadata") EventMetadata metadata,
+                 @JsonProperty("data") EventData data) {
         this.metadata = metadata;
         this.data = data;
     }
@@ -40,5 +46,9 @@ public class Event {
 
     public EventData getData() {
         return data;
+    }
+
+    public UUID getId() {
+        return metadata.getId();
     }
 }

@@ -2,9 +2,12 @@ package be.looorent.jflu.entity;
 
 import be.looorent.jflu.Event;
 import be.looorent.jflu.publisher.EventPublisher;
+import be.looorent.jflu.publisher.PublishingException;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,10 +15,13 @@ import java.util.Collection;
 import java.util.function.Supplier;
 
 /**
+ * Produces events whenever an entity is subject to any CRUD operation.
  * Must be registered as session-scoped.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class EntityListener extends EmptyInterceptor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(EntityListener.class);
 
     private final Collection<Event> events;
     private final Supplier<EventPublisher> publisher;
@@ -34,7 +40,15 @@ public class EntityListener extends EmptyInterceptor {
     @Override
     public void afterTransactionCompletion(Transaction tx) {
         if (!tx.getRollbackOnly()) {
-            events.forEach(publisher.get()::publish);
+            EventPublisher publisher = this.publisher.get();
+            try {
+                for (Event event : events) {
+                    publisher.publish(event);
+                }
+            } catch (PublishingException e) {
+                LOG.error("An error occurred when publishing an event.", e);
+                throw new RuntimeException(e);
+            }
         }
     }
 

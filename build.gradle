@@ -1,9 +1,14 @@
-allprojects {
-  apply plugin: "java"
-  apply plugin: "idea"
+apply plugin: "java"
+apply plugin: "idea"
+
+ext {
+  junitVersion = "4.12"
+  slf4jVersion = "1.7.21"
+  jacksonVersion = "2.8.5"
 }
 
 subprojects {
+
   group = "be.looorent"
   version "0.1"
 
@@ -13,15 +18,16 @@ subprojects {
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
-
-  dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-  }
 }
 
 project(":jflu-core") {
   dependencies {
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.8.4'
+    compile group: 'com.fasterxml.jackson.core',     name: 'jackson-annotations',     version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
+
+    testCompile group: 'junit',                    name: 'junit',        version: junitVersion
+    testCompile group: 'org.codehaus.groovy',      name: 'groovy-all',   version: '2.4.7'
+    testCompile group: 'org.spockframework',       name: 'spock-core',   version: '1.0-groovy-2.4'
   }
 }
 
@@ -31,6 +37,7 @@ project(":jflu-producer-hibernate") {
   dependencies {
     compile project(":jflu-core")
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.4.Final'
+    compile group: 'org.slf4j',     name: 'slf4j-api',      version: slf4jVersion
   }
 }
 
@@ -38,6 +45,11 @@ project(":jflu-producer-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
     compile group: 'com.rabbitmq', name: 'amqp-client', version: '3.6.5'
+    compile group: 'org.slf4j',    name: 'slf4j-api',  version: slf4jVersion
+
+    testCompile group: 'junit',                    name: 'junit',        version: junitVersion
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.16.1'
+
   }
 }
 

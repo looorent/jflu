@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "id": "0d5ce258-1314-45d9-8ace-ce43d42255cc",
+    "name": "controllerName",
+    "eventEmitter": "sleew-backend",
+    "timestamp": {
+      "dayOfYear": 331,
+      "dayOfWeek": "SATURDAY",
+      "hour": 15,
+      "minute": 35,
+      "second": 46,
+      "nano": 757000000,
+      "year": 2016,
+      "month": "NOVEMBER",
+      "monthValue": 11,
+      "dayOfMonth": 26,
+      "chronology": {
+        "calendarType": "iso8601",
+        "id": "ISO"
+      }
+    },
+    "kind": "entity_changed",
+    "status": "new"
+  },
+  "data": {
+    "type": "request",
+    "requestId": "requestId",
+    "controllerName": "controllerName",
+    "actionName": "actionName",
+    "path": "172.18.0.3",
+    "responseCode": 200,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36",
+    "duration": 0,
+    "parameters": {}
+  },
+  "id": "0d5ce258-1314-45d9-8ace-ce43d42255cc"
+}

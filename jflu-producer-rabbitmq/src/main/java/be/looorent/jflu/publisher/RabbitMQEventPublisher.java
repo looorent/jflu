@@ -1,5 +1,6 @@
 package be.looorent.jflu.publisher;
 
+import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.EventMetadata;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +12,10 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static be.looorent.jflu.publisher.RabbitMQPropertyName.*;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -18,9 +23,11 @@ import static java.util.Optional.ofNullable;
  */
 public class RabbitMQEventPublisher implements EventPublisher, AutoCloseable {
 
+    private static final Logger LOG = LoggerFactory.getLogger(RabbitMQEventPublisher.class);
+
     private static final String TOPIC_EXCHANGE_TYPE = "topic";
     private static final String DEFAULT_EXCHANGE_NAME = "jflu";
-    public static final String ROUTING_KEY_SEPARATOR = ".";
+    private static final String ROUTING_KEY_SEPARATOR = ".";
 
     private Connection connection;
     private Channel channel;
@@ -29,25 +36,32 @@ public class RabbitMQEventPublisher implements EventPublisher, AutoCloseable {
 
     @Override
     public void initialize(Properties properties) {
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setUsername(properties.getProperty("rabbitmq.username"));
-        factory.setPassword(properties.getProperty("rabbitmq.password"));
-        factory.setVirtualHost(properties.getProperty("rabbitmq.virtualHost"));
-        factory.setHost(properties.getProperty("rabbitmq.host"));
-        factory.setPort(Integer.parseInt(properties.getProperty("rabbitmq.port")));
         try {
-            connection = factory.newConnection();
+            jsonMapper = createJsonMapper();
+            connection = createFactory(properties).newConnection();
             channel = connection.createChannel();
-            exchangeName = ofNullable(properties.getProperty("rabbitmq.exchangeName")).orElse(DEFAULT_EXCHANGE_NAME);
+            exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
             channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE);
         } catch (IOException | TimeoutException e) {
             throw new RuntimeException(e);
         }
     }
 
+    private ConnectionFactory createFactory(Properties properties) {
+        LOG.debug("Creating RabbitMQ connection factory with properties: {}", properties);
+        ConnectionFactory factory = new ConnectionFactory();
+        factory.setUsername(USERNAME.readFrom(properties));
+        factory.setPassword(PASSWORD.readFrom(properties));
+        factory.setVirtualHost(VIRTUAL_HOST.readFrom(properties));
+        factory.setHost(HOST.readFrom(properties));
+        factory.setPort(Integer.parseInt(PORT.readFrom(properties)));
+        return factory;
+    }
+
     @Override
     public void publish(Event event) throws PublishingException {
         String routingKey = createRoutingKeyFrom(event);
+        LOG.debug("Publishing event {} with routing key : {}", event.getId(), routingKey);
         try {
             channel.basicPublish(exchangeName,
                     routingKey,
@@ -64,7 +78,11 @@ public class RabbitMQEventPublisher implements EventPublisher, AutoCloseable {
         connection.close();
     }
 
-    private String createRoutingKeyFrom(Event event) {
+    protected ObjectMapper createJsonMapper() {
+        return Configuration.getInstance().getDefaultJsonMapper();
+    }
+
+    protected String createRoutingKeyFrom(Event event) {
         StringBuilder builder = new StringBuilder();
         EventMetadata metadata = event.getMetadata();
         builder.append(metadata.getStatus().name().toLowerCase());

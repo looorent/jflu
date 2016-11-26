@@ -1,5 +1,8 @@
 package be.looorent.jflu;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,12 +18,13 @@ public class EventMetadata {
     private final EventKind kind;
     private final EventStatus status;
 
-    public EventMetadata(UUID id,
-                         String name,
-                         String eventEmitter,
-                         LocalDateTime timestamp,
-                         EventKind kind,
-                         EventStatus status) {
+    @JsonCreator
+    public EventMetadata(@JsonProperty("id") UUID id,
+                         @JsonProperty("name") String name,
+                         @JsonProperty("eventEmitter") String eventEmitter,
+                         @JsonProperty("timestamp") LocalDateTime timestamp,
+                         @JsonProperty("kind") EventKind kind,
+                         @JsonProperty("status") EventStatus status) {
         this.id = id;
         this.name = name;
         this.eventEmitter = eventEmitter;
