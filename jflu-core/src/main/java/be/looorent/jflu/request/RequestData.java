@@ -4,31 +4,33 @@ import be.looorent.jflu.EventData;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class RequestData implements EventData {
 
-    private final String requestId;
+    private final UUID requestId;
     private final String controllerName;
     private final String actionName;
     private final String path;
     private final int responseCode;
     private final String userAgent;
     private final int duration;
-    private final Map<String, String[]> parameters;
+    private final Map<String, List<String>> parameters;
 
     @JsonCreator
-    public RequestData(@JsonProperty("requestId") String requestId,
+    public RequestData(@JsonProperty("requestId") UUID requestId,
                        @JsonProperty("controllerName") String controllerName,
                        @JsonProperty("actionName") String actionName,
                        @JsonProperty("path") String path,
                        @JsonProperty("responseCode") int responseCode,
                        @JsonProperty("userAgent") String userAgent,
                        @JsonProperty("duration") int duration,
-                       @JsonProperty("parameters") Map<String, String[]> parameters) {
+                       @JsonProperty("parameters") Map<String, List<String>> parameters) {
         this.requestId = requestId;
         this.controllerName = controllerName;
         this.actionName = actionName;
@@ -39,7 +41,7 @@ public class RequestData implements EventData {
         this.parameters = parameters;
     }
 
-    public String getRequestId() {
+    public UUID getRequestId() {
         return requestId;
     }
 
@@ -67,7 +69,7 @@ public class RequestData implements EventData {
         return duration;
     }
 
-    public Map<String, String[]> getParameters() {
+    public Map<String, List<String>> getParameters() {
         return parameters;
     }
 }

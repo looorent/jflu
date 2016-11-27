@@ -4,6 +4,7 @@ import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.EventMetadata;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,14 +17,14 @@ import static java.time.LocalDateTime.now;
  */
 public class RequestEventFactory {
 
-    public Event createEvent(String requestId,
+    public Event createEvent(UUID requestId,
                              String controllerName,
                              String actionName,
                              String path,
                              int responseCode,
                              String userAgent,
                              int duration,
-                             Map<String, String[]> parameters) {
+                             Map<String, List<String>> parameters) {
         return new Event(createMetadata(controllerName),
                 new RequestData(requestId,
                     controllerName,
