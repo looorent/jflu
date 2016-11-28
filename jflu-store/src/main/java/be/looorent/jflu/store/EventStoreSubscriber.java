@@ -6,7 +6,6 @@ import be.looorent.jflu.subscriber.EventMapping;
 import be.looorent.jflu.subscriber.EventSubscriber;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.postgresql.util.PGTimestamp;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +14,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.createDatabaseConnection;
 import static be.looorent.jflu.subscriber.EventMappingStatus.NEW;

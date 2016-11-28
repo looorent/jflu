@@ -34,7 +34,7 @@ public class EventStore {
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(
                     new JdbcConnection(connection)
             );
-            Liquibase liquibase = new Liquibase("db/changelog.xml", new FileSystemResourceAccessor(), database);
+            Liquibase liquibase = new Liquibase("/db/changelog.xml", new FileSystemResourceAccessor(), database);
             liquibase.update("");
         }
     }
