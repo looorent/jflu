@@ -1,6 +1,3 @@
-apply plugin: "java"
-apply plugin: "idea"
-
 ext {
   junitVersion = "4.12"
   slf4jVersion = "1.7.21"
@@ -9,6 +6,8 @@ ext {
 }
 
 subprojects {
+  apply plugin: "java"
+  apply plugin: "idea"
 
   group = "be.looorent"
   version "0.1"
