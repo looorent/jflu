@@ -7,14 +7,21 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="1-create-event" author="lorent">
-        <createTable tableName="event">
-            <column name="id" type="int">
+        <createSequence sequenceName="seq_events" />
+
+        <createTable tableName="events">
+            <column name="id" type="bigint" defaultValueSequenceNext="seq_events">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(50)">
+            <column name="uuid" type="uuid">
                 <constraints nullable="false"/>
             </column>
-            <column name="active" type="boolean" defaultValueBoolean="true"/>
+            <column name="emitter" type="varchar(255)" />
+            <column name="name" type="varchar(255)" />
+            <column name="kind" type="varchar(255)" />
+            <column name="timestamp" type="timestamp" />
+            <column name="stored_at" type="timestamp" />
+            <column name="data" type="jsonb" />
         </createTable>
     </changeSet>
 

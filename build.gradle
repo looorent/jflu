@@ -79,7 +79,8 @@ project(":jflu-store") {
   dependencies {
     compile project(":jflu-core")
     compile project(":jflu-subscriber-rabbitmq")
-    compile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
+    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.5.3'
+    compile group: 'org.postgresql', name: 'postgresql',     version: '9.4.1212'
 
   }
 }

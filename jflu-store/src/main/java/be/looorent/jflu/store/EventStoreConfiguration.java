@@ -5,4 +5,7 @@ package be.looorent.jflu.store;
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class EventStoreConfiguration {
+
+
+
 }
