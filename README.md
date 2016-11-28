@@ -119,3 +119,9 @@ where:
 * `event_store` contains your `Dockerfile`
 * `db` is a PostgreSQL service
 * `rabbitmq` is a RabbitMQ service
+
+### TODO
+
+* make consumer work
+* do not use exclusive queue
+* refactor code to make readable
