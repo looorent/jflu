@@ -11,7 +11,7 @@ import java.io.IOException;
 public class RabbitMQSubscriptionRepository extends SubscriptionRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMQSubscriptionRepository.class);
-    private static final String ROUTING_KEY_SEPARATOR = "*";
+    private static final String ROUTING_KEY_SEPARATOR = ".";
 
     private final RabbitMQConfiguration configuration;
 

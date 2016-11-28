@@ -144,4 +144,14 @@ public class SubscriptionQuery {
     public int hashCode() {
         return Objects.hash(emitter, kind, name, status);
     }
+
+    @Override
+    public String toString() {
+        return "SubscriptionQuery{" +
+                "emitter='" + emitter + '\'' +
+                ", kind=" + kind +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

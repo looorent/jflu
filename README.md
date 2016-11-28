@@ -75,4 +75,47 @@ To initialize an instance of `RabbitMQEventPublisher`, several properties must b
 
 This JAR defines consumers and projectors to work with RabbitMQ.
 
+## jflu-store
 
+Naïve implementation for a JVM event-store that uses `jflu-subscriber-rabbitmq` and PostgreSQL. Listens for `new` (where `status=new`) events and store them into a database.
+
+For instance, this project can be deployed in a Docker container:
+```
+FROM cogniteev/gradle
+
+RUN apt-get update && \
+  apt-get install -y git && \
+  git clone https://github.com/looorent/jflu.git
+
+WORKDIR /data/jflu
+
+CMD ["gradle", "jflu-store:run"]
+```
+
+This container must depend on RabbitMQ and PostgreSQL. For example, using `docker-compose`:
+
+```
+  event-store:
+    build: event_store
+    container_name: event-store
+    env:
+      - DATABASE_HOST: <xxx>
+      - DATABASE_NAME: <xxx> 
+      - DATABASE_USERNAME: <xxx>
+      - DATABASE_PORT: <xxx>
+      - DATABASE_PASSWORD: <xxx>
+      - RABBITMQ_USERNAME: <xxx>
+      - RABBITMQ_PASSWORD: <xxx>
+      - RABBITMQ_HOST: <xxx>
+      - RABBITMQ_PORT: <xxx>
+      - RABBITMQ_VIRTUALHOST: <xxx>
+      - RABBITMQ_EXCHANGENAME: <xxx>
+      - RABBITMQ_QUEUENAME: <xxx>
+    links:
+      - db
+      - rabbitmq
+```
+where: 
+* `event_store` contains your `Dockerfile`
+* `db` is a PostgreSQL service
+* `rabbitmq` is a RabbitMQ service
