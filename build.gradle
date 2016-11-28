@@ -73,6 +73,9 @@ project(":jflu-subscriber-rabbitmq") {
 }
 
 project(":jflu-store") {
+  apply plugin: 'application'
+  mainClassName = "be.looorent.jflu.store.EventStore"
+
   dependencies {
     compile project(":jflu-core")
     compile project(":jflu-subscriber-rabbitmq")
