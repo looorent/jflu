@@ -79,8 +79,12 @@ project(":jflu-store") {
   dependencies {
     compile project(":jflu-core")
     compile project(":jflu-subscriber-rabbitmq")
-    compile group: 'org.liquibase',  name: 'liquibase-core', version: '3.5.3'
-    compile group: 'org.postgresql', name: 'postgresql',     version: '9.4.1212'
+    compile group: 'org.liquibase',  name: 'liquibase-core',  version: '3.5.3'
+    compile group: 'org.postgresql', name: 'postgresql',      version: '9.4.1212'
+    compile group: 'org.slf4j',      name: 'slf4j-api',       version: slf4jVersion
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+    compile group: 'ch.qos.logback', name: 'logback-core',    version: '1.1.7'
+
 
   }
 }
