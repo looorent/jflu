@@ -3,6 +3,7 @@ package be.looorent.jflu;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -50,5 +51,26 @@ public class Event {
 
     public UUID getId() {
         return metadata.getId();
+    }
+
+
+    public String getName() {
+        return metadata.getName();
+    }
+
+    public String getEventEmitter() {
+        return metadata.getEventEmitter();
+    }
+
+    public LocalDateTime getTimestamp() {
+        return metadata.getTimestamp();
+    }
+
+    public EventKind getKind() {
+        return metadata.getKind();
+    }
+
+    public EventStatus getStatus() {
+        return metadata.getStatus();
     }
 }

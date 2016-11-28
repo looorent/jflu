@@ -14,15 +14,16 @@ import static java.util.UUID.randomUUID;
 public class Subscription {
 
     private final UUID id;
-
+    private final String name;
     private final SubscriptionQuery query;
-
     private final Consumer<Event> projector;
 
     public Subscription(SubscriptionQuery query,
+                        String name,
                         Consumer<Event> projector) {
         this.id = randomUUID();
         this.query = query;
+        this.name = name;
         this.projector = projector;
     }
 
@@ -43,5 +44,21 @@ public class Subscription {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public SubscriptionQuery getQuery() {
+        return query;
+    }
+
+    public Consumer<Event> getProjector() {
+        return projector;
+    }
+
+    public String getName() {
+        return name;
     }
 }

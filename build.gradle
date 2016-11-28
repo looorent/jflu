@@ -5,6 +5,7 @@ ext {
   junitVersion = "4.12"
   slf4jVersion = "1.7.21"
   jacksonVersion = "2.8.5"
+  rabbitmqVersion = "3.6.5"
 }
 
 subprojects {
@@ -24,10 +25,13 @@ project(":jflu-core") {
   dependencies {
     compile group: 'com.fasterxml.jackson.core',     name: 'jackson-annotations',     version: jacksonVersion
     compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
+    compile group: 'org.reflections',                name: 'reflections',             version: '0.9.10'
+    compile group: 'org.slf4j',                      name: 'slf4j-api',               version: slf4jVersion
 
     testCompile group: 'junit',                    name: 'junit',        version: junitVersion
     testCompile group: 'org.codehaus.groovy',      name: 'groovy-all',   version: '2.4.7'
     testCompile group: 'org.spockframework',       name: 'spock-core',   version: '1.0-groovy-2.4'
+
   }
 }
 
@@ -44,8 +48,8 @@ project(":jflu-producer-hibernate") {
 project(":jflu-producer-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
-    compile group: 'com.rabbitmq', name: 'amqp-client', version: '3.6.5'
-    compile group: 'org.slf4j',    name: 'slf4j-api',  version: slf4jVersion
+    compile group: 'com.rabbitmq', name: 'amqp-client', version: rabbitmqVersion
+    compile group: 'org.slf4j',    name: 'slf4j-api',   version: slf4jVersion
 
     testCompile group: 'junit',                    name: 'junit',        version: junitVersion
     testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.16.1'
@@ -65,6 +69,15 @@ project(":jflu-producer-springmvc") {
 project(":jflu-subscriber-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
+    compile group: 'com.rabbitmq',  name: 'amqp-client',    version: rabbitmqVersion
+  }
+}
+
+project(":jflu-store") {
+  dependencies {
+    compile project(":jflu-core")
+    compile project(":jflu-subscriber-rabbitmq")
+    compile group: 'org.liquibase', name: 'liquibase-core', version: '3.5.3'
 
   }
 }

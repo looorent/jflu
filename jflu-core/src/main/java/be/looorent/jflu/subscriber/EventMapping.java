@@ -5,8 +5,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import static be.looorent.jflu.subscriber.EventMappingStatus.ALL;
-
 /**
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
@@ -14,11 +12,18 @@ import static be.looorent.jflu.subscriber.EventMappingStatus.ALL;
 @Target(ElementType.METHOD)
 public @interface EventMapping {
 
-    String emitter() default "*";
 
-    String kind() default "*";
+    /**
+     * "" means ALL
+     */
+    String emitter() default "";
 
-    String name() default "*";
+    EventMappingKind kind() default EventMappingKind.ALL;
 
-    EventMappingStatus status() default ALL;
+    /**
+     * "" means ALL
+     */
+    String name() default "";
+
+    EventMappingStatus status() default EventMappingStatus.ALL;
 }
