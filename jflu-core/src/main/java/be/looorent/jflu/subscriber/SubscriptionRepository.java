@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public abstract class SubscriptionRepository {
+public class SubscriptionRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionRepository.class);
 

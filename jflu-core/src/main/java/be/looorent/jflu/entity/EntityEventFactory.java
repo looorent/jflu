@@ -6,7 +6,7 @@ import be.looorent.jflu.EventMetadata;
 
 import java.util.UUID;
 
-import static be.looorent.jflu.EventKind.ENTITY_CHANGED;
+import static be.looorent.jflu.EventKind.ENTITY_CHANGE;
 import static be.looorent.jflu.EventStatus.NEW;
 import static be.looorent.jflu.entity.EntityActionName.CREATE;
 import static be.looorent.jflu.entity.EntityActionName.DESTROY;
@@ -40,7 +40,7 @@ public class EntityEventFactory {
                 actionName.name().toLowerCase() + " " + typeName,
                 Configuration.getInstance().getEmitter(),
                 now(),
-                ENTITY_CHANGED,
+                ENTITY_CHANGE,
                 NEW);
     }
 }

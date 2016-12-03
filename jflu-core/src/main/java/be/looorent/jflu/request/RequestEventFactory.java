@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static be.looorent.jflu.EventKind.ENTITY_CHANGED;
+import static be.looorent.jflu.EventKind.ENTITY_CHANGE;
 import static be.looorent.jflu.EventStatus.NEW;
 import static java.time.LocalDateTime.now;
 
@@ -41,7 +41,7 @@ public class RequestEventFactory {
                 controllerName,
                 Configuration.getInstance().getEmitter(),
                 now(),
-                ENTITY_CHANGED,
+                ENTITY_CHANGE,
                 NEW);
     }
 }

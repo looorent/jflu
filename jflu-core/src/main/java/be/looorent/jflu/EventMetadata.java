@@ -13,7 +13,7 @@ public class EventMetadata {
 
     private final UUID id;
     private final String name;
-    private final String eventEmitter;
+    private final String emitter;
     private final LocalDateTime timestamp;
     private final EventKind kind;
     private final EventStatus status;
@@ -21,13 +21,13 @@ public class EventMetadata {
     @JsonCreator
     public EventMetadata(@JsonProperty("id") UUID id,
                          @JsonProperty("name") String name,
-                         @JsonProperty("eventEmitter") String eventEmitter,
+                         @JsonProperty("emitter") String emitter,
                          @JsonProperty("timestamp") LocalDateTime timestamp,
                          @JsonProperty("kind") EventKind kind,
                          @JsonProperty("status") EventStatus status) {
         this.id = id;
         this.name = name;
-        this.eventEmitter = eventEmitter;
+        this.emitter = emitter;
         this.timestamp = timestamp;
         this.kind = kind;
         this.status = status;
@@ -41,8 +41,8 @@ public class EventMetadata {
         return name;
     }
 
-    public String getEventEmitter() {
-        return eventEmitter;
+    public String getEmitter() {
+        return emitter;
     }
 
     public LocalDateTime getTimestamp() {

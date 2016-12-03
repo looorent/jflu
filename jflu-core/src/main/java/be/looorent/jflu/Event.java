@@ -59,7 +59,7 @@ public class Event {
     }
 
     public String getEventEmitter() {
-        return metadata.getEventEmitter();
+        return metadata.getEmitter();
     }
 
     public LocalDateTime getTimestamp() {

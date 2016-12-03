@@ -7,10 +7,12 @@ import be.looorent.jflu.EventMetadata
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
-import static be.looorent.jflu.EventKind.ENTITY_CHANGED
+import static be.looorent.jflu.EventKind.ENTITY_CHANGE
+import static be.looorent.jflu.EventKind.REQUEST
 import static be.looorent.jflu.EventStatus.NEW
 import static java.time.LocalDateTime.of
 import static java.time.Month.APRIL
+import static java.util.UUID.randomUUID
 
 /**
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
@@ -30,14 +32,14 @@ class RequestEventSerializationTest extends Specification {
 
         metadata.id.toString() == "0d5ce258-1314-45d9-8ace-ce43d42255cc"
         metadata.name == "create pouetpouet"
-        metadata.eventEmitter == "jflu"
+        metadata.emitter == "jflu"
         metadata.timestamp == of(2016, APRIL, 23, 18, 25, 43)
-        metadata.kind == ENTITY_CHANGED
+        metadata.kind == REQUEST
         metadata.status == NEW
 
         data instanceof RequestData
         RequestData request = (RequestData) data
-        request.requestId == "requestId"
+        request.requestId == UUID.fromString("2f0a07e2-70e5-44e6-9875-6fc46a3ab887")
         request.controllerName == "pouetpouet"
         request.actionName == "create"
         request.path == "http://localhost:8080/pouetpouet"
@@ -51,7 +53,7 @@ class RequestEventSerializationTest extends Specification {
 
     def "json mapper is bi-directional"() {
         given: "a typical event"
-        Event event = new RequestEventFactory().createEvent("requestId",
+        Event event = new RequestEventFactory().createEvent(randomUUID(),
             "controllerName",
             "actionName",
             "path",
@@ -76,7 +78,7 @@ class RequestEventSerializationTest extends Specification {
         RequestData request = (RequestData) event.data
 
         parsedMetadata.id           == metadata.id
-        parsedMetadata.eventEmitter == metadata.eventEmitter
+        parsedMetadata.emitter == metadata.emitter
         parsedMetadata.kind         == metadata.kind
         parsedMetadata.name         == metadata.name
         parsedMetadata.status       == metadata.status

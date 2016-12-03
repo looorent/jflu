@@ -77,7 +77,13 @@ This JAR defines consumers and projectors to work with RabbitMQ.
 
 ## jflu-store
 
-Naïve implementation for a JVM event-store that uses `jflu-subscriber-rabbitmq` and PostgreSQL. Listens for `new` (where `status=new`) events and store them into a database.
+Naïve implementation for a JVM event-store that uses PostgreSQL. 
+Listens for `new` (where `status=new`) events and store them into a database.
+
+This implementation is Broker-agnostic. Therefore, you must provide:
+* An implementation of `BrokerSubscriptionConfiguration`. _e.g._ by adding `jflu-subscriber-rabbitmq` as a JAR dependency (which is already included with `jflu-store` by default)
+* `BROKER_SUBSCRIPTION_IMPLEMENTATION`: an environment variable that specifies which subclass of `BrokerSubscriptionConfiguration` to use. _e.g._ `be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration`
+
 
 For instance, this project can be deployed in a Docker container:
 ```
@@ -92,7 +98,7 @@ WORKDIR /data/jflu
 CMD ["gradle", "jflu-store:run"]
 ```
 
-This container must depend on RabbitMQ and PostgreSQL. For example, using `docker-compose`:
+This container must depend on a broker and PostgreSQL. For example, using `docker-compose`:
 
 ```
   event-store:
@@ -111,6 +117,7 @@ This container must depend on RabbitMQ and PostgreSQL. For example, using `docke
       - RABBITMQ_VIRTUALHOST: <xxx>
       - RABBITMQ_EXCHANGENAME: <xxx>
       - RABBITMQ_QUEUENAME: <xxx>
+      - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
     links:
       - db
       - rabbitmq
@@ -118,7 +125,7 @@ This container must depend on RabbitMQ and PostgreSQL. For example, using `docke
 where: 
 * `event_store` contains your `Dockerfile`
 * `db` is a PostgreSQL service
-* `rabbitmq` is a RabbitMQ service
+* `rabbitmq` is a RabbitMQ service (you can use any broker depending on the implementation you provide)
 
 ### TODO
 

@@ -12,13 +12,13 @@ import java.io.IOException;
  * defined by a {@link SubscriptionQuery}.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class RabbitMQSubscriptionRepository extends SubscriptionRepository {
+class RabbitMQSubscriptionRepository extends SubscriptionRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMQSubscriptionRepository.class);
 
-    private final RabbitMQConfiguration configuration;
+    private final RabbitMQSubscriptionConfiguration configuration;
 
-    public RabbitMQSubscriptionRepository(RabbitMQConfiguration configuration) {
+    public RabbitMQSubscriptionRepository(RabbitMQSubscriptionConfiguration configuration) {
         super();
         if (configuration == null) {
             throw new IllegalArgumentException("configuration must not be null");

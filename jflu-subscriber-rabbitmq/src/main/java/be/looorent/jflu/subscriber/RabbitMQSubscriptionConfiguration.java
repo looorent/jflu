@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
@@ -20,9 +19,9 @@ import static java.util.Optional.ofNullable;
  * This classes reads properties to give access to a dedicated RabbitMQ queue.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class RabbitMQConfiguration {
+public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConfiguration {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RabbitMQConfiguration.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RabbitMQSubscriptionConfiguration.class);
 
     private static final String TOPIC_EXCHANGE_TYPE = "topic";
     private static final String DEFAULT_EXCHANGE_NAME = "jflu";
@@ -33,7 +32,7 @@ public class RabbitMQConfiguration {
     private final String exchangeName;
     private final String queueName;
 
-    public RabbitMQConfiguration(Properties properties) {
+    public RabbitMQSubscriptionConfiguration(Properties properties) {
         try {
             connection = createFactory(properties).newConnection();
             channel = createChannel(connection, properties);
@@ -43,6 +42,10 @@ public class RabbitMQConfiguration {
             LOG.error("An error occurred when creating a connection to RabbitMQ", e);
             throw new RuntimeException(e);
         }
+    }
+
+    public static final RabbitMQSubscriptionConfiguration createFromSystemProperties() {
+        return new RabbitMQSubscriptionConfiguration(readPropertiesFromEnvironment());
     }
 
     private String connectExchange(Properties properties) throws IOException {
@@ -88,5 +91,15 @@ public class RabbitMQConfiguration {
 
     public String getQueueName() {
         return queueName;
+    }
+
+    @Override
+    public SubscriptionRepository getSubscriptionRepository() {
+        return new RabbitMQSubscriptionRepository(this);
+    }
+
+    @Override
+    public QueueListener getQueueListener() {
+        return new RabbitMQQueueListener(this);
     }
 }

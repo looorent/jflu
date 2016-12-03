@@ -2,14 +2,14 @@
   "metadata": {
     "id": "0d5ce258-1314-45d9-8ace-ce43d42255cc",
     "name": "create pouetpouet",
-    "eventEmitter": "jflu",
+    "emitter": "jflu",
     "timestamp": "2016-04-23T18:25:43.000Z",
-    "kind": "entity_changed",
+    "kind": "request",
     "status": "new"
   },
   "data": {
     "type": "request",
-    "requestId": "requestId",
+    "requestId": "2f0a07e2-70e5-44e6-9875-6fc46a3ab887",
     "controllerName": "pouetpouet",
     "actionName": "create",
     "path": "http://localhost:8080/pouetpouet",

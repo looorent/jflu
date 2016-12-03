@@ -85,7 +85,6 @@ public class RabbitMQEventPublisher implements EventPublisher, AutoCloseable {
     }
 
     protected String createRoutingKeyFrom(Event event) {
-        EventMetadata metadata = event.getMetadata();
         return RoutingKeyBuilder.create()
                 .withStatus(event.getStatus())
                 .withEmitter(event.getEventEmitter())

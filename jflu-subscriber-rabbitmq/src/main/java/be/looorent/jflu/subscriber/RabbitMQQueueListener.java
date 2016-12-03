@@ -16,14 +16,14 @@ import java.io.IOException;
  *
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class RabbitMQQueueListener implements QueueListener {
+class RabbitMQQueueListener implements QueueListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMQQueueListener.class);
 
-    private final RabbitMQConfiguration configuration;
+    private final RabbitMQSubscriptionConfiguration configuration;
     private final ObjectMapper jsonMapper;
 
-    public RabbitMQQueueListener(RabbitMQConfiguration configuration) {
+    public RabbitMQQueueListener(RabbitMQSubscriptionConfiguration configuration) {
         if (configuration == null) {
             throw new IllegalArgumentException("configuration must not be null");
         }
