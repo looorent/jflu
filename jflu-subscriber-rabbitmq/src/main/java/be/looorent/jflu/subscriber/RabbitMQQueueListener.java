@@ -4,6 +4,7 @@ import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 import org.slf4j.Logger;
@@ -12,16 +13,17 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
+ *
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class RabbitMQListener extends EventListener {
+public class RabbitMQQueueListener implements QueueListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RabbitMQListener.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RabbitMQQueueListener.class);
 
     private final RabbitMQConfiguration configuration;
     private final ObjectMapper jsonMapper;
 
-    public RabbitMQListener(RabbitMQConfiguration configuration) {
+    public RabbitMQQueueListener(RabbitMQConfiguration configuration) {
         if (configuration == null) {
             throw new IllegalArgumentException("configuration must not be null");
         }
@@ -30,9 +32,15 @@ public class RabbitMQListener extends EventListener {
     }
 
     @Override
-    protected void startConsumers(final SubscriptionRepository subscriptionRepository) {
+    public void listen(final SubscriptionRepository subscriptionRepository) {
+        if (subscriptionRepository == null) {
+            throw new IllegalArgumentException("subscriptionRepository must not be null");
+        }
+
         try {
-            configuration.getChannel().basicConsume(configuration.getQueueName(), true, new DefaultConsumer(configuration.getChannel()) {
+            final Channel channel = configuration.getChannel();
+
+            channel.basicConsume(configuration.getQueueName(), false, new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag,
                                            Envelope envelope,
@@ -44,6 +52,8 @@ public class RabbitMQListener extends EventListener {
                         LOG.debug("Consuming event {} with consumer {}", event.getId(), subscription.getName());
                         subscription.getProjector().accept(event);
                     }
+                    channel.basicAck(envelope.getDeliveryTag(), false);
+                    LOG.debug("Event acked: {}", event.getId());
                 }
             });
         } catch (IOException e) {

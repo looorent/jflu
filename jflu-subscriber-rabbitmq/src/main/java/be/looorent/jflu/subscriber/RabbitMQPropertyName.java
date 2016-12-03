@@ -18,7 +18,8 @@ public enum RabbitMQPropertyName {
     PORT("rabbitmq.port"),
     VIRTUAL_HOST("rabbitmq.virtualHost"),
     EXCHANGE_NAME("rabbitmq.exchangeName"),
-    QUEUE_NAME("rabbitmq.queueName")
+    QUEUE_NAME("rabbitmq.queueName"),
+    PREFETCH_SIZE("rabbitmq.prefetchSize")
     ;
 
     private final String propertyName;

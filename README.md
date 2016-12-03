@@ -124,4 +124,5 @@ where:
 
 * make consumer work
 * do not use exclusive queue
-* refactor code to make readable
+* refactor code to make it readable
+* Configure event-store to use reflection to use any implementation

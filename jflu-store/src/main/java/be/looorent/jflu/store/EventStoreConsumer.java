@@ -3,7 +3,7 @@ package be.looorent.jflu.store;
 import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.subscriber.EventMapping;
-import be.looorent.jflu.subscriber.EventSubscriber;
+import be.looorent.jflu.subscriber.EventConsumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.postgresql.util.PGobject;
@@ -22,13 +22,13 @@ import static java.time.LocalDateTime.now;
 /**
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class EventStoreSubscriber implements EventSubscriber {
+public class EventStoreConsumer implements EventConsumer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(EventStoreSubscriber.class);
+    private static final Logger LOG = LoggerFactory.getLogger(EventStoreConsumer.class);
     private final Connection connection;
     private final ObjectMapper jsonMapper;
 
-    public EventStoreSubscriber() throws SQLException {
+    public EventStoreConsumer() throws SQLException {
         connection = createDatabaseConnection();
         jsonMapper = Configuration.getInstance().getDefaultJsonMapper();
     }

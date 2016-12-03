@@ -17,6 +17,7 @@ import static be.looorent.jflu.subscriber.RabbitMQPropertyName.*;
 import static java.util.Optional.ofNullable;
 
 /**
+ * This classes reads properties to give access to a dedicated RabbitMQ queue.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class RabbitMQConfiguration {
@@ -25,6 +26,7 @@ public class RabbitMQConfiguration {
 
     private static final String TOPIC_EXCHANGE_TYPE = "topic";
     private static final String DEFAULT_EXCHANGE_NAME = "jflu";
+    private static final int DEFAULT_PREFETCH_SIZE = 10;
 
     private final Connection connection;
     private final Channel channel;
@@ -34,15 +36,35 @@ public class RabbitMQConfiguration {
     public RabbitMQConfiguration(Properties properties) {
         try {
             connection = createFactory(properties).newConnection();
-            channel = connection.createChannel();
-            AMQP.Queue.DeclareOk queueDeclaration = channel.queueDeclare(QUEUE_NAME.readFrom(properties), true, true, true, new HashMap<>());
-            this.queueName = queueDeclaration.getQueue();
-            exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
-            channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE);
+            channel = createChannel(connection, properties);
+            queueName = createQueue(channel, properties);
+            exchangeName = connectExchange(properties);
         } catch (IOException | TimeoutException e) {
             LOG.error("An error occurred when creating a connection to RabbitMQ", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private String connectExchange(Properties properties) throws IOException {
+        String exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
+        channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE);
+        return exchangeName;
+    }
+
+    private String createQueue(Channel channel, Properties properties) throws IOException {
+        AMQP.Queue.DeclareOk queueDeclaration = channel.queueDeclare(QUEUE_NAME.readFrom(properties), true, true, true, new HashMap<>());
+        return queueDeclaration.getQueue();
+    }
+
+    private Channel createChannel(Connection connection, Properties properties) throws IOException {
+        Channel channel = connection.createChannel();
+
+        int prefetchSize = ofNullable(PREFETCH_SIZE.readFrom(properties))
+                .map(Integer::parseInt)
+                .orElse(DEFAULT_PREFETCH_SIZE);
+        LOG.info("Prefetch size of queue is set to {}", prefetchSize);
+        channel.basicQos(prefetchSize);
+        return channel;
     }
 
     private ConnectionFactory createFactory(Properties properties) {
@@ -54,10 +76,6 @@ public class RabbitMQConfiguration {
         factory.setHost(HOST.readFrom(properties));
         factory.setPort(Integer.parseInt(PORT.readFrom(properties)));
         return factory;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public Channel getChannel() {

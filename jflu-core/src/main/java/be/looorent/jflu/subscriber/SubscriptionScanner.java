@@ -27,7 +27,7 @@ public class SubscriptionScanner {
         }
 
         Reflections reflections = new Reflections(rootPackage);
-        return reflections.getSubTypesOf(EventSubscriber.class)
+        return reflections.getSubTypesOf(EventConsumer.class)
                 .stream()
                 .map(this::createSubscriber)
                 .filter(Optional::isPresent)
@@ -37,14 +37,14 @@ public class SubscriptionScanner {
                 .collect(toList());
     }
 
-    private Collection<Subscription> findAllProjectionsMethods(EventSubscriber subscriber) {
+    private Collection<Subscription> findAllProjectionsMethods(EventConsumer subscriber) {
         return stream(subscriber.getClass().getMethods())
                 .filter(method -> method.isAnnotationPresent(EventMapping.class))
                 .map(method -> createSubscription(subscriber, method))
                 .collect(toList());
     }
 
-    private Subscription createSubscription(EventSubscriber subscriber, Method method) {
+    private Subscription createSubscription(EventConsumer subscriber, Method method) {
         String name = method.getDeclaringClass().getSimpleName() + "." + method.getName();
         SubscriptionQuery query = new SubscriptionQuery(method.getAnnotation(EventMapping.class));
         return new Subscription(query, name, event -> {
@@ -59,7 +59,7 @@ public class SubscriptionScanner {
         });
     }
 
-    private Optional<EventSubscriber> createSubscriber(Class<? extends EventSubscriber> type) {
+    private Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type) {
         try {
             return of(type.newInstance());
         } catch (InstantiationException | IllegalAccessException e) {

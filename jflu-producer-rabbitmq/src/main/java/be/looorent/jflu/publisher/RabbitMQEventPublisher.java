@@ -3,6 +3,8 @@ package be.looorent.jflu.publisher;
 import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.EventMetadata;
+import be.looorent.jflu.RoutingKeyBuilder;
+import be.looorent.jflu.subscriber.SubscriptionQuery;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -83,15 +85,12 @@ public class RabbitMQEventPublisher implements EventPublisher, AutoCloseable {
     }
 
     protected String createRoutingKeyFrom(Event event) {
-        StringBuilder builder = new StringBuilder();
         EventMetadata metadata = event.getMetadata();
-        builder.append(metadata.getStatus().name().toLowerCase());
-        builder.append(ROUTING_KEY_SEPARATOR);
-        builder.append(metadata.getEventEmitter());
-        builder.append(ROUTING_KEY_SEPARATOR);
-        builder.append(metadata.getKind().name().toLowerCase());
-        builder.append(ROUTING_KEY_SEPARATOR);
-        builder.append(metadata.getName());
-        return builder.toString();
+        return RoutingKeyBuilder.create()
+                .withStatus(event.getStatus())
+                .withEmitter(event.getEventEmitter())
+                .withKind(event.getKind())
+                .withName(event.getName())
+                .build();
     }
 }

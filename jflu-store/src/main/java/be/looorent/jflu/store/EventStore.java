@@ -1,23 +1,16 @@
 package be.looorent.jflu.store;
 
-import be.looorent.jflu.subscriber.RabbitMQConfiguration;
-import be.looorent.jflu.subscriber.RabbitMQListener;
-import be.looorent.jflu.subscriber.RabbitMQSubscriptionRepository;
-import be.looorent.jflu.subscriber.SubscriptionScanner;
+import be.looorent.jflu.subscriber.*;
 import liquibase.Liquibase;
-import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import liquibase.resource.FileSystemResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
-import java.util.Properties;
 
 import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.*;
 import static be.looorent.jflu.subscriber.RabbitMQPropertyName.readPropertiesFromEnvironment;
@@ -50,9 +43,10 @@ public class EventStore {
     private static void listenToQueue() {
         LOG.info("Starting listener...");
         RabbitMQConfiguration configuration = new RabbitMQConfiguration(readPropertiesFromEnvironment());
-        RabbitMQListener listener = new RabbitMQListener(configuration);
+        RabbitMQQueueListener queueListener = new RabbitMQQueueListener(configuration);
         RabbitMQSubscriptionRepository repository = new RabbitMQSubscriptionRepository(configuration);
-        listener.start("be.looorent.jflu.store", new SubscriptionScanner(), repository);
+        EventListener listener = new EventListener();
+        listener.start("be.looorent.jflu.store", new SubscriptionScanner(), repository, queueListener);
         LOG.info("Starting listener: Done.");
     }
 }

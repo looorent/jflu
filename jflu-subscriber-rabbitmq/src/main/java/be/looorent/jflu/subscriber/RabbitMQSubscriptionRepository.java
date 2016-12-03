@@ -1,17 +1,20 @@
 package be.looorent.jflu.subscriber;
 
+import be.looorent.jflu.RoutingKeyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 /**
+ * Decorator that adds some RabbitMQ details on the {@link SubscriptionRepository}.
+ * Each time a subscription is registered, the RabbitMQ queue is bound to a routing key
+ * defined by a {@link SubscriptionQuery}.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class RabbitMQSubscriptionRepository extends SubscriptionRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMQSubscriptionRepository.class);
-    private static final String ROUTING_KEY_SEPARATOR = ".";
 
     private final RabbitMQConfiguration configuration;
 
@@ -28,29 +31,28 @@ public class RabbitMQSubscriptionRepository extends SubscriptionRepository {
         if (subscription == null) {
             throw new IllegalArgumentException("subscription must not be null");
         }
+
+        String queue = configuration.getQueueName();
+        String exchange = configuration.getExchangeName();
         try {
-            configuration.getChannel().queueBind(configuration.getQueueName(),
-                                                 configuration.getExchangeName(),
-                                                 convertToRoutingKey(subscription.getQuery()));
+            String routingKey = convertToRoutingKey(subscription.getQuery());
+            LOG.info("Binding RabbitMQ Queue '{}' to Exchange '{}' using routing key: {}", queue, exchange, routingKey);
+            configuration.getChannel().queueBind(queue,
+                    exchange,
+                    routingKey);
         } catch (IOException e) {
-            LOG.error("An error occurred when binding a subscription ({}) to queue: {}",
-                    subscription.getName(),
-                    configuration.getQueueName(),
-                    e);
+            LOG.error("An error occurred when binding RabbitMQ Queue '{}' to Exchange '{}' for subscription: {}", queue, exchange, subscription.getName(), e);
             throw new IllegalArgumentException(e);
         }
         super.register(subscription);
     }
 
     protected String convertToRoutingKey(SubscriptionQuery query) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(query.matchesAllStatuses() ? "*" : query.getStatus().name().toLowerCase());
-        builder.append(ROUTING_KEY_SEPARATOR);
-        builder.append(query.matchesAllEmitters() ? "*" : query.getEmitter());
-        builder.append(ROUTING_KEY_SEPARATOR);
-        builder.append(query.matchesAllKinds() ? "*" : query.getKind().name().toLowerCase());
-        builder.append(ROUTING_KEY_SEPARATOR);
-        builder.append(query.matchesAllNames() ? "*" : query.getName());
-        return builder.toString();
+        return RoutingKeyBuilder.create()
+                .withStatus(query.getStatus())
+                .withEmitter(query.getEmitter())
+                .withKind(query.getKind())
+                .withName(query.getName())
+                .build();
     }
 }
