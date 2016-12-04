@@ -38,7 +38,7 @@ class EventStoreConsumer implements EventConsumer {
     public void store(Event event) {
         LOG.debug("Storing event with id : {}", event.getId());
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO events (`uuid`, `emitter`, `name`, `kind`, `timestamp`, `stored_at`, `data`) VALUES (?, ?, ?, ?, ?, ?, ?, );");
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO events (uuid, emitter, name, kind, timestamp, stored_at, data) VALUES (?, ?, ?, ?, ?, ?, ?, );");
             statement.setObject(1, createUniqueId(event));
             statement.setString(2, event.getEmitter());
             statement.setString(3, event.getName());
