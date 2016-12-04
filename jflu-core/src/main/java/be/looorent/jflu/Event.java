@@ -59,7 +59,7 @@ public class Event {
         return metadata.getName();
     }
 
-    public String getEventEmitter() {
+    public String getEmitter() {
         return metadata.getEmitter();
     }
 

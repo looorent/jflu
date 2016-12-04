@@ -42,10 +42,17 @@ public class SubscriptionQuery {
     }
 
     public static final SubscriptionQuery exactMatchWith(Event event) {
-        return new SubscriptionQuery(event.getEventEmitter(),
+        return new SubscriptionQuery(event.getEmitter(),
                 EventMappingKind.valueOf(event.getKind().name()),
                 event.getName(),
                 EventMappingStatus.valueOf(event.getStatus().name()));
+    }
+
+    public static final SubscriptionQuery thatMatchAllEvents() {
+        return new SubscriptionQuery("",
+                EventMappingKind.ALL,
+                "",
+                EventMappingStatus.ALL);
     }
 
     public String getEmitter() {
@@ -119,7 +126,7 @@ public class SubscriptionQuery {
         }
 
         List<EventMappingStatus> possibleStatuses = newArrayList(EventMappingStatus.ALL, EventMappingStatus.valueOf(event.getStatus()));
-        List<String> possibleEmitters = newArrayList("", event.getEventEmitter());
+        List<String> possibleEmitters = newArrayList("", event.getEmitter());
         List<EventMappingKind> possibleKinds = newArrayList(EventMappingKind.ALL, EventMappingKind.valueOf(event.getKind()));
         List<String> possibleNames = newArrayList("", event.getName());
 

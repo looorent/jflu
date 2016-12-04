@@ -40,7 +40,7 @@ class EventStoreConsumer implements EventConsumer {
         try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO events (`uuid`, `emitter`, `name`, `kind`, `timestamp`, `stored_at`, `data`) VALUES (?, ?, ?, ?, ?, ?, ?, );");
             statement.setObject(1, createUniqueId(event));
-            statement.setString(2, event.getEventEmitter());
+            statement.setString(2, event.getEmitter());
             statement.setString(3, event.getName());
             statement.setString(4, jsonMapper.writeValueAsString(event.getKind()));
             statement.setTimestamp(5, Timestamp.valueOf(event.getTimestamp()));

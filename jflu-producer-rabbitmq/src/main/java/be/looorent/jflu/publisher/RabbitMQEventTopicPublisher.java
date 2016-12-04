@@ -93,7 +93,7 @@ public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseabl
     protected String createRoutingKeyFrom(Event event) {
         return RoutingKeyBuilder.create()
                 .withStatus(event.getStatus())
-                .withEmitter(event.getEventEmitter())
+                .withEmitter(event.getEmitter())
                 .withKind(event.getKind())
                 .withName(event.getName())
                 .build();
