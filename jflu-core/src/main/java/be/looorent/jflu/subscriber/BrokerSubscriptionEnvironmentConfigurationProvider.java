@@ -19,19 +19,31 @@ public class BrokerSubscriptionEnvironmentConfigurationProvider implements Broke
     private static final String BROKER_FACTORY_METHOD_NAME = "createFromSystemProperties";
 
     @Override
-    public BrokerSubscriptionConfiguration createSubscriptionConfiguration() {
-        String configurationClassName = System.getenv(BROKER_IMPLEMENTATION_PROPERTY);
+    public BrokerSubscriptionConfiguration createSubscriptionConfiguration() throws BrokerException {
+        String configurationClassName = readConfigurationClassName();
         try {
             LOG.debug("Instanciating Broker configuration based on environment property: {}={}", BROKER_IMPLEMENTATION_PROPERTY, configurationClassName);
             Class<? extends BrokerSubscriptionConfiguration> configurationType = (Class<? extends BrokerSubscriptionConfiguration>) Class.forName(configurationClassName);
-            Method method = configurationType.getMethod(BROKER_FACTORY_METHOD_NAME, String.class);
+            Method method = configurationType.getMethod(BROKER_FACTORY_METHOD_NAME);
             return (BrokerSubscriptionConfiguration) method.invoke(null);
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException | ClassNotFoundException e) {
+        } catch (IllegalAccessException | NoSuchMethodException | ClassNotFoundException e) {
             LOG.error("Class does not exist to create an instance of BrokerSubcriptionConfiguration: {}. Did you define a static method called {} ? Is this class available to the classpath?",
                     configurationClassName,
                     BROKER_FACTORY_METHOD_NAME,
                     e);
             throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            LOG.error("An internal error occurred when creating an instance of BrokerSubcriptionConfiguration", e);
+            if (e.getCause() instanceof BrokerException) {
+                throw (BrokerException) e.getCause();
+            }
+            else {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    protected String readConfigurationClassName() {
+        return System.getenv(BROKER_IMPLEMENTATION_PROPERTY);
     }
 }

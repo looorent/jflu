@@ -32,19 +32,19 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
     private final String exchangeName;
     private final String queueName;
 
-    public RabbitMQSubscriptionConfiguration(Properties properties) {
+    public RabbitMQSubscriptionConfiguration(Properties properties) throws RabbitMQConnectionException {
         try {
             connection = createFactory(properties).newConnection();
             channel = createChannel(connection, properties);
             queueName = createQueue(channel, properties);
             exchangeName = connectExchange(properties);
-        } catch (IOException | TimeoutException e) {
+        } catch (Exception e) {
             LOG.error("An error occurred when creating a connection to RabbitMQ", e);
-            throw new RuntimeException(e);
+            throw new RabbitMQConnectionException(e);
         }
     }
 
-    public static final RabbitMQSubscriptionConfiguration createFromSystemProperties() {
+    public static final RabbitMQSubscriptionConfiguration createFromSystemProperties() throws RabbitMQConnectionException {
         return new RabbitMQSubscriptionConfiguration(readPropertiesFromEnvironment());
     }
 
@@ -70,7 +70,7 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
         return channel;
     }
 
-    private ConnectionFactory createFactory(Properties properties) {
+    protected ConnectionFactory createFactory(Properties properties) {
         LOG.debug("Creating RabbitMQ connection factory with properties: {}", properties);
         ConnectionFactory factory = new ConnectionFactory();
         factory.setUsername(USERNAME.readFrom(properties));

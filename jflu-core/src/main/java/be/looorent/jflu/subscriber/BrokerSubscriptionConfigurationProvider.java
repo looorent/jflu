@@ -8,6 +8,7 @@ public interface BrokerSubscriptionConfigurationProvider {
 
     /**
      * @return an instance of {@link BrokerSubscriptionConfiguration}
+     * @throws BrokerException if a connection error occurs
      */
-    BrokerSubscriptionConfiguration createSubscriptionConfiguration();
+    BrokerSubscriptionConfiguration createSubscriptionConfiguration() throws BrokerException;
 }
