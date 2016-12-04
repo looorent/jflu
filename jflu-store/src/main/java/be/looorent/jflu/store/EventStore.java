@@ -1,9 +1,6 @@
 package be.looorent.jflu.store;
 
-import be.looorent.jflu.subscriber.BrokerSubscriptionConfiguration;
-import be.looorent.jflu.subscriber.BrokerSubscriptionEnvironmentConfigurationProvider;
-import be.looorent.jflu.subscriber.EventListener;
-import be.looorent.jflu.subscriber.SubscriptionScanner;
+import be.looorent.jflu.subscriber.*;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -28,7 +25,7 @@ public class EventStore {
     private static final String PROJECTOR_ROOT_PACKAGE = "be.looorent.jflu.store";
     private static final String CHANGELOG_LOCATION = "db/changelog.xml";
 
-    public static void main(String... args) throws SQLException, LiquibaseException {
+    public static void main(String... args) throws SQLException, LiquibaseException, BrokerException {
         migrateDatabase();
         listenToQueue();
     }
@@ -44,7 +41,7 @@ public class EventStore {
         LOG.info("Migrating database: Done.");
     }
 
-    private static final void listenToQueue() {
+    private static final void listenToQueue() throws BrokerException {
         LOG.info("Starting listener...");
         BrokerSubscriptionConfiguration configuration = new BrokerSubscriptionEnvironmentConfigurationProvider().createSubscriptionConfiguration();
         new EventListener().start(PROJECTOR_ROOT_PACKAGE,
