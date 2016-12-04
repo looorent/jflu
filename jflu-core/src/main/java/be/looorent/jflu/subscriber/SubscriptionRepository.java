@@ -36,7 +36,7 @@ public class SubscriptionRepository {
 
         LOG.info("Register subscription for mapping : {}", subscription.getName());
         subscriptionsByQuery.putIfAbsent(subscription.getQuery(), new ArrayList<>());
-        subscriptionsByQuery.get(subscription).add(subscription);
+        subscriptionsByQuery.get(subscription.getQuery()).add(subscription);
     }
 
     /**
