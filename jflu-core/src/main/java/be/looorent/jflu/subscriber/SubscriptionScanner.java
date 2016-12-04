@@ -52,7 +52,7 @@ public class SubscriptionScanner {
                 .collect(toList());
     }
 
-    private Subscription createSubscription(EventConsumer subscriber, Method method) {
+    protected Subscription createSubscription(EventConsumer subscriber, Method method) {
         String name = method.getDeclaringClass().getSimpleName() + "." + method.getName();
         SubscriptionQuery query = new SubscriptionQuery(method.getAnnotation(EventMapping.class));
         return new Subscription(query, name, event -> {
@@ -67,14 +67,15 @@ public class SubscriptionScanner {
         });
     }
 
-    private Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type) {
+    protected Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type) {
         try {
             Constructor<? extends EventConsumer> constructor = type.getConstructor();
-            return of(type.newInstance());
+            constructor.setAccessible(true);
+            return of(constructor.newInstance());
         } catch (NoSuchMethodException e) {
             LOG.error("EventConsumer must have a default constructor: {}", type, e);
             throw new RuntimeException(e);
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             LOG.error("Impossible to create an instance of this type: {}", type, e);
             throw new RuntimeException(e);
         }
