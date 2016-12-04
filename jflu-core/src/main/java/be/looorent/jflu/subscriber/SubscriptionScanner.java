@@ -55,14 +55,16 @@ public class SubscriptionScanner {
     protected Subscription createSubscription(EventConsumer subscriber, Method method) {
         String name = method.getDeclaringClass().getSimpleName() + "." + method.getName();
         SubscriptionQuery query = new SubscriptionQuery(method.getAnnotation(EventMapping.class));
+        method.setAccessible(true);
         return new Subscription(query, name, event -> {
             try {
                 method.invoke(subscriber, event);
             } catch (IllegalAccessException | InvocationTargetException e) {
-                LOG.error("This subscriber cannot be called.");
+                LOG.error("This subscriber cannot be called.", e);
+                throw new RuntimeException(e);
             } catch (Exception e) {
                 LOG.error("An error occurred when processing this event: {}", event.getId(), e);
-                throw new IllegalArgumentException(e);
+                throw new RuntimeException(e);
             }
         });
     }
