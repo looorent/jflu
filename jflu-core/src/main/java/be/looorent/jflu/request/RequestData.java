@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * When an event represents an HTTP request, it can use this class as {@link EventData} implementation.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class RequestData implements EventData {

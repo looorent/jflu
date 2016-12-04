@@ -7,7 +7,7 @@ import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toMap;
 
 /**
- * All properties that must be set to initialize a proper instance of {@link RabbitMQEventPublisher}.
+ * All properties that must be set to initialize a proper instance of {@link RabbitMQEventTopicPublisher}.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public enum RabbitMQPropertyName {

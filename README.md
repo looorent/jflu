@@ -75,6 +75,10 @@ To initialize an instance of `RabbitMQEventPublisher`, several properties must b
 
 This JAR defines consumers and projectors to work with RabbitMQ.
 
+Based on all subscriptions defined in your codebase, this implementation register them 
+to a queue by binding it automatically with routing keys.
+
+
 ## jflu-store
 
 Naïve implementation for a JVM event-store that uses PostgreSQL. 

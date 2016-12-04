@@ -2,15 +2,17 @@ package be.looorent.jflu.publisher;
 
 import be.looorent.jflu.Event;
 
-import java.util.Properties;
-
 /**
+ * Publishes an event to a message broker.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public interface EventPublisher {
 
-    void initialize(Properties properties);
-
+    /**
+     * Publishes an event to a message broker.
+     * @param event must not be null
+     * @throws PublishingException if any publishing error occurs
+     */
     void publish(Event event) throws PublishingException;
 
 }

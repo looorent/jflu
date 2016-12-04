@@ -1,6 +1,7 @@
 package be.looorent.jflu.store;
 
 import be.looorent.jflu.subscriber.BrokerSubscriptionConfiguration;
+import be.looorent.jflu.subscriber.BrokerSubscriptionEnvironmentConfigurationProvider;
 import be.looorent.jflu.subscriber.EventListener;
 import be.looorent.jflu.subscriber.SubscriptionScanner;
 import liquibase.Liquibase;
@@ -16,7 +17,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.createDatabaseConnection;
-import static be.looorent.jflu.subscriber.BrokerSubscriptionEnvironmentConfigurationProvider.createSubscriptionConfiguration;
 
 /**
  * Startup class that registers a single projector to record each event into a store.
@@ -26,6 +26,7 @@ public class EventStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventStore.class);
     private static final String PROJECTOR_ROOT_PACKAGE = "be.looorent.jflu.store";
+    private static final String CHANGELOG_LOCATION = "db/changelog.xml";
 
     public static void main(String... args) throws SQLException, LiquibaseException {
         migrateDatabase();
@@ -38,14 +39,14 @@ public class EventStore {
             Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(
                     new JdbcConnection(connection)
             );
-            new Liquibase("db/changelog.xml", new ClassLoaderResourceAccessor(), database).update("");
+            new Liquibase(CHANGELOG_LOCATION, new ClassLoaderResourceAccessor(), database).update("");
         }
         LOG.info("Migrating database: Done.");
     }
 
     private static final void listenToQueue() {
         LOG.info("Starting listener...");
-        BrokerSubscriptionConfiguration configuration = createSubscriptionConfiguration();
+        BrokerSubscriptionConfiguration configuration = new BrokerSubscriptionEnvironmentConfigurationProvider().createSubscriptionConfiguration();
         new EventListener().start(PROJECTOR_ROOT_PACKAGE,
                 new SubscriptionScanner(),
                 configuration.getSubscriptionRepository(),

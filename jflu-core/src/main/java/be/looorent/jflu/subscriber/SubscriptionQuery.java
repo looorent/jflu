@@ -10,6 +10,7 @@ import java.util.Objects;
 import static com.google.common.collect.Lists.newArrayList;
 
 /**
+ * Immutable class to match {@link Event}s based on their metadata.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class SubscriptionQuery {
@@ -20,6 +21,10 @@ public class SubscriptionQuery {
     private final EventMappingStatus status;
 
     public SubscriptionQuery(EventMapping mapping) {
+        if (mapping == null) {
+            throw new IllegalArgumentException("mapping must not be null");
+        }
+
         this.emitter = mapping.emitter();
         this.kind = mapping.kind();
         this.name = mapping.name();
@@ -30,10 +35,10 @@ public class SubscriptionQuery {
                              EventMappingKind kind,
                              String name,
                              EventMappingStatus status) {
-        this.emitter = emitter;
-        this.kind = kind;
-        this.name = name;
-        this.status = status;
+        this.emitter = emitter == null ? "" : emitter;
+        this.kind = kind == null ? EventMappingKind.ALL : kind;
+        this.name = name == null ? "" : name;
+        this.status = status == null ? EventMappingStatus.ALL : status;
     }
 
     public static final SubscriptionQuery exactMatchWith(Event event) {
@@ -103,10 +108,19 @@ public class SubscriptionQuery {
                 EventMappingStatus.ALL);
     }
 
-    public static final Collection<SubscriptionQuery> allPossibilitiesFor(Event event) {
-        List<EventMappingStatus> possibleStatuses = newArrayList(EventMappingStatus.ALL, EventMappingStatus.valueOf(event.getStatus().name()));
+    /**
+     * For a given event, this method provides all queries that could match it.
+     * @param event must not be null
+     * @return all queries that can match the provided event
+     */
+    public static final Collection<SubscriptionQuery> allQueriesThatMatch(Event event) {
+        if (event == null) {
+            throw new IllegalArgumentException("event must not be null");
+        }
+
+        List<EventMappingStatus> possibleStatuses = newArrayList(EventMappingStatus.ALL, EventMappingStatus.valueOf(event.getStatus()));
         List<String> possibleEmitters = newArrayList("", event.getEventEmitter());
-        List<EventMappingKind> possibleKinds = newArrayList(EventMappingKind.ALL, EventMappingKind.valueOf(event.getKind().name()));
+        List<EventMappingKind> possibleKinds = newArrayList(EventMappingKind.ALL, EventMappingKind.valueOf(event.getKind()));
         List<String> possibleNames = newArrayList("", event.getName());
 
         List<SubscriptionQuery> queries = new ArrayList<>();
@@ -114,8 +128,7 @@ public class SubscriptionQuery {
             for (String emitter : possibleEmitters) {
                 for (EventMappingKind kind : possibleKinds) {
                     for (String name : possibleNames) {
-                        SubscriptionQuery query = new SubscriptionQuery(emitter, kind, name, status);
-                        queries.add(query);
+                        queries.add(new SubscriptionQuery(emitter, kind, name, status));
                     }
                 }
             }

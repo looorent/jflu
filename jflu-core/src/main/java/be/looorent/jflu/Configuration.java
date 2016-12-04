@@ -1,17 +1,14 @@
 package be.looorent.jflu;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
-import static com.fasterxml.jackson.annotation.PropertyAccessor.CREATOR;
-import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
-import static com.fasterxml.jackson.annotation.PropertyAccessor.GETTER;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.*;
 
 /**
+ * Overall Jflu configuration.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class Configuration {
@@ -36,6 +33,9 @@ public class Configuration {
         return emitter;
     }
 
+    /**
+     * @return a default service that (un)marshall object from/to JSON.
+     */
     public ObjectMapper getDefaultJsonMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(FIELD, ANY);

@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
+ * When an event represents a CRUD operation on an entity, it can use this class as {@link EventData} implementation.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class EntityData implements EventData {

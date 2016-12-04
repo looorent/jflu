@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import static java.util.UUID.randomUUID;
 
 /**
+ * Immutable class that represents a consumer of events mapped to all events
+ * that satisfy a {@link SubscriptionQuery}.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class Subscription {

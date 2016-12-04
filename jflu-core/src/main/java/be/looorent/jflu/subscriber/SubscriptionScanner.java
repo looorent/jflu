@@ -15,18 +15,25 @@ import static java.util.Optional.of;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Scans classpath to find {@link EventConsumer}s that define consuming methods (represented by {@link Subscription}s).
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class SubscriptionScanner {
 
     private static final Logger LOG = LoggerFactory.getLogger(SubscriptionScanner.class);
 
-    public Collection<Subscription> findAllSubscriptions(String rootPackage) {
-        if (rootPackage == null || rootPackage.isEmpty()) {
-            throw new IllegalArgumentException("rootPackage must not be null");
+    /**
+     * Scans the provided {@code packagePrefix} in the classpath to find event subscriptions.
+     * This method can be very slow for large classpaths.
+     * @param packagePrefix must not be null or empty
+     * @return all the {@link Subscription} that can be found within these packages.
+     */
+    public Collection<Subscription> findAllSubscriptionsIn(String packagePrefix) {
+        if (packagePrefix == null || packagePrefix.isEmpty()) {
+            throw new IllegalArgumentException("packagePrefix must not be null");
         }
 
-        Reflections reflections = new Reflections(rootPackage);
+        Reflections reflections = new Reflections(packagePrefix);
         return reflections.getSubTypesOf(EventConsumer.class)
                 .stream()
                 .map(this::createSubscriber)

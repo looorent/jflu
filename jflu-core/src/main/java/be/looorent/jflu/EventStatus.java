@@ -9,5 +9,4 @@ public enum EventStatus {
 
     @JsonProperty("new") NEW,
     @JsonProperty("replayed") REPLAYED
-
 }

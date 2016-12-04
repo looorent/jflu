@@ -20,9 +20,10 @@ import static be.looorent.jflu.subscriber.EventMappingStatus.NEW;
 import static java.time.LocalDateTime.now;
 
 /**
+ * Uses native SQL queries to store {@link Event} into a PostgreSQL table.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class EventStoreConsumer implements EventConsumer {
+class EventStoreConsumer implements EventConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventStoreConsumer.class);
     private final Connection connection;

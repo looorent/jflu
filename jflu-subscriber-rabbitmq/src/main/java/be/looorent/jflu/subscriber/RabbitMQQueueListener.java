@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- *
+ * RabbitMQ implementation to consume messages from a dedicated queue.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 class RabbitMQQueueListener implements QueueListener {

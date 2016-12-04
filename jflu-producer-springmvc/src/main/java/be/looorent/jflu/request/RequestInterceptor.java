@@ -17,9 +17,12 @@ import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.toMap;
 
 /**
+ * If registered, this interceptor listens for HTTP requests
+ * to Spring controllers and publish an {@link be.looorent.jflu.Event}
+ * representing this request.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
-public class RequestListener extends HandlerInterceptorAdapter {
+public class RequestInterceptor extends HandlerInterceptorAdapter {
 
     private static final String JFLU_START_TIME = "jfluStartTime";
     private static final String JFLU_REQUEST_ID = "jfluRequestId";
@@ -27,7 +30,7 @@ public class RequestListener extends HandlerInterceptorAdapter {
     private final EventPublisher publisher;
     private final RequestEventFactory factory;
 
-    public RequestListener(EventPublisher publisher) {
+    public RequestInterceptor(EventPublisher publisher) {
         if (publisher == null) {
             throw new IllegalArgumentException("publisher must not be null");
         }
