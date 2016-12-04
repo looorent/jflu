@@ -4,6 +4,7 @@ import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -68,10 +69,14 @@ public class SubscriptionScanner {
 
     private Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type) {
         try {
+            Constructor<? extends EventConsumer> constructor = type.getConstructor();
             return of(type.newInstance());
+        } catch (NoSuchMethodException e) {
+            LOG.error("EventConsumer must have a default constructor: {}", type, e);
+            throw new RuntimeException(e);
         } catch (InstantiationException | IllegalAccessException e) {
             LOG.error("Impossible to create an instance of this type: {}", type, e);
-            return empty();
+            throw new RuntimeException(e);
         }
     }
 }
