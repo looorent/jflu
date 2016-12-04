@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
 import static be.looorent.jflu.subscriber.RabbitMQPropertyName.*;
+import static java.lang.Integer.parseInt;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -62,9 +63,8 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
     private Channel createChannel(Connection connection, Properties properties) throws IOException {
         Channel channel = connection.createChannel();
 
-        int prefetchSize = ofNullable(PREFETCH_SIZE.readFrom(properties))
-                .map(Integer::parseInt)
-                .orElse(DEFAULT_PREFETCH_SIZE);
+        String prefetchProperty = PREFETCH_SIZE.readFrom(properties);
+        int prefetchSize = prefetchProperty == null || prefetchProperty.isEmpty() ? DEFAULT_PREFETCH_SIZE : parseInt(prefetchProperty);
         LOG.info("Prefetch size of queue is set to {}", prefetchSize);
         channel.basicQos(prefetchSize);
         return channel;
