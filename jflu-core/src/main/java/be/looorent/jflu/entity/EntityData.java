@@ -37,7 +37,7 @@ public class EntityData implements EventData {
                       @JsonProperty("actionName")   EntityActionName actionName,
                       @JsonProperty("userMetadata") Object userMetadata,
                       @JsonProperty("associations") Object associations,
-                      @JsonProperty("associations") Map<String, List<Object>> changes) {
+                      @JsonProperty("changes")      Map<String, List<Object>> changes) {
         this.id = id;
         this.entityName = entityName;
         this.actionName = actionName;
@@ -64,5 +64,9 @@ public class EntityData implements EventData {
 
     public Object getAssociations() {
         return associations;
+    }
+
+    public Map<String, List<Object>> getChanges() {
+        return changes;
     }
 }
