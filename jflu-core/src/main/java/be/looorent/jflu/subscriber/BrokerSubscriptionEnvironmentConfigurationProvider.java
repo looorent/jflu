@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Service that reads an environment variable <code>BROKER_SUBSCRIPTION_IMPLEMENTATION</code> to instanciate a {@link BrokerSubscriptionConfiguration} using reflection.
+ * Service that reads an environment variable <code>BROKER_SUBSCRIPTION_IMPLEMENTATION</code> to instanciate a {@link c} using reflection.
  * All these properties will be read from environment variables.
  * The {@link BrokerSubscriptionConfiguration} implementation must provide a static method {@code createFromSystemProperties}.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>

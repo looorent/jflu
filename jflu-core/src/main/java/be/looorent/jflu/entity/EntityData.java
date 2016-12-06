@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * When an event represents a CRUD operation on an entity, it can use this class as {@link EventData} implementation.
@@ -17,6 +20,7 @@ public class EntityData implements EventData {
     private final EntityActionName actionName;
     private final Object userMetadata;
     private final Object associations;
+    private final Map<String, List<Object>> changes;
 
     public EntityData() {
         id = null;
@@ -24,6 +28,7 @@ public class EntityData implements EventData {
         actionName = null;
         userMetadata = null;
         associations = null;
+        changes = new HashMap<>();
     }
 
     @JsonCreator
@@ -31,12 +36,14 @@ public class EntityData implements EventData {
                       @JsonProperty("entityName")   String entityName,
                       @JsonProperty("actionName")   EntityActionName actionName,
                       @JsonProperty("userMetadata") Object userMetadata,
-                      @JsonProperty("associations") Object associations) {
+                      @JsonProperty("associations") Object associations,
+                      @JsonProperty("associations") Map<String, List<Object>> changes) {
         this.id = id;
         this.entityName = entityName;
         this.actionName = actionName;
         this.userMetadata = userMetadata;
         this.associations = associations;
+        this.changes = changes;
     }
 
     public Serializable getId() {

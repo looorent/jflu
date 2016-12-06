@@ -56,7 +56,7 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
     }
 
     private String createQueue(Channel channel, Properties properties) throws IOException {
-        AMQP.Queue.DeclareOk queueDeclaration = channel.queueDeclare(QUEUE_NAME.readFrom(properties), true, true, true, new HashMap<>());
+        AMQP.Queue.DeclareOk queueDeclaration = channel.queueDeclare(QUEUE_NAME.readFrom(properties), true, false, false, new HashMap<>());
         return queueDeclaration.getQueue();
     }
 

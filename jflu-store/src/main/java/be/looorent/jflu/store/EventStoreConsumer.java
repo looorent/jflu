@@ -42,7 +42,7 @@ class EventStoreConsumer implements EventConsumer {
             statement.setObject(1, createUniqueId(event));
             statement.setString(2, event.getEmitter());
             statement.setString(3, event.getName());
-            statement.setString(4, jsonMapper.writeValueAsString(event.getKind()));
+            statement.setString(4, event.getKind().name().toLowerCase());
             statement.setTimestamp(5, Timestamp.valueOf(event.getTimestamp()));
             statement.setTimestamp(6, Timestamp.valueOf(now()));
             statement.setObject(7, createData(event));

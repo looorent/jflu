@@ -6,20 +6,26 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.*;
+import static java.lang.System.getenv;
 
 /**
  * Overall Jflu configuration.
+ * If no 'JFLU_EMITTER' environment variable is set, '[not emitter set]' will be used as the default emitter.
  * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
  */
 public class Configuration {
 
     private static final String EMITTER_VARIABLE = "JFLU_EMITTER";
+    private static final String DEFAULT_EMITTER = "[no emitter set]";
     private static Configuration instance;
 
     private String emitter;
 
     public Configuration() {
-        emitter = System.getenv(EMITTER_VARIABLE);
+        emitter = getenv(EMITTER_VARIABLE);
+        if (emitter == null || emitter.isEmpty()) {
+            emitter = DEFAULT_EMITTER;
+        }
     }
 
     public static Configuration getInstance() {
