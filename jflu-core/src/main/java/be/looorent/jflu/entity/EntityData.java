@@ -22,24 +22,15 @@ public class EntityData implements EventData {
     private final String entityName;
     private final EntityActionName actionName;
     private final Object userMetadata;
-    private final Object associations;
+    private final Map<String, List<Long>> associations;
     private final Map<String, List<Object>> changes;
-
-    public EntityData() {
-        id = null;
-        entityName = null;
-        actionName = null;
-        userMetadata = null;
-        associations = null;
-        changes = new HashMap<>();
-    }
 
     @JsonCreator
     public EntityData(@JsonProperty("id")           Object id,
                       @JsonProperty("entityName")   String entityName,
                       @JsonProperty("actionName")   EntityActionName actionName,
                       @JsonProperty("userMetadata") Object userMetadata,
-                      @JsonProperty("associations") Object associations,
+                      @JsonProperty("associations") Map<String, List<Long>> associations,
                       @JsonProperty("changes")      Map<String, List<Object>> changes) {
         this.id = id;
         this.entityName = entityName;
@@ -65,7 +56,7 @@ public class EntityData implements EventData {
         return userMetadata;
     }
 
-    public Object getAssociations() {
+    public Map<String, List<Long>> getAssociations() {
         return associations;
     }
 
