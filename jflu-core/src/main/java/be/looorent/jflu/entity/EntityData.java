@@ -3,6 +3,8 @@ package be.looorent.jflu.entity;
 import be.looorent.jflu.EventData;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -15,7 +17,8 @@ import java.util.Map;
  */
 public class EntityData implements EventData {
 
-    private final Serializable id;
+    @JsonDeserialize(using = EventSerializer.IdDeserializer.class)
+    private final Object id;
     private final String entityName;
     private final EntityActionName actionName;
     private final Object userMetadata;
@@ -32,7 +35,7 @@ public class EntityData implements EventData {
     }
 
     @JsonCreator
-    public EntityData(@JsonProperty("id")           Serializable id,
+    public EntityData(@JsonProperty("id")           Object id,
                       @JsonProperty("entityName")   String entityName,
                       @JsonProperty("actionName")   EntityActionName actionName,
                       @JsonProperty("userMetadata") Object userMetadata,
@@ -46,7 +49,7 @@ public class EntityData implements EventData {
         this.changes = changes;
     }
 
-    public Serializable getId() {
+    public Object getId() {
         return id;
     }
 
