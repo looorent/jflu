@@ -229,4 +229,4 @@ You can also use the `ReplayService` programmatically.
 * Make "replay" a real gradle task
 * documentation
 * more tests
-* build events properly
+* Handle associations when creating entity event
