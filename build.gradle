@@ -21,14 +21,9 @@ subprojects {
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
-}
 
-project(":jflu-core") {
   dependencies {
-    compile group: 'com.fasterxml.jackson.core',     name: 'jackson-annotations',     version: jacksonVersion
-    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
-    compile group: 'org.reflections',                name: 'reflections',             version: '0.9.10'
-    compile group: 'org.slf4j',                      name: 'slf4j-api',               version: slf4jVersion
+    compile group: 'org.slf4j',     name: 'slf4j-api',      version: slf4jVersion
 
     testCompile group: 'junit',               name: 'junit',        version: junitVersion
     testCompile group: 'org.codehaus.groovy', name: 'groovy-all',   version: groovyVersion
@@ -38,13 +33,20 @@ project(":jflu-core") {
   }
 }
 
+project(":jflu-core") {
+  dependencies {
+    compile group: 'com.fasterxml.jackson.core',     name: 'jackson-annotations',     version: jacksonVersion
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: jacksonVersion
+    compile group: 'org.reflections',                name: 'reflections',             version: '0.9.10'
+  }
+}
+
 project(":jflu-producer-hibernate") {
   description = "JFlu Hibernate Interceptor to generate events from entities"
 
   dependencies {
     compile project(":jflu-core")
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.2.4.Final'
-    compile group: 'org.slf4j',     name: 'slf4j-api',      version: slf4jVersion
   }
 }
 
@@ -52,11 +54,8 @@ project(":jflu-producer-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
     compile group: 'com.rabbitmq', name: 'amqp-client', version: rabbitmqVersion
-    compile group: 'org.slf4j',    name: 'slf4j-api',   version: slf4jVersion
 
-    testCompile group: 'junit',                    name: 'junit',        version: junitVersion
     testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: systemRulesVersion
-
   }
 }
 
@@ -65,7 +64,6 @@ project(":jflu-producer-springmvc") {
     compile project(":jflu-core")
     compile group: 'org.springframework', name: 'spring-webmvc',     version: '4.3.4.RELEASE'
     compile group: 'javax.servlet',       name: 'javax.servlet-api', version: '3.1.0'
-
   }
 }
 
@@ -73,10 +71,6 @@ project(":jflu-subscriber-rabbitmq") {
   dependencies {
     compile project(":jflu-core")
     compile group: 'com.rabbitmq',  name: 'amqp-client',    version: rabbitmqVersion
-
-    testCompile group: 'junit',                    name: 'junit',        version: junitVersion
-    testCompile group: 'org.codehaus.groovy',      name: 'groovy-all',   version: groovyVersion
-    testCompile group: 'org.spockframework',       name: 'spock-core',   version: spockVersion
   }
 }
 
@@ -90,7 +84,6 @@ project(":jflu-store") {
     compile project(":jflu-producer-rabbitmq")
     compile group: 'org.liquibase',  name: 'liquibase-core',  version: '3.5.3'
     compile group: 'org.postgresql', name: 'postgresql',      version: '9.4.1212'
-    compile group: 'org.slf4j',      name: 'slf4j-api',       version: slf4jVersion
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
     compile group: 'ch.qos.logback', name: 'logback-core',    version: '1.1.7'
   }
