@@ -8,7 +8,7 @@ import static java.util.stream.Collectors.toMap;
 
 /**
  * All properties that must be set to initialize a proper instance of all RabbitMQ implementations.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 enum RabbitMQPropertyName {
 

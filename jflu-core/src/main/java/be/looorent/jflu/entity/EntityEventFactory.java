@@ -3,8 +3,6 @@ package be.looorent.jflu.entity;
 import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.EventMetadata;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,15 +12,13 @@ import java.util.UUID;
 
 import static be.looorent.jflu.EventKind.ENTITY_CHANGE;
 import static be.looorent.jflu.EventStatus.NEW;
-import static be.looorent.jflu.entity.EntityActionName.CREATE;
-import static be.looorent.jflu.entity.EntityActionName.DESTROY;
-import static be.looorent.jflu.entity.EntityActionName.UPDATE;
+import static be.looorent.jflu.entity.EntityActionName.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.time.LocalDateTime.now;
 
 /**
  * Create events for each create/delete/update operation on an entity.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class EntityEventFactory {
 

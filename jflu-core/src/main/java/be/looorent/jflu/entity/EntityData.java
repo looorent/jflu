@@ -4,16 +4,13 @@ import be.looorent.jflu.EventData;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
  * When an event represents a CRUD operation on an entity, it can use this class as {@link EventData} implementation.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class EntityData implements EventData {
 

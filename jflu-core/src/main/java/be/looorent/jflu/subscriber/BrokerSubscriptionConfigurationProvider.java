@@ -2,7 +2,7 @@ package be.looorent.jflu.subscriber;
 
 /**
  * Service that provides an instance of {@link BrokerSubscriptionConfiguration}.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public interface BrokerSubscriptionConfigurationProvider {
 

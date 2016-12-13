@@ -11,7 +11,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 /**
  * Immutable class to match {@link Event}s based on their metadata.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class SubscriptionQuery {
 

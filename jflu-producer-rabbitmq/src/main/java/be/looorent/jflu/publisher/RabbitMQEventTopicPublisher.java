@@ -20,7 +20,7 @@ import static java.util.Optional.ofNullable;
 /**
  * RabbitMQ implementation that connects an Exchange using a topic-based communication model
  * and that publishes events with routing keys (see {@link RoutingKeyBuilder}).
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseable {
 

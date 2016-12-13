@@ -6,7 +6,6 @@ import be.looorent.jflu.publisher.PublishingException;
 import com.google.common.collect.Lists;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Metamodel;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.type.Type;
 import org.slf4j.Logger;
@@ -14,17 +13,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import static java.util.UUID.randomUUID;
 
 /**
  * Produces events whenever an entity is subject to any CRUD operation.
  * Must be registered as session-scoped.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class EntityListener extends EmptyInterceptor {
 

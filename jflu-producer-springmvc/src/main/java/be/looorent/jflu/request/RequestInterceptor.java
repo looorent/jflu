@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.toMap;
  * If registered, this interceptor listens for HTTP requests
  * to Spring controllers and publish an {@link be.looorent.jflu.Event}
  * representing this request.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class RequestInterceptor extends HandlerInterceptorAdapter {
 

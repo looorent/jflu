@@ -2,7 +2,7 @@ package be.looorent.jflu.subscriber;
 
 /**
  * Bootstrap class to connect a message broker and start a set of {@link EventConsumer}s to consume its messages.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class EventListener {
 

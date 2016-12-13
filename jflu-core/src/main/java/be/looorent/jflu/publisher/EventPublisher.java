@@ -4,7 +4,7 @@ import be.looorent.jflu.Event;
 
 /**
  * Publishes an event to a message broker.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public interface EventPublisher {
 

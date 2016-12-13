@@ -2,7 +2,7 @@ package be.looorent.jflu.subscriber;
 
 /**
  * Start consuming a queue.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public interface QueueListener {
 

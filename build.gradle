@@ -1,3 +1,8 @@
+def repoUser = hasProperty('ossrhUser') ? ossrhUser : System.getenv('ossrhUser')
+def repoPassword = hasProperty('ossrhPassword') ? ossrhPassword : System.getenv('ossrhUser')
+
+apply plugin: 'io.codearte.nexus-staging'
+
 ext {
   junitVersion = "4.12"
   slf4jVersion = "1.7.21"
@@ -6,6 +11,15 @@ ext {
   spockVersion = "1.0-groovy-2.4"
   groovyVersion = "2.4.7"
   systemRulesVersion = "1.16.1"
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+  }
 }
 
 subprojects {
@@ -30,6 +44,89 @@ subprojects {
     testCompile group: 'org.spockframework',  name: 'spock-core',   version: spockVersion
     testCompile group: 'cglib',               name: 'cglib-nodep',  version: '3.2.4'
     testCompile group: 'org.objenesis',       name: 'objenesis',    version: '2.4'
+  }
+
+  apply plugin: 'maven-publish'
+
+  publishing {
+    publications {
+      maven(MavenPublication) {
+        from components.java
+      }
+    }
+  }
+
+  if (project.hasProperty('release')) {
+    allprojects {
+      apply plugin: 'signing'
+      apply plugin: 'maven'
+
+      task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+      }
+
+      task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+      }
+
+      artifacts {
+        archives sourcesJar
+        archives javadocJar
+      }
+
+      jar {
+        manifest {
+          attributes 'Implementation-Version': version, 'provider': gradle
+        }
+      }
+
+      signing {
+        sign configurations.archives
+      }
+
+      uploadArchives {
+        repositories {
+          mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+              authentication(userName: repoUser, password: repoPassword)
+            }
+
+            pom.project {
+              name project.name
+              description project.description
+              packaging 'jar'
+              url 'https://github.com/looorent/jflu'
+
+              scm {
+                connection 'scm:git:https://github.com/looorent/jflu'
+                developerConnection 'scm:git:git@github.com:looorent/jflu.git'
+                url 'https://github.com/looorent/jflu'
+              }
+
+              licenses {
+                license {
+                  name 'The MIT License (MIT)'
+                  url 'http://opensource.org/licenses/MIT'
+                  distribution 'repo'
+                }
+              }
+
+              developers {
+                developer {
+                  id = 'looorent'
+                  name = 'Lorent Lempereur'
+                  email = 'lorent.lempereur.dev@gmail.com'
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }
 
@@ -96,4 +193,10 @@ project(":jflu-store") {
         args Eval.me(firstEventId)
       }
   }
+}
+
+nexusStaging {
+  username = repoUser
+  password = repoPassword
+  packageGroup = "be.looorent"
 }

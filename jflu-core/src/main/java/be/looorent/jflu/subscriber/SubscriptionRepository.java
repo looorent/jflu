@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentMap;
 import static java.util.stream.Collectors.toList;
 
 /**
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class SubscriptionRepository {
 

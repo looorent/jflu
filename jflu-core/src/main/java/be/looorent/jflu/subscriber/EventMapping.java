@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * Event's metadata to match an {@link EventConsumer} method.
  * This annotation can be used on methods of any subclass of {@link EventConsumer}?
  * By default, an {@link EventMapping} matches all events.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

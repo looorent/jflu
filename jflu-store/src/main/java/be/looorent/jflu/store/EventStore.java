@@ -17,7 +17,7 @@ import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.createDatab
 
 /**
  * Startup class that registers a single projector to record each event into a store.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class EventStore {
 

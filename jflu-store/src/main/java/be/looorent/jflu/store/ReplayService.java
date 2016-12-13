@@ -31,7 +31,7 @@ import static java.util.stream.Collectors.joining;
 /**
  * This service can be used to read all events from the database
  * and send them to the exchange with {@code status=replay}
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class ReplayService {
 

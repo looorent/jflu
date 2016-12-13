@@ -2,8 +2,8 @@ package be.looorent.jflu.store;
 
 import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
-import be.looorent.jflu.subscriber.EventMapping;
 import be.looorent.jflu.subscriber.EventConsumer;
+import be.looorent.jflu.subscriber.EventMapping;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.postgresql.util.PGobject;
@@ -21,7 +21,7 @@ import static java.time.LocalDateTime.now;
 
 /**
  * Uses native SQL queries to store {@link Event} into a PostgreSQL table.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 class EventStoreConsumer implements EventConsumer {
 

@@ -10,7 +10,7 @@ import java.io.IOException;
  * Decorator that adds some RabbitMQ details on the {@link SubscriptionRepository}.
  * Each time a subscription is registered, the RabbitMQ queue is bound to a routing key
  * defined by a {@link SubscriptionQuery}.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 class RabbitMQSubscriptionRepository extends SubscriptionRepository {
 

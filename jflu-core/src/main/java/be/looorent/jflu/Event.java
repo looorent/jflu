@@ -9,7 +9,7 @@ import java.util.UUID;
 
 /**
  * Basic JFlu object representing an event/message.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class Event {
 

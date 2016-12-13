@@ -7,7 +7,6 @@ import be.looorent.jflu.EventMetadata
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
-import static be.looorent.jflu.EventKind.ENTITY_CHANGE
 import static be.looorent.jflu.EventKind.REQUEST
 import static be.looorent.jflu.EventStatus.NEW
 import static java.time.LocalDateTime.of
@@ -15,7 +14,7 @@ import static java.time.Month.APRIL
 import static java.util.UUID.randomUUID
 
 /**
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 class RequestEventSerializationTest extends Specification {
 

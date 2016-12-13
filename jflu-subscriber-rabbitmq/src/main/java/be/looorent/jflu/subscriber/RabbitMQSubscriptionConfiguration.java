@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
-import java.util.concurrent.TimeoutException;
 
 import static be.looorent.jflu.subscriber.RabbitMQPropertyName.*;
 import static java.lang.Integer.parseInt;
@@ -18,7 +17,7 @@ import static java.util.Optional.ofNullable;
 
 /**
  * This classes reads properties to give access to a dedicated RabbitMQ queue.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConfiguration {
 

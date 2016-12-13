@@ -5,7 +5,7 @@ import be.looorent.jflu.subscriber.EventMappingStatus;
 
 /**
  * Create a routing key that can map one or multiple events in a broker using a topic-based communication model.
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class RoutingKeyBuilder {
 

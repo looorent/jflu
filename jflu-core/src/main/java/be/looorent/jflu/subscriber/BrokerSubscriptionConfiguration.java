@@ -9,7 +9,7 @@ package be.looorent.jflu.subscriber;
  *     <li>An implementation of {@link SubscriptionRepository} that provides some {@link EventConsumer} for each event.</li>
  *     <li>An implementation of {@link QueueListener} to define how to connect a queue and consume its messages.</li>
  * </ul>
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public interface BrokerSubscriptionConfiguration {
 

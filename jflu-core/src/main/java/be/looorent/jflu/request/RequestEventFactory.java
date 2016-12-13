@@ -8,13 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static be.looorent.jflu.EventKind.ENTITY_CHANGE;
 import static be.looorent.jflu.EventKind.REQUEST;
 import static be.looorent.jflu.EventStatus.NEW;
 import static java.time.LocalDateTime.now;
 
 /**
- * @author Lorent Lempereur <lorent.lempereur.dev@gmail.com>
+ * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class RequestEventFactory {
 
