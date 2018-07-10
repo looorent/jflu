@@ -18,7 +18,7 @@ class EventSerializer {
         private static final Logger LOG = LoggerFactory.getLogger(IdDeserializer.class);
 
         @Override
-        public Object deserialize(JsonParser parser, DeserializationContext ctxt) throws IOException {
+        public Object deserialize(JsonParser parser, DeserializationContext ctxt) {
             try {
                 return parser.readValueAs(Long.class);
             }

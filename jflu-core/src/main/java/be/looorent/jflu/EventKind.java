@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public enum EventKind {
 
     @JsonProperty("entity_change") ENTITY_CHANGE,
-    @JsonProperty("request") REQUEST
+    @JsonProperty("request") REQUEST,
+    @JsonProperty("manual") MANUAL
 
 }

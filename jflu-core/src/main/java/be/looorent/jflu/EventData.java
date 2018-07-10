@@ -1,6 +1,7 @@
 package be.looorent.jflu;
 
 import be.looorent.jflu.entity.EntityData;
+import be.looorent.jflu.manual.ManualData;
 import be.looorent.jflu.request.RequestData;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -12,11 +13,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type")
+        property = "type",
+        defaultImpl = ManualData.class)
 @JsonSubTypes({
         @JsonSubTypes.Type(value = EntityData.class, name = "entity"),
-        @JsonSubTypes.Type(value = RequestData.class, name = "request")
+        @JsonSubTypes.Type(value = RequestData.class, name = "request"),
+        @JsonSubTypes.Type(value = ManualData.class, name = "manual"),
 })
 public interface EventData {
 }

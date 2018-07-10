@@ -1,6 +1,7 @@
 package be.looorent.jflu.entity;
 
 import be.looorent.jflu.EventData;
+import be.looorent.jflu.EventKind;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

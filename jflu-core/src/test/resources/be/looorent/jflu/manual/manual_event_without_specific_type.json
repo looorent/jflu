@@ -1,0 +1,14 @@
+{
+  "metadata": {
+    "id": "25c0e636-bd3e-45a0-8d7b-3371678bb810",
+    "name": "clean manually",
+    "emitter": "another-micro-service",
+    "timestamp": "2018-07-05T18:25:43.000Z",
+    "kind": "manual",
+    "status": "new"
+  },
+  "data": {
+    "a": 1,
+    "b": "requestId"
+  }
+}
