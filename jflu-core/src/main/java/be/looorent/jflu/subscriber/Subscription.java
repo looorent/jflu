@@ -72,12 +72,7 @@ public class Subscription {
         if (event == null) {
             throw new IllegalArgumentException("A subscription cannot consume a null event");
         }
-
         LOG.debug("Consuming event {} with consumer {}", event.getId(), name);
-        try {
-            getProjector().accept(event);
-        } catch (Exception e) {
-            throw new ConsumptionException(event, e);
-        }
+        getProjector().accept(event);
     }
 }

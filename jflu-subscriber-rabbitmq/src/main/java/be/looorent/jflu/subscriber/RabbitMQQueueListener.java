@@ -48,12 +48,15 @@ class RabbitMQQueueListener implements QueueListener {
                                            byte[] body) throws IOException {
                     super.handleDelivery(consumerTag, envelope, properties, body);
                     Event event = jsonMapper.readValue(body, Event.class);
+                    try {
+                        subscriptionRepository.findAllSubscriptionsFor(event)
+                                .forEach(subscription -> subscription.consume(event));
 
-                    subscriptionRepository.findAllSubscriptionsFor(event)
-                            .forEach(subscription -> subscription.consume(event));
-
-                    channel.basicAck(envelope.getDeliveryTag(), false);
-                    LOG.debug("Event acked: {}", event.getId());
+                        channel.basicAck(envelope.getDeliveryTag(), false);
+                        LOG.debug("Event acked: {}", event.getId());
+                    } catch (Exception e) {
+                        throw new ConsumptionException(event, e);
+                    }
                 }
             });
         } catch (IOException e) {
