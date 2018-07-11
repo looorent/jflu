@@ -1,6 +1,8 @@
 package be.looorent.jflu.subscriber;
 
 import be.looorent.jflu.Event;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -14,6 +16,8 @@ import static java.util.UUID.randomUUID;
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class Subscription {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Subscription.class);
 
     private final UUID id;
     private final String name;
@@ -62,5 +66,18 @@ public class Subscription {
 
     public String getName() {
         return name;
+    }
+
+    public void consume(Event event) {
+        if (event == null) {
+            throw new IllegalArgumentException("A subscription cannot consume a null event");
+        }
+
+        LOG.debug("Consuming event {} with consumer {}", event.getId(), name);
+        try {
+            getProjector().accept(event);
+        } catch (Exception e) {
+            throw new ConsumptionException(event, e);
+        }
     }
 }
