@@ -48,7 +48,7 @@ public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseabl
             connection = createFactory(properties).newConnection();
             channel = connection.createChannel();
             exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
-            LOG.info("Connect RabbitMQ with topic exchange type to exchange: {}", exchangeName);
+            LOG.info("Connect RabbitMQ with topic exchange type to exchange: {} with durability {}", exchangeName);
             channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE);
         } catch (IOException | TimeoutException e) {
             throw new RuntimeException(e);

@@ -139,10 +139,10 @@ This implementation is based on the RabbitMQ Topic model.
 To initialize an instance of `RabbitMQEventPublisher`, several properties must be provided:
 * `rabbitmq.username`
 * `rabbitmq.password`
-* `rabbitmq.virtualHost`
+* `rabbitmq.virtual-host`
 * `rabbitmq.host`
 * `rabbitmq.port`
-* `rabbitmq.exchangeName`
+* `rabbitmq.exchange-name`
 
 ## jflu-subscriber-rabbitmq
 
@@ -155,6 +155,18 @@ Note that `jflu-store` is a typical use of subscribers.
 
 ### Getting started
 
+To initialize the subscription configuration, several properties must be provided (they are read from environment variables automatically):
+
+* `rabbitmq.username`
+* `rabbitmq.password`
+* `rabbitmq.host`
+* `rabbitmq.port`
+* `rabbitmq.virtual-host`
+* `rabbitmq.exchange-name`
+* `rabbitmq.queue-name`
+* `rabbitmq.prefetch-size`
+* `rabbitmq.queue-durable`
+
 By default, you an use a RabbitMQ implementation by setting this environment variable:
 ```
 BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
@@ -163,6 +175,15 @@ BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscript
 Then, this line of code will return a RabbitMQ configuration:
 ```
 BrokerSubscriptionConfiguration configuration = new BrokerSubscriptionEnvironmentConfigurationProvider().createSubscriptionConfiguration();
+```
+
+Therefore, you can start your projectors using this code:
+```java
+BrokerSubscriptionConfiguration configuration = new BrokerSubscriptionEnvironmentConfigurationProvider().createSubscriptionConfiguration();
+new EventListener().start("your.package.with.projectors",
+        new SubscriptionScanner(),
+        configuration.getSubscriptionRepository(),
+        configuration.getQueueListener());
 ```
 
 ## jflu-store
@@ -206,9 +227,10 @@ This container must depend on a broker and PostgreSQL. For example, using `docke
       - RABBITMQ_PASSWORD: <xxx>
       - RABBITMQ_HOST: <xxx>
       - RABBITMQ_PORT: <xxx>
-      - RABBITMQ_VIRTUALHOST: <xxx>
-      - RABBITMQ_EXCHANGENAME: <xxx>
-      - RABBITMQ_QUEUENAME: <xxx>
+      - RABBITMQ_VIRTUAL_HOST: <xxx>
+      - RABBITMQ_EXCHANGE_NAME: <xxx>
+      - RABBITMQ_QUEUE_NAME: <xxx>
+      - RABBITMQ_QUEUE_DURABLE: <xxx>
       - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
     links:
       - db

@@ -26,6 +26,7 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
     private static final String TOPIC_EXCHANGE_TYPE = "topic";
     private static final String DEFAULT_EXCHANGE_NAME = "jflu";
     private static final int DEFAULT_PREFETCH_SIZE = 10;
+    private static final boolean DEFAULT_QUEUE_DURABILITY = false;
 
     private final Connection connection;
     private final Channel channel;
@@ -50,7 +51,8 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
 
     private String connectExchange(Properties properties) throws IOException {
         String exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
-        channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE);
+        boolean durableQueue = ofNullable(DURABLE_QUEUE.readFrom(properties)).map(Boolean::parseBoolean).orElse(DEFAULT_QUEUE_DURABILITY);
+        channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE, durableQueue);
         return exchangeName;
     }
 

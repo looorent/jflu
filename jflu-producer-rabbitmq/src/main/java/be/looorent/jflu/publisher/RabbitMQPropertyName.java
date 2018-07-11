@@ -16,8 +16,8 @@ public enum RabbitMQPropertyName {
     PASSWORD("rabbitmq.password"),
     HOST("rabbitmq.host"),
     PORT("rabbitmq.port"),
-    VIRTUAL_HOST("rabbitmq.virtualHost"),
-    EXCHANGE_NAME("rabbitmq.exchangeName");
+    VIRTUAL_HOST("rabbitmq.virtual-host"),
+    EXCHANGE_NAME("rabbitmq.exchange-name");
 
     private final String propertyName;
 
@@ -44,7 +44,7 @@ public enum RabbitMQPropertyName {
     }
 
     public String getEnvironmentVariableName() {
-        return propertyName.toUpperCase().replace(".", "_");
+        return propertyName.toUpperCase().replace("-", "_").replace(".", "_");
     }
 
     public static final Properties readPropertiesFromEnvironment() {
