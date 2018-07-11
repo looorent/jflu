@@ -7,6 +7,7 @@ import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
 import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.NONE;
 import static com.fasterxml.jackson.annotation.PropertyAccessor.*;
 import static com.fasterxml.jackson.databind.DeserializationFeature.USE_LONG_FOR_INTS;
+import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 import static java.lang.System.getenv;
 
 /**
@@ -50,6 +51,7 @@ public class Configuration {
         mapper.setVisibility(GETTER, NONE);
         mapper.configure(USE_LONG_FOR_INTS, true);
         mapper.registerModule(new JavaTimeModule());
+        mapper.disable(WRITE_DATES_AS_TIMESTAMPS);
         return mapper;
     }
 }
