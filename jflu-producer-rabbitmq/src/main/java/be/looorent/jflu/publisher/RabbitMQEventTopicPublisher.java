@@ -28,10 +28,12 @@ public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseabl
 
     private static final String TOPIC_EXCHANGE_TYPE = "topic";
     private static final String DEFAULT_EXCHANGE_NAME = "jflu";
+    private static final boolean DEFAULT_EXCHANGE_DURABLE = false;
 
     private Connection connection;
     private Channel channel;
     private String exchangeName;
+    private boolean exchangeDurable;
     private ObjectMapper jsonMapper;
 
     /**
@@ -48,8 +50,12 @@ public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseabl
             connection = createFactory(properties).newConnection();
             channel = connection.createChannel();
             exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
+            exchangeDurable = ofNullable(EXCHANGE_DURABLE.readFrom(properties))
+                    .filter(durable -> !durable.isEmpty())
+                    .map(Boolean::parseBoolean)
+                    .orElse(DEFAULT_EXCHANGE_DURABLE);
             LOG.info("Connect RabbitMQ with topic exchange type to exchange: {} with durability {}", exchangeName);
-            channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE);
+            channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE, exchangeDurable);
         } catch (IOException | TimeoutException e) {
             throw new RuntimeException(e);
         }

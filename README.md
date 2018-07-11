@@ -143,6 +143,7 @@ To initialize an instance of `RabbitMQEventPublisher`, several properties must b
 * `rabbitmq.host`
 * `rabbitmq.port`
 * `rabbitmq.exchange-name`
+* `rabbitmq.exchange-durable`
 
 ## jflu-subscriber-rabbitmq
 
