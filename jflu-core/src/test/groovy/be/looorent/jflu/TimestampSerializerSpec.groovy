@@ -5,10 +5,6 @@ import spock.lang.Specification
 
 import java.time.LocalDateTime
 
-import static be.looorent.jflu.EventKind.ENTITY_CHANGE
-import static be.looorent.jflu.EventStatus.NEW
-import static java.util.UUID.randomUUID
-
 class TimestampSerializerSpec extends Specification {
     ObjectMapper jsonMapper = Configuration.instance.defaultJsonMapper
 
