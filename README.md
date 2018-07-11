@@ -238,7 +238,7 @@ This container must depend on a broker and PostgreSQL. For example, using `docke
 ```
 where:
 * `event_store` contains your `Dockerfile`
-* `db` is a PostgreSQL service
+* `db` is a PostgreSQL serviceEventMappingKind
 * `rabbitmq` is a RabbitMQ service (you can use any broker depending on the implementation you provide)
 
 ### Getting started: Replay events
@@ -251,6 +251,15 @@ where `<firstEventId>` if the store id of the first event to replay (default: 0)
 
 You can also use the `ReplayService` programmatically.
 
+### Instanciating EventConsumers differently
+
+If you want to create your `EventConsumer`s differently, you can override a method of `be.looorent.jflu.subscriber.SubscriptionScanner` that uses reflection by default: `protected Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type)`
+
+For example, if you use Guice to handle dependency injection, you can use a different implementation of `SubscriptionScanner`:
+
+```java
+
+```
 
 ## TODO
 

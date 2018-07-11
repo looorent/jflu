@@ -10,6 +10,7 @@ public enum EventMappingKind {
 
     ENTITY_CHANGE,
     REQUEST,
+    MANUAL,
     ALL;
 
     public static EventMappingKind valueOf(EventKind kind) {
