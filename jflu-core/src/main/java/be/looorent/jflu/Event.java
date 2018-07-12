@@ -13,11 +13,12 @@ import java.util.UUID;
  */
 public class Event {
 
+    @JsonProperty("meta")
     private final EventMetadata metadata;
     private final EventData data;
 
     @JsonCreator
-    public Event(@JsonProperty("metadata") EventMetadata metadata,
+    public Event(@JsonProperty("meta") EventMetadata metadata,
                  @JsonProperty("data") EventData data) {
         this.metadata = metadata;
         this.data = data;
