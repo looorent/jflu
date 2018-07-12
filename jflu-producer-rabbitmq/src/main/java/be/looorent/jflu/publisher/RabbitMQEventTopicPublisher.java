@@ -6,15 +6,14 @@ import be.looorent.jflu.RoutingKeyBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Properties;
-import java.util.concurrent.TimeoutException;
 
-import static be.looorent.jflu.publisher.RabbitMQPropertyName.*;
+import static be.looorent.jflu.publisher.RabbitMQPropertyName.EXCHANGE_DURABLE;
+import static be.looorent.jflu.publisher.RabbitMQPropertyName.EXCHANGE_NAME;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -47,29 +46,18 @@ public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseabl
 
         try {
             jsonMapper = createJsonMapper();
-            connection = createFactory(properties).newConnection();
+            connection = new RabbitMQConnectionFactory().connect(properties);
             channel = connection.createChannel();
             exchangeName = ofNullable(EXCHANGE_NAME.readFrom(properties)).orElse(DEFAULT_EXCHANGE_NAME);
             exchangeDurable = ofNullable(EXCHANGE_DURABLE.readFrom(properties))
                     .filter(durable -> !durable.isEmpty())
                     .map(Boolean::parseBoolean)
                     .orElse(DEFAULT_EXCHANGE_DURABLE);
-            LOG.info("Connect RabbitMQ with topic exchange type to exchange: {} with durability {}", exchangeName);
+            LOG.info("Connect RabbitMQ with topic exchange type to exchange: {} with durability {}", exchangeName, exchangeDurable);
             channel.exchangeDeclare(exchangeName, TOPIC_EXCHANGE_TYPE, exchangeDurable);
-        } catch (IOException | TimeoutException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private ConnectionFactory createFactory(Properties properties) {
-        LOG.debug("Creating RabbitMQ connection factory with properties: {}", properties);
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setUsername(USERNAME.readFrom(properties));
-        factory.setPassword(PASSWORD.readFrom(properties));
-        factory.setVirtualHost(VIRTUAL_HOST.readFrom(properties));
-        factory.setHost(HOST.readFrom(properties));
-        factory.setPort(Integer.parseInt(PORT.readFrom(properties)));
-        return factory;
     }
 
     @Override

@@ -1,7 +1,8 @@
 package be.looorent.jflu.subscriber;
 
-import com.rabbitmq.client.*;
-import com.rabbitmq.client.impl.DefaultExceptionHandler;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
 
     public RabbitMQSubscriptionConfiguration(Properties properties) throws RabbitMQConnectionException {
         try {
-            connection = createFactory(properties).newConnection();
+            connection = new RabbitMQConnectionFactory().connect(properties);
             channel = createChannel(connection, properties);
             queueName = createQueue(channel, properties);
             exchangeName = connectExchange(properties);
@@ -61,38 +62,11 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
 
     private Channel createChannel(Connection connection, Properties properties) throws IOException {
         Channel channel = connection.createChannel();
-
         String prefetchProperty = PREFETCH_SIZE.readFrom(properties);
         int prefetchSize = prefetchProperty == null || prefetchProperty.isEmpty() ? DEFAULT_PREFETCH_SIZE : parseInt(prefetchProperty);
         LOG.info("Prefetch size of queue is set to {}", prefetchSize);
         channel.basicQos(prefetchSize);
         return channel;
-    }
-
-    protected ConnectionFactory createFactory(Properties properties) {
-        LOG.debug("Creating RabbitMQ connection factory with properties: {}", properties);
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setUsername(USERNAME.readFrom(properties));
-        factory.setPassword(PASSWORD.readFrom(properties));
-        factory.setVirtualHost(VIRTUAL_HOST.readFrom(properties));
-        factory.setHost(HOST.readFrom(properties));
-        factory.setPort(Integer.parseInt(PORT.readFrom(properties)));
-        factory.setExceptionHandler(handleChannelExceptions());
-        return factory;
-    }
-
-    private DefaultExceptionHandler handleChannelExceptions() {
-        return new DefaultExceptionHandler() {
-            @Override
-            public void handleConsumerException(Channel channel, Throwable exception, Consumer consumer, String consumerTag, String methodName) {
-                super.handleConsumerException(channel, exception, consumer, consumerTag, methodName);
-                if (exception instanceof RuntimeException) {
-                    throw (RuntimeException) exception;
-                } else {
-                    throw new RuntimeException(exception);
-                }
-            }
-        };
     }
 
     public Channel getChannel() {

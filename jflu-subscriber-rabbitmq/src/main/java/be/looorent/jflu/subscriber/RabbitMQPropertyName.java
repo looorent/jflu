@@ -20,7 +20,8 @@ enum RabbitMQPropertyName {
     EXCHANGE_NAME("rabbitmq.exchange-name"),
     QUEUE_NAME("rabbitmq.queue-name"),
     PREFETCH_SIZE("rabbitmq.prefetch-size"),
-    DURABLE_QUEUE("rabbitmq.queue-durable")
+    DURABLE_QUEUE("rabbitmq.queue-durable"),
+    WAIT_FOR_CONNECTION("rabbitmq.wait-for-connection")
     ;
 
     private final String propertyName;

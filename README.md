@@ -144,6 +144,7 @@ To initialize an instance of `RabbitMQEventPublisher`, several properties must b
 * `rabbitmq.port`
 * `rabbitmq.exchange-name`
 * `rabbitmq.exchange-durable`
+* `rabbitmq.wait-for-connection`
 
 ## jflu-subscriber-rabbitmq
 
@@ -167,6 +168,7 @@ To initialize the subscription configuration, several properties must be provide
 * `rabbitmq.queue-name`
 * `rabbitmq.prefetch-size`
 * `rabbitmq.queue-durable`
+* `rabbitmq.wait-for-connection`
 
 By default, you an use a RabbitMQ implementation by setting this environment variable:
 ```
@@ -232,6 +234,7 @@ This container must depend on a broker and PostgreSQL. For example, using `docke
       - RABBITMQ_EXCHANGE_NAME: <xxx>
       - RABBITMQ_QUEUE_NAME: <xxx>
       - RABBITMQ_QUEUE_DURABLE: <xxx>
+      - RABBITMQ_WAIT_FOR_CONNECTION: <xxx>
       - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
     links:
       - db

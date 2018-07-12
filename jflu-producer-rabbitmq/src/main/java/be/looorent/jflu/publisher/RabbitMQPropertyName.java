@@ -18,7 +18,8 @@ public enum RabbitMQPropertyName {
     PORT("rabbitmq.port"),
     VIRTUAL_HOST("rabbitmq.virtual-host"),
     EXCHANGE_NAME("rabbitmq.exchange-name"),
-    EXCHANGE_DURABLE("rabbitmq.exchange-durable");
+    EXCHANGE_DURABLE("rabbitmq.exchange-durable"),
+    WAIT_FOR_CONNECTION("rabbitmq.wait-for-connection");
 
     private final String propertyName;
 
