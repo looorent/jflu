@@ -8,7 +8,6 @@
     "status": "new"
   },
   "data": {
-    "type": "request",
     "requestId": "2f0a07e2-70e5-44e6-9875-6fc46a3ab887",
     "controllerName": "pouetpouet",
     "actionName": "create",
@@ -16,8 +15,12 @@
     "responseCode": 200,
     "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.98 Safari/537.36",
     "duration": 12,
-    "parameters": {
+    "params": {
       "type": ["coincoin"]
+    },
+    "userMetadata": {
+      "pou": "eeeeet",
+      "hii" : "han"
     }
   }
 }

@@ -48,6 +48,12 @@ class RequestEventSerializationTest extends Specification {
         request.parameters.size() == 1
         request.parameters.get("type")[0] == "coincoin"
 
+        request.userMetadata instanceof Map
+        Map<String, String> userMetadata = (Map<String, String>) request.userMetadata
+        userMetadata.size() == 2
+        userMetadata.get("pou") == "eeeeet"
+        userMetadata.get("hii") == "han"
+
     }
 
     def "json mapper is bi-directional"() {
@@ -62,6 +68,9 @@ class RequestEventSerializationTest extends Specification {
             [
                     "name": ["pouet"],
                     "values": ["1", "2", "3"]
+            ],
+            [
+                    "action": "plouf"
             ])
 
         when: "marshalling and unmarshalling this event"
@@ -77,20 +86,21 @@ class RequestEventSerializationTest extends Specification {
         RequestData request = (RequestData) event.data
 
         parsedMetadata.id           == metadata.id
-        parsedMetadata.emitter == metadata.emitter
+        parsedMetadata.emitter      == metadata.emitter
         parsedMetadata.kind         == metadata.kind
         parsedMetadata.name         == metadata.name
         parsedMetadata.status       == metadata.status
         parsedMetadata.timestamp    == metadata.timestamp
 
-        parsedRequest.requestId         == request.requestId
-        parsedRequest.controllerName    == request.controllerName
-        parsedRequest.actionName        == request.actionName
-        parsedRequest.path              == request.path
-        parsedRequest.responseCode      == request.responseCode
-        parsedRequest.userAgent         == request.userAgent
-        parsedRequest.duration          == request.duration
-        parsedRequest.parameters.size() == request.parameters.size()
+        parsedRequest.requestId              == request.requestId
+        parsedRequest.controllerName         == request.controllerName
+        parsedRequest.actionName             == request.actionName
+        parsedRequest.path                   == request.path
+        parsedRequest.responseCode           == request.responseCode
+        parsedRequest.userAgent              == request.userAgent
+        parsedRequest.duration               == request.duration
+        parsedRequest.parameters.size()      == request.parameters.size()
+        parsedRequest.userMetadata["action"] == request.userMetadata["action"]
     }
 
 }

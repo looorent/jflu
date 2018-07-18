@@ -66,7 +66,8 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
                 response.getStatus(),
                 request.getHeader("User-Agent"),
                 duration,
-                extractParametersFrom(request)));
+                extractParametersFrom(request),
+                null));
     }
 
     private Map<String, List<String>> extractParametersFrom(HttpServletRequest request) {

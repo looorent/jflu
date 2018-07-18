@@ -22,6 +22,7 @@ public class RequestData implements EventData {
     private final String userAgent;
     private final int duration;
     private final Map<String, List<String>> parameters;
+    private final Object userMetadata;
 
     @JsonCreator
     public RequestData(@JsonProperty("requestId") UUID requestId,
@@ -31,7 +32,8 @@ public class RequestData implements EventData {
                        @JsonProperty("responseCode") int responseCode,
                        @JsonProperty("userAgent") String userAgent,
                        @JsonProperty("duration") int duration,
-                       @JsonProperty("parameters") Map<String, List<String>> parameters) {
+                       @JsonProperty("params") Map<String, List<String>> parameters,
+                       @JsonProperty("userMetadata") Object userMetadata) {
         this.requestId = requestId;
         this.controllerName = controllerName;
         this.actionName = actionName;
@@ -40,6 +42,7 @@ public class RequestData implements EventData {
         this.userAgent = userAgent;
         this.duration = duration;
         this.parameters = parameters;
+        this.userMetadata = userMetadata;
     }
 
     public UUID getRequestId() {
@@ -72,5 +75,9 @@ public class RequestData implements EventData {
 
     public Map<String, List<String>> getParameters() {
         return parameters;
+    }
+
+    public Object getUserMetadata() {
+        return userMetadata;
     }
 }

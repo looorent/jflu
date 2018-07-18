@@ -2,6 +2,7 @@ package be.looorent.jflu;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public class EventMetadata {
     private final UUID id;
     private final String name;
     private final String emitter;
+    @JsonDeserialize(using = EventSerializer.TimestampDeserializer.class)
     private final LocalDateTime timestamp;
     private final EventKind kind;
     private final EventStatus status;
