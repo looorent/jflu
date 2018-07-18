@@ -11,38 +11,42 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 import static be.looorent.jflu.EventKind.MANUAL;
+import static java.time.format.DateTimeFormatter.ofPattern;
+import static java.util.Arrays.asList;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 public class EventSerializer {
 
     static class TimestampDeserializer extends JsonDeserializer<LocalDateTime> {
 
-        private static DateTimeFormatter[] DATE_FORMATS = new DateTimeFormatter[]{
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'"),
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss X")
-        };
+        private static final List<DateTimeFormatter> DATE_FORMATS = asList(
+            ofPattern("yyyy-MM-dd HH:mm:ss 'UTC'"),
+            ofPattern("yyyy-MM-dd HH:mm:ss X")
+        );
 
         @Override
-        public LocalDateTime deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
-            String dateAsString = p.getValueAsString();
+        public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+            String dateAsString = parser.getValueAsString();
 
-            LocalDateTime date;
-            for(DateTimeFormatter formatter : DATE_FORMATS) {
-                date = parseDate(formatter, dateAsString);
-                if (date != null) {
-                    return date;
-                }
-            }
-            return p.readValueAs(LocalDateTime.class);
+            Optional<LocalDateTime> date = DATE_FORMATS.stream()
+                        .map(formatter -> parseDate(formatter, dateAsString))
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .findFirst();
+
+            return date.isPresent() ? date.get() : parser.readValueAs(LocalDateTime.class);
         }
 
-        private LocalDateTime parseDate(DateTimeFormatter formatter, String dateAsString) {
+        private Optional<LocalDateTime> parseDate(DateTimeFormatter formatter, String dateAsString) {
             try {
-                return LocalDateTime.parse(dateAsString, formatter);
+                return of(LocalDateTime.parse(dateAsString, formatter));
             } catch (Exception e) {
-                return null;
+                return empty();
             }
         }
     }
@@ -50,22 +54,22 @@ public class EventSerializer {
     static class EventDataDeserializer extends JsonDeserializer<EventData> {
 
         @Override
-        public EventData deserialize(JsonParser p, DeserializationContext ctx) throws IOException {
-            EventKind kind = Optional.of(p.getParsingContext())
+        public EventData deserialize(JsonParser parser, DeserializationContext context) throws IOException {
+            EventKind kind = of(parser.getParsingContext())
                     .map(JsonStreamContext::getParent)
                     .map(JsonStreamContext::getCurrentValue)
-                    .map(v -> (EventMetadata)v)
+                    .map(EventMetadata.class::cast)
                     .map(EventMetadata::getKind)
                     .orElse(MANUAL);
 
             switch (kind) {
                 case ENTITY_CHANGE:
-                    return p.readValueAs(EntityData.class);
+                    return parser.readValueAs(EntityData.class);
                 case REQUEST:
-                    return p.readValueAs(RequestData.class);
+                    return parser.readValueAs(RequestData.class);
                 case MANUAL:
                 default:
-                    return p.readValueAs(ManualData.class);
+                    return parser.readValueAs(ManualData.class);
             }
         }
     }

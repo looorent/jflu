@@ -20,7 +20,7 @@ public class EntityData implements EventData {
     private final UUID requestId;
     private final String entityName;
     private final EntityActionName actionName;
-    private final Object userMetadata;
+    private final Map<String, Object> userMetadata;
     private final Map<String, Long> associations;
     private final Map<String, List<Object>> changes;
 
@@ -29,7 +29,7 @@ public class EntityData implements EventData {
                       @JsonProperty("requestId")    UUID requestId,
                       @JsonProperty("entityName")   String entityName,
                       @JsonProperty("actionName")   EntityActionName actionName,
-                      @JsonProperty("userMetadata") Object userMetadata,
+                      @JsonProperty("userMetadata") Map<String, Object> userMetadata,
                       @JsonProperty("associations") Map<String, Long> associations,
                       @JsonProperty("changes")      Map<String, List<Object>> changes) {
         this.id = id;
@@ -57,7 +57,7 @@ public class EntityData implements EventData {
         return actionName;
     }
 
-    public Object getUserMetadata() {
+    public Map<String, Object> getUserMetadata() {
         return userMetadata;
     }
 

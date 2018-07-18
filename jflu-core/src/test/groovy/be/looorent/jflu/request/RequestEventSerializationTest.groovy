@@ -48,11 +48,9 @@ class RequestEventSerializationTest extends Specification {
         request.parameters.size() == 1
         request.parameters.get("type")[0] == "coincoin"
 
-        request.userMetadata instanceof Map
-        Map<String, String> userMetadata = (Map<String, String>) request.userMetadata
-        userMetadata.size() == 2
-        userMetadata.get("pou") == "eeeeet"
-        userMetadata.get("hii") == "han"
+        request.userMetadata.size() == 2
+        request.userMetadata.get("pou") == "eeeeet"
+        request.userMetadata.get("hii") == "han"
 
     }
 
