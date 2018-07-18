@@ -2,6 +2,7 @@ package be.looorent.jflu;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -15,6 +16,8 @@ public class Event {
 
     @JsonProperty("meta")
     private final EventMetadata metadata;
+
+    @JsonDeserialize(using = EventSerializer.EventDataDeserializer.class)
     private final EventData data;
 
     @JsonCreator

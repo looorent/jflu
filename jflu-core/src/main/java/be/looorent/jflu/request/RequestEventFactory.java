@@ -24,7 +24,8 @@ public class RequestEventFactory {
                              int responseCode,
                              String userAgent,
                              int duration,
-                             Map<String, List<String>> parameters) {
+                             Map<String, List<String>> parameters,
+                             Map<String, Object> userMetadata) {
         return new Event(createMetadata(controllerName+"."+actionName),
                 new RequestData(requestId,
                     controllerName,
@@ -33,7 +34,8 @@ public class RequestEventFactory {
                     responseCode,
                     userAgent,
                     duration,
-                    parameters));
+                    parameters,
+                    userMetadata));
     }
 
     private EventMetadata createMetadata(String controllerName) {

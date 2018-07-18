@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "id": "0d5ce258-1314-45d9-8ace-ce43d42255cc",
+    "name": "create animal",
+    "emitter": "pet-store",
+    "timestamp": "2016-04-23 18:25:43 +0000",
+    "kind": "entity_change",
+    "status": "new"
+  }
+}

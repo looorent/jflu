@@ -8,7 +8,6 @@
     "status": "new"
   },
   "data": {
-    "type": "entity",
     "id": 42,
     "entityName": "Animal",
     "actionName": "create",
@@ -16,8 +15,8 @@
       "custom": true
     },
     "associations": {
-      "owner": [42],
-      "child": [1, 2]
+      "owner": 42,
+      "child": 1
     },
     "changes": {
       "name": [null, "KnapKnap"],

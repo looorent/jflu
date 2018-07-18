@@ -33,6 +33,7 @@ public class EntityEventFactory {
             changes.put(stateAndPropertyName.getKey(), newArrayList(null, stateAndPropertyName.getValue()));
         }
         return new Event(metadata, new EntityData(entityId,
+                null,
                 entityType.getSimpleName(),
                 CREATE,
                 null,
@@ -45,6 +46,7 @@ public class EntityEventFactory {
                                      UUID sessionId) {
         EventMetadata metadata = createMetadata(entityType, DESTROY, sessionId);
         return new Event(metadata, new EntityData(entityId,
+                null,
                 entityType.getSimpleName(),
                 DESTROY,
                 null,
@@ -58,6 +60,7 @@ public class EntityEventFactory {
                                      UUID sessionId) {
         EventMetadata metadata = createMetadata(entityType, UPDATE, sessionId);
         return new Event(metadata, new EntityData(entityId,
+                null,
                 entityType.getSimpleName(),
                 CREATE,
                 null,

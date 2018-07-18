@@ -1,13 +1,13 @@
 package be.looorent.jflu.entity;
 
 import be.looorent.jflu.EventData;
-import be.looorent.jflu.EventKind;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * When an event represents a CRUD operation on an entity, it can use this class as {@link EventData} implementation.
@@ -17,20 +17,23 @@ public class EntityData implements EventData {
 
     @JsonDeserialize(using = EventSerializer.IdDeserializer.class)
     private final Object id;
+    private final UUID requestId;
     private final String entityName;
     private final EntityActionName actionName;
-    private final Object userMetadata;
-    private final Map<String, List<Long>> associations;
+    private final Map<String, Object> userMetadata;
+    private final Map<String, Long> associations;
     private final Map<String, List<Object>> changes;
 
     @JsonCreator
-    public EntityData(@JsonProperty("id")           Object id,
+    public EntityData(@JsonProperty("entityId")     Object id,
+                      @JsonProperty("requestId")    UUID requestId,
                       @JsonProperty("entityName")   String entityName,
                       @JsonProperty("actionName")   EntityActionName actionName,
-                      @JsonProperty("userMetadata") Object userMetadata,
-                      @JsonProperty("associations") Map<String, List<Long>> associations,
+                      @JsonProperty("userMetadata") Map<String, Object> userMetadata,
+                      @JsonProperty("associations") Map<String, Long> associations,
                       @JsonProperty("changes")      Map<String, List<Object>> changes) {
         this.id = id;
+        this.requestId = requestId;
         this.entityName = entityName;
         this.actionName = actionName;
         this.userMetadata = userMetadata;
@@ -42,6 +45,10 @@ public class EntityData implements EventData {
         return id;
     }
 
+    public UUID getRequestId() {
+        return requestId;
+    }
+
     public String getEntityName() {
         return entityName;
     }
@@ -50,11 +57,11 @@ public class EntityData implements EventData {
         return actionName;
     }
 
-    public Object getUserMetadata() {
+    public Map<String, Object> getUserMetadata() {
         return userMetadata;
     }
 
-    public Map<String, List<Long>> getAssociations() {
+    public Map<String, Long> getAssociations() {
         return associations;
     }
 
