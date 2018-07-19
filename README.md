@@ -17,7 +17,7 @@ This project is decoupled in a set of JAR you can pick up depending on your own 
 
 All librairies are available on Maven Central. For example, `jflu-subscriber-rabbitmq` can be included in your dependencies like this (Gradle example):
 ```groovy
-compile "be.looorent:jflu-subscriber-rabbitmq:0.8"
+compile "be.looorent:jflu-subscriber-rabbitmq:0.10"
 ```
 
 ## `jflu-core`
