@@ -4,6 +4,7 @@ import be.looorent.jflu.Configuration
 import be.looorent.jflu.Event
 import be.looorent.jflu.EventData
 import be.looorent.jflu.EventMetadata
+import be.looorent.jflu.Payload
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
@@ -49,8 +50,8 @@ class RequestEventSerializationTest extends Specification {
         request.parameters.get("type")[0] == "coincoin"
 
         request.userMetadata.size() == 2
-        request.userMetadata.get("pou") == "eeeeet"
-        request.userMetadata.get("hii") == "han"
+        request.userMetadata.get("pou").get(String) == "eeeeet"
+        request.userMetadata.get("hii").get(String) == "han"
 
     }
 
@@ -68,7 +69,7 @@ class RequestEventSerializationTest extends Specification {
                     "values": ["1", "2", "3"]
             ],
             [
-                    "action": "plouf"
+                    "action": new Payload("plouf")
             ])
 
         when: "marshalling and unmarshalling this event"
@@ -90,15 +91,15 @@ class RequestEventSerializationTest extends Specification {
         parsedMetadata.status       == metadata.status
         parsedMetadata.timestamp    == metadata.timestamp
 
-        parsedRequest.requestId              == request.requestId
-        parsedRequest.controllerName         == request.controllerName
-        parsedRequest.actionName             == request.actionName
-        parsedRequest.path                   == request.path
-        parsedRequest.responseCode           == request.responseCode
-        parsedRequest.userAgent              == request.userAgent
-        parsedRequest.duration               == request.duration
-        parsedRequest.parameters.size()      == request.parameters.size()
-        parsedRequest.userMetadata["action"] == request.userMetadata["action"]
+        parsedRequest.requestId                          == request.requestId
+        parsedRequest.controllerName                     == request.controllerName
+        parsedRequest.actionName                         == request.actionName
+        parsedRequest.path                               == request.path
+        parsedRequest.responseCode                       == request.responseCode
+        parsedRequest.userAgent                          == request.userAgent
+        parsedRequest.duration                           == request.duration
+        parsedRequest.parameters.size()                  == request.parameters.size()
+        parsedRequest.userMetadata["action"].payload     == request.userMetadata["action"].payload
     }
 
 }

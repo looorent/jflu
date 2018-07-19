@@ -3,6 +3,7 @@ package be.looorent.jflu.request;
 import be.looorent.jflu.Configuration;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.EventMetadata;
+import be.looorent.jflu.Payload;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public class RequestEventFactory {
                              String userAgent,
                              int duration,
                              Map<String, List<String>> parameters,
-                             Map<String, Object> userMetadata) {
+                             Map<String, Payload> userMetadata) {
         return new Event(createMetadata(controllerName+"."+actionName),
                 new RequestData(requestId,
                     controllerName,

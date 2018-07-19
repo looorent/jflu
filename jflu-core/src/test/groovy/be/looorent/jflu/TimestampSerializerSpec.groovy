@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+
+import static be.looorent.jflu.TimestampConverter.convertToLocalDateTime
 
 class TimestampSerializerSpec extends Specification {
     ObjectMapper jsonMapper = Configuration.instance.defaultJsonMapper
@@ -35,48 +36,48 @@ class TimestampSerializerSpec extends Specification {
     def "deserializing a timestamp with timezone works fine"() {
         given:
         def expectedTimestamp = LocalDateTime.of(2018, 07, 19, 12, 9, 54)
-        def timestampAsString = "\"2018-07-19T12:09:54Z\""
+        def timestampAsString = "2018-07-19T12:09:54Z"
 
         when:
-        def actualTimestamp = jsonMapper.readValue(timestampAsString, LocalDateTime)
+        def actualTimestamp = convertToLocalDateTime(timestampAsString)
 
         then:
-        actualTimestamp == expectedTimestamp
+        actualTimestamp.get() == expectedTimestamp
     }
 
     def "deserializing a Ruby Time.now.utc works fine"() {
         given:
         def expectedTimestamp = LocalDateTime.of(2018, 07, 17, 11, 22, 39)
-        def timestampAsString = "\"2018-07-17 11:22:39 UTC\""
+        def timestampAsString = "2018-07-17 11:22:39 UTC"
 
         when:
-        def actualTimestamp = LocalDateTime.parse(timestampAsString, DateTimeFormatter.ofPattern("\"yyyy-MM-dd HH:mm:ss 'UTC'\""))
+        def actualTimestamp = convertToLocalDateTime(timestampAsString)
 
         then:
-        actualTimestamp == expectedTimestamp
+        actualTimestamp.get() == expectedTimestamp
     }
 
     def "deserializing a Ruby Time.now in utc works fine"() {
         given:
         def expectedTimestamp = LocalDateTime.of(2018, 07, 17, 11, 22, 39)
-        def timestampAsString = "\"2018-07-17 11:22:39 +0000\""
+        def timestampAsString = "2018-07-17 11:22:39 +0000"
 
         when:
-        def actualTimestamp = LocalDateTime.parse(timestampAsString, DateTimeFormatter.ofPattern("\"yyyy-MM-dd HH:mm:ss X\""))
+        def actualTimestamp = convertToLocalDateTime(timestampAsString)
 
         then:
-        actualTimestamp == expectedTimestamp
+        actualTimestamp.get() == expectedTimestamp
     }
 
     def "deserializing a localized Ruby Time.now works fine"() {
         given:
         def expectedTimestamp = LocalDateTime.of(2018, 07, 17, 11, 22, 39)
-        def timestampAsString = "\"2018-07-17 11:22:39 +0200\""
+        def timestampAsString = "2018-07-17 11:22:39 +0200"
 
         when:
-        def actualTimestamp = LocalDateTime.parse(timestampAsString, DateTimeFormatter.ofPattern("\"yyyy-MM-dd HH:mm:ss X\""))
+        def actualTimestamp = convertToLocalDateTime(timestampAsString)
 
         then:
-        actualTimestamp == expectedTimestamp
+        actualTimestamp.get() == expectedTimestamp
     }
 }

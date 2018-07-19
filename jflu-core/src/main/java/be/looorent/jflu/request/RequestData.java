@@ -1,6 +1,7 @@
 package be.looorent.jflu.request;
 
 import be.looorent.jflu.EventData;
+import be.looorent.jflu.Payload;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -22,7 +23,7 @@ public class RequestData implements EventData {
     private final String userAgent;
     private final int duration;
     private final Map<String, List<String>> parameters;
-    private final Map<String, Object> userMetadata;
+    private final Map<String, Payload> userMetadata;
 
     @JsonCreator
     public RequestData(@JsonProperty("requestId") UUID requestId,
@@ -33,7 +34,7 @@ public class RequestData implements EventData {
                        @JsonProperty("userAgent") String userAgent,
                        @JsonProperty("duration") int duration,
                        @JsonProperty("params") Map<String, List<String>> parameters,
-                       @JsonProperty("userMetadata") Map<String, Object> userMetadata) {
+                       @JsonProperty("userMetadata") Map<String, Payload> userMetadata) {
         this.requestId = requestId;
         this.controllerName = controllerName;
         this.actionName = actionName;
@@ -77,7 +78,7 @@ public class RequestData implements EventData {
         return parameters;
     }
 
-    public Map<String, Object> getUserMetadata() {
+    public Map<String, Payload> getUserMetadata() {
         return userMetadata;
     }
 }
