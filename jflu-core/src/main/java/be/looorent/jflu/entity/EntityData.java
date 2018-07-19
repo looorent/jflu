@@ -1,11 +1,11 @@
 package be.looorent.jflu.entity;
 
 import be.looorent.jflu.EventData;
+import be.looorent.jflu.Payload;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,18 +20,18 @@ public class EntityData implements EventData {
     private final UUID requestId;
     private final String entityName;
     private final EntityActionName actionName;
-    private final Map<String, Object> userMetadata;
+    private final Map<String, Payload> userMetadata;
     private final Map<String, Long> associations;
-    private final Map<String, List<Object>> changes;
+    private final Map<String, EntityChange> changes;
 
     @JsonCreator
     public EntityData(@JsonProperty("entityId")     Object id,
                       @JsonProperty("requestId")    UUID requestId,
                       @JsonProperty("entityName")   String entityName,
                       @JsonProperty("actionName")   EntityActionName actionName,
-                      @JsonProperty("userMetadata") Map<String, Object> userMetadata,
+                      @JsonProperty("userMetadata") Map<String, Payload> userMetadata,
                       @JsonProperty("associations") Map<String, Long> associations,
-                      @JsonProperty("changes")      Map<String, List<Object>> changes) {
+                      @JsonProperty("changes")      Map<String, EntityChange> changes) {
         this.id = id;
         this.requestId = requestId;
         this.entityName = entityName;
@@ -57,7 +57,7 @@ public class EntityData implements EventData {
         return actionName;
     }
 
-    public Map<String, Object> getUserMetadata() {
+    public Map<String, Payload> getUserMetadata() {
         return userMetadata;
     }
 
@@ -65,7 +65,7 @@ public class EntityData implements EventData {
         return associations;
     }
 
-    public Map<String, List<Object>> getChanges() {
+    public Map<String, EntityChange> getChanges() {
         return changes;
     }
 }

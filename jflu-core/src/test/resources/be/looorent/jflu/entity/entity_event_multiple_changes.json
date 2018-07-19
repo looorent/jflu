@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "id": "0d5ce258-1314-45d9-8ace-ce43d42255cc",
+    "name": "create animal",
+    "emitter": "pet-store",
+    "timestamp": "2016-04-23T18:25:43.000Z",
+    "kind": "entity_change",
+    "status": "new"
+  },
+  "data": {
+    "id": 42,
+    "entityName": "Animal",
+    "actionName": "create",
+    "changes": {
+      "name": [null, "KnapKnap"],
+      "kind": ["Dog", "Cat"],
+      "age": [7, 8],
+      "someDate": ["2018-07-20T00:00:00Z", null]
+    }
+  }
+}
