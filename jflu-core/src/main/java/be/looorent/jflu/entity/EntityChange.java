@@ -18,7 +18,7 @@ public class EntityChange {
     private List<Payload> changes;
 
     @JsonCreator
-    EntityChange(List<Payload> changes) {
+    public EntityChange(List<Payload> changes) {
         if(changes.size() != 2) {
             throw new IllegalArgumentException("Changes must have two elements");
         }

@@ -11,12 +11,57 @@ import static be.looorent.jflu.EventStatus.NEW
 import static be.looorent.jflu.entity.EntityActionName.CREATE
 import static java.time.LocalDateTime.of
 import static java.time.Month.APRIL
+import static java.util.UUID.randomUUID
 
 /**
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 class EntityEventSerializationTest extends Specification {
     ObjectMapper jsonMapper = Configuration.instance.defaultJsonMapper
+
+    def "json mapper is bi-directional"() {
+        given: "a typical updated entity event"
+        Event event = new EntityEventFactory().createEventOnUpdate(
+                String.class,
+                42,
+                [
+                        "type": ["Bus", "Autocar"],
+                        "maxSpeed" : [null, 90l],
+                        "editedAt": ["2018-07-01T00:00:00Z", null]
+                ],
+                randomUUID()
+        )
+
+        when: "marhsalling and unmashalling this event"
+        Event parsedEvent = jsonMapper.readValue jsonMapper.writeValueAsBytes(event), Event
+
+        then: "this event is identical to the original one"
+        EventMetadata parsedMetadata = parsedEvent.metadata
+        parsedEvent.data instanceof EntityData
+        EntityData parsedEntity = parsedEvent.data as EntityData
+        EventMetadata metadata = event.metadata
+        event.data instanceof EntityData
+        EntityData entity = event.data as EntityData
+
+        parsedMetadata.id           == metadata.id
+        parsedMetadata.emitter      == metadata.emitter
+        parsedMetadata.kind         == metadata.kind
+        parsedMetadata.name         == metadata.name
+        parsedMetadata.status       == metadata.status
+        parsedMetadata.timestamp    == metadata.timestamp
+
+
+        parsedEntity.id                      == entity.id
+        parsedEntity.requestId               == entity.requestId
+        parsedEntity.entityName              == entity.entityName
+        parsedEntity.actionName              == entity.actionName
+        parsedEntity.changes.size()          == entity.changes.size()
+        parsedEntity.changes["type"].changes == entity.changes["type"].changes
+        parsedEntity.changes["maxSpeed"].beforeValue(Long.class) == entity.changes["maxSpeed"].beforeValue(Long.class)
+        parsedEntity.changes["maxSpeed"].afterValue(Long.class)  == entity.changes["maxSpeed"].afterValue(Long.class)
+        parsedEntity.changes["editedAt"].beforeValue(LocalDateTime.class)  == entity.changes["editedAt"].beforeValue(LocalDateTime.class)
+
+    }
 
     def "parsing an event from a JSON file works"() {
         when: "an event is parsed from a JSON file"
