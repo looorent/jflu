@@ -1,9 +1,7 @@
 package be.looorent.jflu.subscriber;
 
-import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.impl.DefaultExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,17 +71,7 @@ class RabbitMQConnectionFactory {
     }
 
     private DefaultExceptionHandler handleChannelExceptions() {
-        return new DefaultExceptionHandler() {
-            @Override
-            public void handleConsumerException(Channel channel, Throwable exception, Consumer consumer, String consumerTag, String methodName) {
-                super.handleConsumerException(channel, exception, consumer, consumerTag, methodName);
-                if (exception instanceof RuntimeException) {
-                    throw (RuntimeException) exception;
-                } else {
-                    throw new RuntimeException(exception);
-                }
-            }
-        };
+        return new RabbitMQExceptionHandler();
     }
 
     private void waitOrStop(int attempt, RuntimeException error) {

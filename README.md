@@ -170,7 +170,7 @@ To initialize the subscription configuration, several properties must be provide
 * `rabbitmq.queue-durable`
 * `rabbitmq.wait-for-connection`
 
-By default, you an use a RabbitMQ implementation by setting this environment variable:
+By default, you can use a RabbitMQ implementation by setting this environment variable:
 ```
 BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
 ```
@@ -188,6 +188,15 @@ new EventListener().start("your.package.with.projectors",
         configuration.getSubscriptionRepository(),
         configuration.getQueueListener());
 ```
+
+### Custom handling of ConsumptionException
+
+By default, when a `ConsumptionException` is raised, the broker will wrap the exception in a `RuntimeException` then interrupt the consumer thread.
+If you want to handle this exception yourself, you can create your own implementation by extending the interface `ConsumptionExceptionHandler`, then add the following environment variable:
+```
+CONSUMPTION_EXCEPTION_HANDLER_IMPLEMENTATION=your.custom.ExceptionHandler
+```
+This class must be instantiable.
 
 ## jflu-store
 
