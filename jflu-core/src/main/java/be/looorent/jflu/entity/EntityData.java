@@ -33,13 +33,13 @@ public class EntityData implements EventData {
     private final Map<String, EntityChange> changes;
 
     /**
-     * View of associations where all keys ends with `_id`
+     * View of associations where all keys ends with `_id` or `Id`
      */
     @JsonIgnore
     private final Map<String, Long> associationIds;
 
     /**
-     * View of associations where all keys ends with `_types`
+     * View of associations where all keys ends with `_type` or `Type`
      */
     @JsonIgnore
     private final Map<String, String> associationTypes;
@@ -121,11 +121,13 @@ public class EntityData implements EventData {
         }
 
         private static boolean isIdEntry(Map.Entry<String, Object> entry) {
-            return entry.getKey().endsWith("_id");
+            String key = entry.getKey();
+            return key.endsWith("Id") || key.endsWith("_id");
         }
 
         private static boolean isTypeEntry(Map.Entry<String, Object> entry) {
-            return entry.getKey().endsWith("_type");
+            String key = entry.getKey();
+            return key.endsWith("Type") || key.endsWith("_type");
         }
     }
 }
