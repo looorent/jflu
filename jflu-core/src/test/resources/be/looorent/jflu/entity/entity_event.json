@@ -15,8 +15,10 @@
       "custom": true
     },
     "associations": {
-      "owner": 42,
-      "child": 1
+      "owner_id": 42,
+      "owner_type": "User",
+      "child_id": 1,
+      "unknown": 1
     },
     "changes": {
       "name": [null, "KnapKnap"],
