@@ -32,7 +32,7 @@ class EntityEventSerializationTest extends Specification {
                 randomUUID()
         )
 
-        when: "marhsalling and unmashalling this event"
+        when: "marshalling and unmashalling this event"
         Event parsedEvent = jsonMapper.readValue jsonMapper.writeValueAsBytes(event), Event
 
         then: "this event is identical to the original one"
@@ -60,8 +60,9 @@ class EntityEventSerializationTest extends Specification {
         parsedEntity.changes["maxSpeed"].beforeValue(Long.class) == entity.changes["maxSpeed"].beforeValue(Long.class)
         parsedEntity.changes["maxSpeed"].afterValue(Long.class)  == entity.changes["maxSpeed"].afterValue(Long.class)
         parsedEntity.changes["editedAt"].beforeValue(LocalDateTime.class)  == entity.changes["editedAt"].beforeValue(LocalDateTime.class)
-
     }
+
+
 
     def "parsing an event from a JSON file works"() {
         when: "an event is parsed from a JSON file"
@@ -87,7 +88,9 @@ class EntityEventSerializationTest extends Specification {
         entity.entityName == "Animal"
         entity.actionName == CREATE
         entity.userMetadata == [ custom: new Payload(true) ]
-        entity.associations == [ owner: 42, child: 1]
+        entity.associations == [ owner_id: 42, owner_type: "User", child_id: 1, unknown: 1 ]
+        entity.associationIds == [ owner_id: 42, child_id: 1 ]
+        entity.associationTypes == [ owner_type: "User" ]
         entity.changes == [name: new EntityChange([null, new Payload("KnapKnap")]), color: new EntityChange([null, new Payload("Brown")])]
     }
 
@@ -170,6 +173,5 @@ class EntityEventSerializationTest extends Specification {
         changes["age"].afterValue(Long) == 8
         changes["someDate"].beforeValue(LocalDateTime) == of(2018,7,20,0,0,0)
         changes["someDate"].afterValue(LocalDateTime) == null
-
     }
 }
