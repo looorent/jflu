@@ -33,13 +33,13 @@ public class EntityData implements EventData {
     private final Map<String, EntityChange> changes;
 
     /**
-     * View of associations where all keys ends with `_type`
+     * View of associations where all keys ends with `_id`
      */
     @JsonIgnore
     private final Map<String, Long> associationIds;
 
     /**
-     * View of associations where all keys ends with `_id`
+     * View of associations where all keys ends with `_types`
      */
     @JsonIgnore
     private final Map<String, String> associationTypes;
