@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -59,14 +59,8 @@ public class EntityData implements EventData {
         this.userMetadata = ofNullable(userMetadata).orElseGet(Collections::emptyMap);
         this.associations = ofNullable(associations).orElseGet(Collections::emptyMap);
         this.changes = changes;
-        this.associationIds = this.associations.entrySet()
-                .stream()
-                .filter(Association::isIdEntry)
-                .collect(toMap(Map.Entry::getKey, Association::castAssociationId));
-        this.associationTypes = this.associations.entrySet()
-                .stream()
-                .filter(Association::isTypeEntry)
-                .collect(toMap(Map.Entry::getKey, Association::castAssociationType));
+        this.associationIds = Association.reduce(this.associations, Association::isId, Association::castAssociationId);
+        this.associationTypes = Association.reduce(this.associations, Association::isType, Association::castAssociationType);
     }
 
     public Object getId() {
@@ -106,28 +100,35 @@ public class EntityData implements EventData {
     }
 
     private static class Association {
-        private static Long castAssociationId(Map.Entry<String, Object> entry) {
-            return ofNullable(entry.getValue())
+        private static Long castAssociationId(Object valueToCast) {
+            return ofNullable(valueToCast)
                     .filter(value -> value instanceof Number)
                     .map(Number.class::cast)
                     .map(Number::longValue)
                     .orElse(null);
         }
 
-        private static String castAssociationType(Map.Entry<String, Object> entry) {
-            return ofNullable(entry.getValue())
+        private static String castAssociationType(Object valueToCast) {
+            return ofNullable(valueToCast)
                     .map(String::valueOf)
                     .orElse(null);
         }
 
-        private static boolean isIdEntry(Map.Entry<String, Object> entry) {
-            String key = entry.getKey();
+        private static boolean isId(String key) {
             return key.endsWith("Id") || key.endsWith("_id");
         }
 
-        private static boolean isTypeEntry(Map.Entry<String, Object> entry) {
-            String key = entry.getKey();
+        private static boolean isType(String key) {
             return key.endsWith("Type") || key.endsWith("_type");
+        }
+
+        private static <T> Map<String, T> reduce(Map<String, Object> associations,
+                                                 Predicate<String> keyFilter,
+                                                 Function<Object, T> transformer) {
+            return associations.entrySet()
+                    .stream()
+                    .filter(entry -> keyFilter.test(entry.getKey()))
+                    .collect(HashMap::new, (map, entry) -> map.put(entry.getKey(), transformer.apply(entry.getValue())), Map::putAll);
         }
     }
 }
