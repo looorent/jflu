@@ -12,6 +12,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 
@@ -84,19 +85,61 @@ public class EntityData implements EventData {
     }
 
     public Map<String, Object> getAssociations() {
-        return Collections.unmodifiableMap(associations);
+        return unmodifiableMap(associations);
     }
 
     public Map<String, Long> getAssociationIds() {
-        return Collections.unmodifiableMap(associationIds);
+        return unmodifiableMap(associationIds);
+    }
+
+    public Long getAssociationId(String id) {
+        return associationIds.get(id);
+    }
+
+    /**
+     * @param id the association's id
+     * @return true iff there is an association with this id, even when the value is null; false otherwise
+     */
+    public boolean hasAssociationId(String id) {
+        return associationIds.containsKey(id);
     }
 
     public Map<String, String> getAssociationTypes() {
-        return Collections.unmodifiableMap(associationTypes);
+        return unmodifiableMap(associationTypes);
+    }
+
+    public String getAssociationType(String typeId) {
+        return associationTypes.get(typeId);
+    }
+
+    /**
+     * @param typeId the association's typeId
+     * @return true iff there is an association with this typeId, even when the value is null; false otherwise
+     */
+    public boolean hasAssociationType(String typeId) {
+        return associationTypes.containsKey(typeId);
     }
 
     public Map<String, EntityChange> getChanges() {
-        return changes;
+        return unmodifiableMap(changes);
+    }
+
+    /**
+     * @param name the name of the field that has changed
+     * @return true iff the changes contain an entry with the provided name, even if the value is null; false otherwise
+     */
+    public boolean hasChange(String name) {
+        return changes.containsKey(name);
+    }
+
+    public <T> Optional<T> afterValueOf(String name, Class<T> clazz) {
+        return ofNullable(changes.get(name))
+                .flatMap(change -> change.afterValue(clazz));
+    }
+
+    public <T> Optional<T> beforeValueOf(String name, Class<T> clazz) {
+        return ofNullable(changes.get(name))
+                .flatMap(change -> change.afterValue(clazz));
     }
 
     private static class Association {

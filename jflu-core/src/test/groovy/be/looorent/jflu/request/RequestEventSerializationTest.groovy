@@ -8,10 +8,12 @@ import be.looorent.jflu.Payload
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
+import java.time.LocalDateTime
+
 import static be.looorent.jflu.EventKind.REQUEST
 import static be.looorent.jflu.EventStatus.NEW
-import static java.time.LocalDateTime.of
 import static java.time.Month.APRIL
+import static java.util.Optional.of
 import static java.util.UUID.randomUUID
 
 /**
@@ -33,7 +35,7 @@ class RequestEventSerializationTest extends Specification {
         metadata.id.toString() == "0d5ce258-1314-45d9-8ace-ce43d42255cc"
         metadata.name == "create pouetpouet"
         metadata.emitter == "jflu"
-        metadata.timestamp == of(2016, APRIL, 23, 18, 25, 43)
+        metadata.timestamp == LocalDateTime.of(2016, APRIL, 23, 18, 25, 43)
         metadata.kind == REQUEST
         metadata.status == NEW
 
@@ -50,8 +52,8 @@ class RequestEventSerializationTest extends Specification {
         request.parameters.get("type")[0] == "coincoin"
 
         request.userMetadata.size() == 2
-        request.userMetadata.get("pou").get(String) == "eeeeet"
-        request.userMetadata.get("hii").get(String) == "han"
+        request.userMetadata.get("pou").get(String) == of("eeeeet")
+        request.userMetadata.get("hii").get(String) == of("han")
 
     }
 

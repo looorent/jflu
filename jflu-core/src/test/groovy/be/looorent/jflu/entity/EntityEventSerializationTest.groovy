@@ -11,6 +11,8 @@ import static be.looorent.jflu.EventStatus.NEW
 import static be.looorent.jflu.entity.EntityActionName.CREATE
 import static java.time.LocalDateTime.of
 import static java.time.Month.APRIL
+import static java.util.Optional.empty
+import static java.util.Optional.of
 import static java.util.UUID.randomUUID
 
 /**
@@ -77,7 +79,7 @@ class EntityEventSerializationTest extends Specification {
         metadata.id.toString() == "0d5ce258-1314-45d9-8ace-ce43d42255cc"
         metadata.name == "create animal"
         metadata.emitter == "pet-store"
-        metadata.timestamp == of(2016, APRIL, 23, 18, 25, 43)
+        metadata.timestamp == LocalDateTime.of(2016, APRIL, 23, 18, 25, 43)
         metadata.kind == ENTITY_CHANGE
         metadata.status == NEW
 
@@ -117,7 +119,7 @@ class EntityEventSerializationTest extends Specification {
         metadata.id.toString() == "0d5ce258-1314-45d9-8ace-ce43d42255cc"
         metadata.name == "create animal"
         metadata.emitter == "pet-store"
-        metadata.timestamp == of(2016, APRIL, 23, 18, 25, 43)
+        metadata.timestamp == LocalDateTime.of(2016, APRIL, 23, 18, 25, 43)
         metadata.kind == ENTITY_CHANGE
         metadata.status == NEW
     }
@@ -134,7 +136,7 @@ class EntityEventSerializationTest extends Specification {
         metadata.id.toString() == "0d5ce258-1314-45d9-8ace-ce43d42255cc"
         metadata.name == "create animal"
         metadata.emitter == "pet-store"
-        metadata.timestamp == of(2016, APRIL, 23, 18, 25, 43)
+        metadata.timestamp == LocalDateTime.of(2016, APRIL, 23, 18, 25, 43)
         metadata.kind == ENTITY_CHANGE
         metadata.status == NEW
     }
@@ -147,11 +149,11 @@ class EntityEventSerializationTest extends Specification {
 
         then: "this event is parseable and metadata is queryable"
         EntityData entityData = event.data as EntityData
-        entityData.userMetadata["aString"].get(String) == "pouet"
-        entityData.userMetadata["aLong"].get(Long) == 42
-        entityData.userMetadata["aUUID"].get(UUID) == UUID.fromString("5546fe3d-b2b2-48c4-a794-2ac02dba888d")
-        entityData.userMetadata["a8601Date"].get(LocalDateTime) == of(2018,07,19,8,14,3)
-        entityData.userMetadata["aRubyDate"].get(LocalDateTime) == of(2018,07,19,13,27,30)
+        entityData.userMetadata["aString"].get(String) == of("pouet")
+        entityData.userMetadata["aLong"].get(Long) == of(42L)
+        entityData.userMetadata["aUUID"].get(UUID) == of(UUID.fromString("5546fe3d-b2b2-48c4-a794-2ac02dba888d"))
+        entityData.userMetadata["a8601Date"].get(LocalDateTime) == of(LocalDateTime.of(2018,07,19,8,14,3))
+        entityData.userMetadata["aRubyDate"].get(LocalDateTime) == of(LocalDateTime.of(2018,07,19,13,27,30))
 
     }
 
@@ -165,13 +167,13 @@ class EntityEventSerializationTest extends Specification {
         def entityData = event.data as EntityData
         def changes = entityData.changes
         changes.size() == 4
-        changes["name"].beforeValue(String) == null
-        changes["name"].afterValue(String) == "KnapKnap"
-        changes["kind"].beforeValue(String) == "Dog"
-        changes["kind"].afterValue(String) == "Cat"
-        changes["age"].beforeValue(Long) == 7
-        changes["age"].afterValue(Long) == 8
-        changes["someDate"].beforeValue(LocalDateTime) == of(2018,7,20,0,0,0)
-        changes["someDate"].afterValue(LocalDateTime) == null
+        changes["name"].beforeValue(String) == empty()
+        changes["name"].afterValue(String) == of("KnapKnap")
+        changes["kind"].beforeValue(String) == of("Dog")
+        changes["kind"].afterValue(String) == of("Cat")
+        changes["age"].beforeValue(Long) == of(7L)
+        changes["age"].afterValue(Long) == of(8L)
+        changes["someDate"].beforeValue(LocalDateTime) == of(LocalDateTime.of(2018,7,20,0,0,0))
+        changes["someDate"].afterValue(LocalDateTime) == empty()
     }
 }

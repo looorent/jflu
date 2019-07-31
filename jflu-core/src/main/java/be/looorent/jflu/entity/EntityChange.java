@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static be.looorent.jflu.Payload.nullValue;
 import static java.util.Optional.ofNullable;
@@ -25,11 +26,11 @@ public class EntityChange {
         this.changes = changes;
     }
 
-    public <T> T beforeValue(Class<T> clazz) {
+    public <T> Optional<T> beforeValue(Class<T> clazz) {
         return selectValue(BEFORE_VALUE_INDEX).get(clazz);
     }
 
-    public <T> T afterValue(Class<T> clazz) {
+    public <T> Optional<T> afterValue(Class<T> clazz) {
         return selectValue(AFTER_VALUE_INDEX).get(clazz);
     }
 
@@ -38,10 +39,10 @@ public class EntityChange {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EntityChange that = (EntityChange) o;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        EntityChange that = (EntityChange) other;
         return Objects.equals(changes, that.changes);
     }
 

@@ -8,6 +8,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.ofNullable;
+
 public class Payload {
 
     private Object payload;
@@ -17,9 +20,9 @@ public class Payload {
         this.payload = payload;
     }
 
-    public <T> T get(Class<T> clazz) {
+    public <T> Optional<T> get(Class<T> clazz) {
         if(payload == null) {
-            return null;
+            return empty();
         }
         if(clazz == null) {
             throw new IllegalArgumentException("Class must be present in order to cast payload");
@@ -33,8 +36,9 @@ public class Payload {
         } else if (clazz.equals(UUID.class)) {
             valueToCast = UUID.fromString(String.valueOf(payload));
         }
-        return clazz.cast(valueToCast);
+        return ofNullable(clazz.cast(valueToCast));
     }
+
 
     @Override
     public boolean equals(Object o) {
