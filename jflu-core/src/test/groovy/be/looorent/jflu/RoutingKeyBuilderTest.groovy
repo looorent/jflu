@@ -11,14 +11,29 @@ import spock.lang.Specification
 class RoutingKeyBuilderTest extends Specification {
 
     def "default routing key is *.*.*.*"() {
-        RoutingKeyBuilder.create().build() == "*.*.*.*"
+        given: "a default builder"
+        RoutingKeyBuilder builder = RoutingKeyBuilder.create()
 
-        RoutingKeyBuilder.create()
+        when: "calling build"
+        String defaultValue = builder.build()
+
+        then:
+        defaultValue == "*.*.*.*"
+    }
+
+    def "default routing key with null values is *.*.*.*"() {
+        given: "a default builder"
+        RoutingKeyBuilder builder = RoutingKeyBuilder.create()
                 .withEmitter(null)
-                .withKind(null)
+                .withStatus((EventStatus) null)
+                .withKind((EventKind) null)
                 .withName(null)
-                .withStatus("")
-                .build() == "*.*.*.*"
+
+        when: "calling build"
+        String defaultValue = builder.build()
+
+        then:
+        defaultValue == "*.*.*.*"
     }
 
     def "create routing key from events works"() {

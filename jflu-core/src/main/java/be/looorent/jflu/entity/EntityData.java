@@ -84,6 +84,11 @@ public class EntityData implements EventData {
         return userMetadata;
     }
 
+    public <T> Optional<T> getUserMetadataFor(String name, Class<T> clazz) {
+        return ofNullable(userMetadata.get(name))
+                .flatMap(metadata -> metadata.get(clazz));
+    }
+
     public Map<String, Object> getAssociations() {
         return unmodifiableMap(associations);
     }
@@ -139,7 +144,7 @@ public class EntityData implements EventData {
 
     public <T> Optional<T> beforeValueOf(String name, Class<T> clazz) {
         return ofNullable(changes.get(name))
-                .flatMap(change -> change.afterValue(clazz));
+                .flatMap(change -> change.beforeValue(clazz));
     }
 
     private static class Association {
