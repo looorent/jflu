@@ -11,6 +11,7 @@ public enum EventMappingKind {
     ENTITY_CHANGE,
     REQUEST,
     MANUAL,
+    TRIGGERED_JOB,
     ALL;
 
     public static EventMappingKind valueOf(EventKind kind) {

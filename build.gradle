@@ -28,7 +28,7 @@ subprojects {
   apply plugin: "idea"
 
   group = "be.looorent"
-  version "0.13.5"
+  version "0.13.6"
 
   repositories {
       mavenCentral()
