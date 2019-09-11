@@ -1,7 +1,7 @@
 package be.looorent.jflu.subscriber;
 
 /**
- * @author Logan Clément {@literal <logan@commuty.net>}
+ * @author Logan Clement {@literal <logan@commuty.net>}
  */
 public interface ConsumptionExceptionHandler {
 

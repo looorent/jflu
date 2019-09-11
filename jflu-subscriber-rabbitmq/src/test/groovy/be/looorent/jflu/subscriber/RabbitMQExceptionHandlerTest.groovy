@@ -5,7 +5,7 @@ import com.rabbitmq.client.Channel
 import spock.lang.Specification
 
 /**
- * @author Logan Clément {@literal <logan@commuty.net>}
+ * @author Logan Clement {@literal <logan@commuty.net>}
  */
 class RabbitMQExceptionHandlerTest extends Specification {
 

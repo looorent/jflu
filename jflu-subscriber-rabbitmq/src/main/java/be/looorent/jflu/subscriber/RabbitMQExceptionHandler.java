@@ -12,7 +12,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
  * Handles RabbitMQ Consumer Exceptions and allow the definition of a custom exception handler
  * for {@link ConsumptionException}s
  *
- * @author Logan Clément {@literal <logan@commuty.net>}
+ * @author Logan Clement {@literal <logan@commuty.net>}
  */
 public class RabbitMQExceptionHandler extends DefaultExceptionHandler {
 
