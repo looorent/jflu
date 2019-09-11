@@ -10,6 +10,7 @@ public enum EventKind {
 
     @JsonProperty("entity_change") ENTITY_CHANGE,
     @JsonProperty("request") REQUEST,
-    @JsonProperty("manual") MANUAL
+    @JsonProperty("manual") MANUAL,
+    @JsonProperty("triggered_job") TRIGGERED_JOB
 
 }
