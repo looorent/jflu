@@ -1,6 +1,6 @@
 JarIndex-Version: 1.0
 
-jflu-producer-rabbitmq-quarkus-deployment-0.13.7.jar
+jflu-producer-rabbitmq-quarkus-deployment-<project.version>.jar
 META-INF
 be
 be/looorent

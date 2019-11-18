@@ -6,8 +6,6 @@ import com.rabbitmq.client.impl.DefaultExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
-
 /**
  * Handles RabbitMQ Consumer Exceptions and allow the definition of a custom exception handler
  * for {@link ConsumptionException}s
@@ -47,7 +45,7 @@ public class RabbitMQExceptionHandler extends DefaultExceptionHandler {
 
     private ConsumptionExceptionHandler initConsumptionExceptionHandler() {
         String consumptionExceptionHandlerClassName = readConsumptionExceptionHandlerClassName();
-        if (!isNullOrEmpty(consumptionExceptionHandlerClassName)) {
+        if (consumptionExceptionHandlerClassName != null && !consumptionExceptionHandlerClassName.isEmpty()) {
             try {
                 Class<?> handlerClass = Class.forName(consumptionExceptionHandlerClassName);
                 return handlerClass.asSubclass(ConsumptionExceptionHandler.class).newInstance();

@@ -9,4 +9,4 @@ metadata:
   status: "preview"
 group-id: "be.looorent"
 artifact-id: "jflu-producer-rabbitmq-quarkus"
-version: "0.13.7"
+version: "<project.version>"

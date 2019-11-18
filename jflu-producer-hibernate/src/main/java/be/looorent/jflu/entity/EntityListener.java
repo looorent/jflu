@@ -3,7 +3,6 @@ package be.looorent.jflu.entity;
 import be.looorent.jflu.Event;
 import be.looorent.jflu.publisher.EventPublisher;
 import be.looorent.jflu.publisher.PublishingException;
-import com.google.common.collect.Lists;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.Metamodel;
 import org.hibernate.Transaction;
@@ -15,6 +14,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Supplier;
 
+import static java.util.Arrays.asList;
 import static java.util.UUID.randomUUID;
 
 /**
@@ -89,7 +89,7 @@ public class EntityListener extends EmptyInterceptor {
             Type type = types[propertyIndex];
             if (isSimple(type)) {
                 if (!Objects.equals(previousState[propertyIndex], currentState[propertyIndex])) {
-                    changePerProperty.put(propertyNames[propertyIndex], Lists.newArrayList(previousState[propertyIndex], currentState[propertyIndex]));
+                    changePerProperty.put(propertyNames[propertyIndex], asList(previousState[propertyIndex], currentState[propertyIndex]));
                 }
             }
         }

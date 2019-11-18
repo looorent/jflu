@@ -274,6 +274,10 @@ For example, if you use Guice to handle dependency injection, you can use a diff
 
 ```
 
+## Quarkus support
+
+
+
 ## TODO
 
 * Move `jflu-subscriber-rabbitmq` and `jflu-producer-rabbitmq` dependencies out of `jflu-store`'s dependencies

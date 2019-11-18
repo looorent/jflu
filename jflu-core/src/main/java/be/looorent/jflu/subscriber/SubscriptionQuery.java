@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.asList;
 
 /**
  * Immutable class to match {@link Event}s based on their metadata.
@@ -125,10 +125,10 @@ public class SubscriptionQuery {
             throw new IllegalArgumentException("event must not be null");
         }
 
-        List<EventMappingStatus> possibleStatuses = newArrayList(EventMappingStatus.ALL, EventMappingStatus.valueOf(event.getStatus()));
-        List<String> possibleEmitters = newArrayList("", event.getEmitter());
-        List<EventMappingKind> possibleKinds = newArrayList(EventMappingKind.ALL, EventMappingKind.valueOf(event.getKind()));
-        List<String> possibleNames = newArrayList("", event.getName());
+        List<EventMappingStatus> possibleStatuses = asList(EventMappingStatus.ALL, EventMappingStatus.valueOf(event.getStatus()));
+        List<String> possibleEmitters = asList("", event.getEmitter());
+        List<EventMappingKind> possibleKinds = asList(EventMappingKind.ALL, EventMappingKind.valueOf(event.getKind()));
+        List<String> possibleNames = asList("", event.getName());
 
         List<SubscriptionQuery> queries = new ArrayList<>();
         for (EventMappingStatus status : possibleStatuses) {

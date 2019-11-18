@@ -1,3 +1,21 @@
 jar {
     archiveBaseName = "jflu-producer-rabbitmq-quarkus"
 }
+
+task createQuarkusExtensionFiles {
+    doLast {
+        def destinationFolder = new File(buildDir, "resources/main/META-INF")
+        def originalFolder = new File(projectDir, "src/main/quarkus-extension")
+        destinationFolder.mkdirs()
+
+        originalFolder.eachFile { originalFile ->
+            def fileName = originalFile.name
+            println("Copy ${fileName} into META-INF")
+            def target = originalFile.text.replace("<project.version>", project.version)
+            def destination = new File(destinationFolder, fileName)
+            destination.createNewFile()
+            destination.write target
+        }
+    }
+}
+jar.dependsOn(createQuarkusExtensionFiles)

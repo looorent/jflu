@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.13.7] - 2019-11-18
 
 * Quarkus extension
+* Timestamp is always produced in UTC
+* Move Gradle Wrapper to `6.0`
+* Upgrade RabbitMQ client to `5.7.3`
 
 ## [0.13.6] - 2019-09-11
 

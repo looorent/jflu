@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 import static be.looorent.jflu.EventKind.ENTITY_CHANGE;
 import static be.looorent.jflu.EventStatus.NEW;
 import static be.looorent.jflu.entity.EntityActionName.*;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.time.LocalDateTime.now;
 import static java.time.ZoneOffset.UTC;
+import static java.util.Arrays.asList;
 
 /**
  * Create events for each create/delete/update operation on an entity.
@@ -43,7 +43,7 @@ public class EntityEventFactory {
 
         Map<String, EntityChange> changes = new HashMap<>();
         for (Map.Entry<String, Object> stateAndPropertyName : stateByPropertyName.entrySet()) {
-            changes.put(stateAndPropertyName.getKey(), new EntityChange(newArrayList(null, new Payload(stateAndPropertyName.getValue()))));
+            changes.put(stateAndPropertyName.getKey(), new EntityChange(asList(null, new Payload(stateAndPropertyName.getValue()))));
         }
         return new Event(metadata, new EntityData(entityId,
                 null,
