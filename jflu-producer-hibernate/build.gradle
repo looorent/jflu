@@ -1,3 +1,3 @@
 jar {
-    baseName = "jflu-producer-hibernate"
+    archiveBaseName = "jflu-producer-hibernate"
 }

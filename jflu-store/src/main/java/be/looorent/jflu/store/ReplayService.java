@@ -13,7 +13,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +23,7 @@ import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.createDatab
 import static com.google.common.collect.Lists.partition;
 import static java.lang.Long.parseLong;
 import static java.time.LocalDateTime.ofInstant;
+import static java.time.ZoneOffset.UTC;
 import static java.util.Collections.max;
 import static java.util.Collections.min;
 import static java.util.stream.Collectors.joining;
@@ -105,7 +105,7 @@ public class ReplayService {
                 UUID.fromString(result.getString(1)),
                 result.getString(2),
                 result.getString(3),
-                ofInstant(result.getDate(4).toInstant(), ZoneId.systemDefault()),
+                ofInstant(result.getDate(4).toInstant(), UTC),
                 EventKind.valueOf(result.getString(5)),
                 REPLAYED
                 );

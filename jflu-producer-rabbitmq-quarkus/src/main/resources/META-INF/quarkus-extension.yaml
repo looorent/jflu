@@ -1,0 +1,12 @@
+---
+name: "JFLU - RabbitMQ producer"
+metadata:
+  keywords:
+    - "messaging"
+    - "rabbitmq"
+  categories:
+    - "messaging"
+  status: "preview"
+group-id: "be.looorent"
+artifact-id: "jflu-producer-rabbitmq-quarkus"
+version: "0.13.7"

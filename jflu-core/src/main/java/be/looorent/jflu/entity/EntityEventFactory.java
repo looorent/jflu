@@ -17,12 +17,23 @@ import static be.looorent.jflu.EventStatus.NEW;
 import static be.looorent.jflu.entity.EntityActionName.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.time.LocalDateTime.now;
+import static java.time.ZoneOffset.UTC;
 
 /**
  * Create events for each create/delete/update operation on an entity.
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class EntityEventFactory {
+
+    private final String emitter;
+
+    public EntityEventFactory(String emitter) {
+        this.emitter = emitter;
+    }
+
+    public EntityEventFactory() {
+        this(Configuration.getInstance().getEmitter());
+    }
 
     public Event createEventOnSave(Class<?> entityType,
                                    Serializable entityId,
@@ -81,8 +92,8 @@ public class EntityEventFactory {
                                          UUID sessionId) {
         return new EventMetadata(sessionId,
                 actionName.name().toLowerCase() + " " + entityType.getSimpleName(),
-                Configuration.getInstance().getEmitter(),
-                now(),
+                emitter,
+                now(UTC),
                 ENTITY_CHANGE,
                 NEW);
     }

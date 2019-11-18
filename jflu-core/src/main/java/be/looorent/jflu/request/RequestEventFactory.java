@@ -12,11 +12,22 @@ import java.util.UUID;
 import static be.looorent.jflu.EventKind.REQUEST;
 import static be.looorent.jflu.EventStatus.NEW;
 import static java.time.LocalDateTime.now;
+import static java.time.ZoneOffset.UTC;
 
 /**
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class RequestEventFactory {
+
+    private final String emitter;
+
+    public RequestEventFactory(String emitter) {
+        this.emitter = emitter;
+    }
+
+    public RequestEventFactory() {
+        this(Configuration.getInstance().getEmitter());
+    }
 
     public Event createEvent(UUID requestId,
                              String controllerName,
@@ -42,8 +53,8 @@ public class RequestEventFactory {
     private EventMetadata createMetadata(String controllerName) {
         return new EventMetadata(UUID.randomUUID(),
                 controllerName,
-                Configuration.getInstance().getEmitter(),
-                now(),
+                emitter,
+                now(UTC),
                 REQUEST,
                 NEW);
     }
