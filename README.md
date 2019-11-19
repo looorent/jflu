@@ -274,9 +274,16 @@ For example, if you use Guice to handle dependency injection, you can use a diff
 
 ```
 
+## Release
+
+Base on this [great article](https://nemerosa.ghost.io/2015/07/01/publishing-to-the-maven-central-using-gradle/)
+```shell
+./gradlew -Prelease uploadArchives closeAndReleaseRepository
+```
+
 ## Quarkus support
 
-
+TODO
 
 ## TODO
 
