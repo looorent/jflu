@@ -13,7 +13,7 @@ public class ConsumptionException extends RuntimeException {
     private final Event event;
     private final String eventAsJson;
 
-    ConsumptionException(Event event, Exception cause) {
+    public ConsumptionException(Event event, Exception cause) {
         super(cause);
         if (event == null) {
             throw new IllegalArgumentException("event is mandatory when creating a ConsumptionException");

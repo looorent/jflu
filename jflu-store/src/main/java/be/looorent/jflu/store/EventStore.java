@@ -1,6 +1,8 @@
 package be.looorent.jflu.store;
 
 import be.looorent.jflu.subscriber.*;
+import be.looorent.jflu.subscriber.reflection.EventListener;
+import be.looorent.jflu.subscriber.reflection.SubscriptionScanner;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;

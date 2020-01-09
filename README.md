@@ -17,7 +17,7 @@ This project is decoupled in a set of JAR you can pick up depending on your own 
 
 All librairies are available on Maven Central. For example, `jflu-subscriber-rabbitmq` can be included in your dependencies like this (Gradle example):
 ```groovy
-compile "be.looorent:jflu-subscriber-rabbitmq:0.13.7"
+compile "be.looorent:jflu-subscriber-rabbitmq:0.14.0"
 ```
 
 ## `jflu-core`
@@ -76,7 +76,7 @@ Any implementation of `BrokerSubscriptionConfigurationProvider` can provide an i
 
 This default implementation reads an environment variable `BROKER_SUBSCRIPTION_IMPLEMENTATION` to know which `BrokerSubscriptionConfiguration` implementation it must use. The JAR `jflu-subscriber-rabbitmq` contains a implementation for RabbitMQ. Using this one, you must define the environment variable:
 ```
-BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
+BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration
 ```
 
 
@@ -86,7 +86,7 @@ Use this JAR if you want to generate events whenever a transaction operates on H
 
 ### Getting started
 
-You can register `be.looorent.jflu.entity.EntityListener` as an Hibernate session-scoped interceptor.
+You can register `be.looorent.jflu.hibernate.EntityListener` as an Hibernate session-scoped interceptor.
 `EntityListener` requires an instance of `EventPublisher`.
 
 For instance:
@@ -172,7 +172,7 @@ To initialize the subscription configuration, several properties must be provide
 
 By default, you can use a RabbitMQ implementation by setting this environment variable:
 ```
-BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
+BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration
 ```
 
 Then, this line of code will return a RabbitMQ configuration:
@@ -207,7 +207,7 @@ Listens for `new` (where `status=new`) events and store them into a database.
 
 This implementation is Broker-agnostic. Therefore, you must provide:
 * An implementation of `BrokerSubscriptionConfiguration`. _e.g._ by adding `jflu-subscriber-rabbitmq` as a JAR dependency (which is already included with `jflu-store` by default)
-* `BROKER_SUBSCRIPTION_IMPLEMENTATION`: an environment variable that specifies which subclass of `BrokerSubscriptionConfiguration` to use. _e.g._ `be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration`
+* `BROKER_SUBSCRIPTION_IMPLEMENTATION`: an environment variable that specifies which subclass of `BrokerSubscriptionConfiguration` to use. _e.g._ `be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration`
 
 
 For instance, this project can be deployed in a Docker container:
@@ -244,7 +244,7 @@ This container must depend on a broker and PostgreSQL. For example, using `docke
       - RABBITMQ_QUEUE_NAME: <xxx>
       - RABBITMQ_QUEUE_DURABLE: <xxx>
       - RABBITMQ_WAIT_FOR_CONNECTION: <xxx>
-      - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.RabbitMQSubscriptionConfiguration
+      - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration
     links:
       - db
       - rabbitmq
@@ -266,7 +266,7 @@ You can also use the `ReplayService` programmatically.
 
 ### Instanciating EventConsumers differently
 
-If you want to create your `EventConsumer`s differently, you can override a method of `be.looorent.jflu.subscriber.SubscriptionScanner` that uses reflection by default: `protected Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type)`
+If you want to create your `EventConsumer`s differently, you can override a method of `be.looorent.jflu.subscriber.reflection.SubscriptionScanner` that uses reflection by default: `protected Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type)`
 
 For example, if you use Guice to handle dependency injection, you can use a different implementation of `SubscriptionScanner`:
 
@@ -287,7 +287,6 @@ TODO
 
 ## TODO
 
-* Move `jflu-subscriber-rabbitmq` and `jflu-producer-rabbitmq` dependencies out of `jflu-store`'s dependencies
 * Make "replay" a real gradle task
 * documentation
 * more tests

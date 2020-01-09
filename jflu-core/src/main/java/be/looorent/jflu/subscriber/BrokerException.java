@@ -5,7 +5,7 @@ package be.looorent.jflu.subscriber;
  */
 public class BrokerException extends Exception {
 
-    BrokerException(Exception cause) {
+    public BrokerException(Exception cause) {
         super(cause);
     }
 

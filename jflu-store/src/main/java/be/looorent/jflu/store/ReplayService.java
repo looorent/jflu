@@ -3,7 +3,7 @@ package be.looorent.jflu.store;
 import be.looorent.jflu.*;
 import be.looorent.jflu.publisher.EventPublisher;
 import be.looorent.jflu.publisher.PublishingException;
-import be.looorent.jflu.publisher.RabbitMQEventTopicPublisher;
+import be.looorent.jflu.publisher.rabbitmq.RabbitMQEventTopicPublisher;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static be.looorent.jflu.EventStatus.REPLAYED;
-import static be.looorent.jflu.publisher.RabbitMQPropertyName.readPropertiesFromEnvironment;
+import static be.looorent.jflu.publisher.rabbitmq.RabbitMQPropertyName.readPropertiesFromEnvironment;
 import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.createDatabaseConnection;
 import static com.google.common.collect.Lists.partition;
 import static java.lang.Long.parseLong;

@@ -6,3 +6,5 @@ be
 be/looorent
 be/looorent/jflu
 be/looorent/jflu/publisher
+be/looorent/jflu/publisher/rabbitmq
+be/looorent/jflu/publisher/rabbitmq/quarkus

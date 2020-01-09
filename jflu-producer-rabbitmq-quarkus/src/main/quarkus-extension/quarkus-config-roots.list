@@ -1,2 +1,2 @@
-be.looorent.jflu.publisher.ProducerRuntimeConfiguration
-be.looorent.jflu.publisher.ProducerBuildConfiguration
+be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRuntimeConfiguration
+be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerBuildConfiguration

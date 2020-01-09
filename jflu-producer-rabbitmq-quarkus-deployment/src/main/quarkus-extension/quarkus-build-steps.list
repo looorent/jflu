@@ -1,1 +1,1 @@
-be.looorent.jflu.publisher.JFluProducerProcessor
+be.looorent.jflu.publisher.rabbitmq.quarkus.deployment.JFluProducerProcessor
