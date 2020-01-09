@@ -9,7 +9,6 @@ module jflu.subscriber.store {
     requires com.fasterxml.jackson.databind;
     requires jflu.core;
     requires jflu.subscriber.rabbitmq;
-    requires jflu.subscriber.reflection;
     requires jflu.producer.rabbitmq;
     exports be.looorent.jflu.store;
 }

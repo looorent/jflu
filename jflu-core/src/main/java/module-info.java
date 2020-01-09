@@ -2,7 +2,6 @@ module jflu.core {
     requires org.slf4j;
 
     requires com.fasterxml.jackson.annotation;
-    requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.datatype.jsr310;
 
     opens be.looorent.jflu to com.fasterxml.jackson.databind;

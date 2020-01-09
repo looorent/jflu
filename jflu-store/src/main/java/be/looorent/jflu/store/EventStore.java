@@ -1,8 +1,6 @@
 package be.looorent.jflu.store;
 
 import be.looorent.jflu.subscriber.*;
-import be.looorent.jflu.subscriber.reflection.EventListener;
-import be.looorent.jflu.subscriber.reflection.SubscriptionScanner;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
@@ -24,7 +22,6 @@ import static be.looorent.jflu.store.EventStoreDatabaseConfiguration.createDatab
 public class EventStore {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventStore.class);
-    private static final String PROJECTOR_ROOT_PACKAGE = "be.looorent.jflu.store";
     private static final String CHANGELOG_LOCATION = "db/changelog.xml";
 
     public static void main(String... args) throws SQLException, LiquibaseException, BrokerException {
@@ -43,13 +40,23 @@ public class EventStore {
         LOG.info("Migrating database: Done.");
     }
 
-    private static final void listenToQueue() throws BrokerException {
+    private static final void listenToQueue() throws BrokerException, SQLException {
         LOG.info("Starting listener...");
         BrokerSubscriptionConfiguration configuration = new BrokerSubscriptionEnvironmentConfigurationProvider().createSubscriptionConfiguration();
-        new EventListener().start(PROJECTOR_ROOT_PACKAGE,
-                new SubscriptionScanner(),
-                configuration.getSubscriptionRepository(),
-                configuration.getQueueListener());
+
+        SubscriptionRepository repository = registerRepository();
+        configuration.getQueueListener().listen(repository);
         LOG.info("Starting listener: Done.");
+    }
+
+    private static SubscriptionRepository registerRepository() throws SQLException {
+        SubscriptionRepository repository = new SubscriptionRepository();
+        repository.register(createOverallSubscription());
+        return repository;
+    }
+
+    private static Subscription createOverallSubscription() throws SQLException {
+        EventStoreConsumer consumer = new EventStoreConsumer();
+        return new Subscription(new SubscriptionQuery("", EventMappingKind.ALL, "", EventMappingStatus.NEW), "EventStore", consumer::store);
     }
 }

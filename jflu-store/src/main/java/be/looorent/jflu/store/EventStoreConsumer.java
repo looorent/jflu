@@ -34,7 +34,6 @@ class EventStoreConsumer implements EventConsumer {
         jsonMapper = Configuration.getInstance().getDefaultJsonMapper();
     }
 
-    @EventMapping(status = NEW)
     public void store(Event event) {
         LOG.debug("Storing event with id : {}", event.getId());
         try {

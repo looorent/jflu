@@ -9,7 +9,6 @@ import java.time.LocalDateTime
 import static be.looorent.jflu.EventKind.ENTITY_CHANGE
 import static be.looorent.jflu.EventStatus.NEW
 import static be.looorent.jflu.entity.EntityActionName.CREATE
-import static java.time.LocalDateTime.of
 import static java.time.Month.APRIL
 import static java.util.Optional.empty
 import static java.util.Optional.of

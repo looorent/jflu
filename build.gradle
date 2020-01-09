@@ -12,6 +12,7 @@ buildscript {
     }
     dependencies {
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusVersion"
+        classpath "org.beryx:badass-jlink-plugin:2.17.0"
     }
 }
 
@@ -27,7 +28,7 @@ def moduleProjects = [
 
 
 subprojects {
-    apply plugin: "java"
+    apply plugin: "java-library"
     apply plugin: "groovy"
     apply plugin: "idea"
 
@@ -43,9 +44,9 @@ subprojects {
     }
 
     dependencies {
-        implementation "org.slf4j:slf4j-api:$slf4jVersion"
+        api "org.slf4j:slf4j-api:$slf4jVersion"
 
-        testCompile(
+        testCompile (
                 "org.codehaus.groovy:groovy-all:$groovyVersion",
                 "org.junit.jupiter:junit-jupiter-api:$junitVersion",
                 "org.junit.vintage:junit-vintage-engine:$junitVersion",
@@ -172,8 +173,9 @@ subprojects {
 
 project(":jflu-core") {
     dependencies {
-        implementation(
+        implementation (
                 "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
+                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
                 "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
         )
     }
@@ -252,13 +254,23 @@ project(":jflu-producer-rabbitmq-quarkus-deployment") {
 
 project(":jflu-store") {
     apply plugin: "java"
-    apply plugin: "application"
+    apply plugin: "org.beryx.jlink"
+
+    sourceCompatibility = JavaVersion.VERSION_13
+    targetCompatibility = JavaVersion.VERSION_13
+
+    jlink {
+        addExtraDependencies (
+                "jackson"
+        )
+        options = ["--strip-java-debug-attributes", "--compress", "2", "--no-header-files", "--no-man-pages"]
+    }
+
     mainClassName = "jflu.subscriber.store/be.looorent.jflu.store.EventStore"
 
     dependencies {
         compile project(":jflu-core")
         compile project(":jflu-subscriber-rabbitmq")
-        compile project(":jflu-subscriber-reflection")
         compile project(":jflu-producer-rabbitmq")
 
         implementation(
@@ -267,7 +279,8 @@ project(":jflu-store") {
                 "org.liquibase:liquibase-core:$liquibaseVersion",
                 "org.postgresql:postgresql:$postgresVersion",
                 "ch.qos.logback:logback-classic:$logbackVersion",
-                "ch.qos.logback:logback-core:$logbackVersion"
+                "ch.qos.logback:logback-core:$logbackVersion",
+                "javax.servlet:javax.servlet-api:$servletVersion"
         )
     }
 
