@@ -35,7 +35,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "0.14.0"
+    version "0.14.1"
 
     repositories {
         mavenCentral()

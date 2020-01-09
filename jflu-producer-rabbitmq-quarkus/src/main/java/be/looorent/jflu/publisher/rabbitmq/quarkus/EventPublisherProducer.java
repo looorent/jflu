@@ -1,6 +1,7 @@
 package be.looorent.jflu.publisher.rabbitmq.quarkus;
 
 import be.looorent.jflu.publisher.EventPublisher;
+import be.looorent.jflu.publisher.EventUnpublisher;
 import be.looorent.jflu.publisher.rabbitmq.RabbitMQEventTopicPublisher;
 import org.jboss.logging.Logger;
 
@@ -21,7 +22,7 @@ public class EventPublisherProducer {
     @Produces
     @Dependent
     public EventPublisher producePublisher() {
-        if (buildConfiguration.enabled) {
+        if (isEnabled()) {
             LOGGER.info("Instanciate singleton EventPublisher of type RabbitMQEventTopicPublisher");
             Properties properties = new Properties();
             USERNAME.writeTo(properties, runtimeConfiguration.username.get());
@@ -31,15 +32,20 @@ public class EventPublisherProducer {
             VIRTUAL_HOST.writeTo(properties, runtimeConfiguration.virtualHost.get());
             EXCHANGE_NAME.writeTo(properties, runtimeConfiguration.exchangeName);
             EXCHANGE_DURABLE.writeTo(properties, runtimeConfiguration.exchangeDurable);
-            WAIT_FOR_CONNECTION.writeTo(properties, buildConfiguration.waitForConnection);
+            WAIT_FOR_CONNECTION.writeTo(properties, runtimeConfiguration.waitForConnection);
             return new RabbitMQEventTopicPublisher(properties);
         } else {
-            return null;
+            LOGGER.info("JFlu is disabled. EventPublisher will not publish anywhere.");
+            return new EventUnpublisher();
         }
     }
 
     public void init(ProducerRuntimeConfiguration runtimeConfiguration, ProducerBuildConfiguration buildConfiguration) {
         this.runtimeConfiguration = runtimeConfiguration;
         this.buildConfiguration = buildConfiguration;
+    }
+
+    private boolean isEnabled() {
+        return buildConfiguration != null && buildConfiguration.enabled;
     }
 }

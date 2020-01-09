@@ -41,7 +41,7 @@ public class RabbitMQEventTopicPublisher implements EventPublisher, AutoCloseabl
      * Build a publisher using properties, whatever their source.
      * @param properties contains properties from {@link RabbitMQPropertyName}
      */
-        public RabbitMQEventTopicPublisher(Properties properties) {
+    public RabbitMQEventTopicPublisher(Properties properties) {
         if (properties == null) {
             throw new IllegalArgumentException("properties must not be null");
         }

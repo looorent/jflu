@@ -11,20 +11,23 @@ import javax.enterprise.inject.Produces;
 public class EventFactoryProducer {
     private static final Logger LOGGER = Logger.getLogger(EventFactoryProducer.class);
 
+    private ProducerRuntimeConfiguration runtimeConfiguration;
     private ProducerBuildConfiguration buildConfiguration;
 
     @Produces
     @Dependent
     public ManualEventFactory produceManualEventFactory() {
-        if (buildConfiguration.enabled) {
-            LOGGER.infof("Instanciate manual event factory for emitter='%s'", buildConfiguration.emitter);
-            return new ManualEventFactory(buildConfiguration.emitter);
-        } else {
-            return null;
-        }
+        String emitter = isEnabled() ? runtimeConfiguration.emitter : "[JFluDisabled]";
+        LOGGER.infof("Instanciate manual event factory for emitter='%s'", emitter);
+        return new ManualEventFactory(emitter);
     }
 
-    public void init(ProducerBuildConfiguration buildConfiguration) {
+    public void init(ProducerRuntimeConfiguration runtimeConfiguration, ProducerBuildConfiguration buildConfiguration) {
+        this.runtimeConfiguration = runtimeConfiguration;
         this.buildConfiguration = buildConfiguration;
+    }
+
+    private boolean isEnabled() {
+        return buildConfiguration != null && buildConfiguration.enabled;
     }
 }

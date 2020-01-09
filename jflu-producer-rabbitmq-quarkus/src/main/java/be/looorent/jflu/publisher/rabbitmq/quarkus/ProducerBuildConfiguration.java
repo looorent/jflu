@@ -11,18 +11,10 @@ public class ProducerBuildConfiguration {
     @ConfigItem(defaultValue = "false")
     public boolean enabled;
 
-    @ConfigItem(defaultValue = "false")
-    public Boolean waitForConnection;
-
-    @ConfigItem
-    public String emitter;
-
     @Override
     public String toString() {
         return "ProducerBuildConfiguration{" +
                 "enabled=" + enabled +
-                "waitForConnection=" + waitForConnection +
-                ", emitter='" + emitter + '\'' +
                 '}';
     }
 }

@@ -60,6 +60,22 @@ public final class ProducerRuntimeConfiguration$$accessor {
         ((ProducerRuntimeConfiguration)__instance).exchangeDurable = exchangeDurable;
     }
 
+    public static Object get_emitter(Object __instance) {
+        return ((ProducerRuntimeConfiguration)__instance).emitter;
+    }
+
+    public static void set_emitter(Object __instance, Object emitter) {
+        ((ProducerRuntimeConfiguration)__instance).emitter = (String) emitter;
+    }
+
+    public static boolean get_waitForConnection(Object __instance) {
+        return ((ProducerRuntimeConfiguration)__instance).waitForConnection;
+    }
+
+    public static void set_waitForConnection(Object __instance, boolean waitForConnection) {
+        ((ProducerRuntimeConfiguration)__instance).waitForConnection = waitForConnection;
+    }
+
     private ProducerRuntimeConfiguration$$accessor() { }
     public static Object construct() {
         return new ProducerRuntimeConfiguration();

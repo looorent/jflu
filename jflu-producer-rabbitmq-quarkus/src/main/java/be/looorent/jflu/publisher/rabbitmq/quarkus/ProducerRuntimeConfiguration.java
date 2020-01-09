@@ -29,17 +29,26 @@ public class ProducerRuntimeConfiguration {
     public String exchangeName;
 
     @ConfigItem
+    public String emitter;
+
+    @ConfigItem
     public boolean exchangeDurable;
+
+    @ConfigItem(defaultValue = "false")
+    public boolean waitForConnection;
 
     @Override
     public String toString() {
         return "ProducerRuntimeConfiguration{" +
                 "username=" + username +
+                ", password=" + password +
                 ", host='" + host + '\'' +
                 ", port=" + port +
                 ", virtualHost=" + virtualHost +
                 ", exchangeName='" + exchangeName + '\'' +
+                ", emitter='" + emitter + '\'' +
                 ", exchangeDurable=" + exchangeDurable +
+                ", waitForConnection=" + waitForConnection +
                 '}';
     }
 }
