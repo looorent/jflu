@@ -2,8 +2,6 @@ package be.looorent.jflu.subscriber.rabbitmq
 
 import be.looorent.jflu.subscriber.BrokerSubscriptionConfigurationProvider
 import be.looorent.jflu.subscriber.BrokerSubscriptionEnvironmentConfigurationProvider
-import be.looorent.jflu.subscriber.rabbitmq.RabbitMQConnectionException
-import be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration
 import spock.lang.Specification
 
 /**

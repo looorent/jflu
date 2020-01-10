@@ -4,4 +4,5 @@ module jflu.subscriber.rabbitmq {
     requires com.rabbitmq.client;
     requires com.fasterxml.jackson.databind;
     exports be.looorent.jflu.subscriber.rabbitmq;
+    opens be.looorent.jflu.subscriber.rabbitmq;
 }
