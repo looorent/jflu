@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusVersion"
-        classpath "org.beryx:badass-jlink-plugin:2.17.0"
+        classpath "org.beryx:badass-jlink-plugin:$jlinkVersion"
     }
 }
 
@@ -36,7 +36,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "0.14.3"
+    version "1.0.0"
 
     repositories {
         mavenCentral()
@@ -193,9 +193,11 @@ project(":jflu-producer-hibernate") {
 project(":jflu-producer-rabbitmq") {
     dependencies {
         compile project(":jflu-core")
-        implementation(
-                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+        api (
                 "com.rabbitmq:amqp-client:$rabbitmqVersion"
+        )
+        implementation(
+                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         )
         testCompile "com.github.stefanbirkner:system-rules:$systemRulesVersion"
     }
@@ -212,9 +214,11 @@ project(":jflu-producer-springmvc") {
 project(":jflu-subscriber-rabbitmq") {
     dependencies {
         compile project(":jflu-core")
-        implementation(
-                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
+        api (
                 "com.rabbitmq:amqp-client:$rabbitmqVersion"
+        )
+        implementation(
+                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         )
     }
 }
@@ -232,8 +236,8 @@ project(":jflu-producer-rabbitmq-quarkus") {
     }
 
     dependencies {
-        compile project(":jflu-core")
-        compile project(":jflu-producer-rabbitmq")
+        api project(":jflu-core")
+        api project(":jflu-producer-rabbitmq")
         compileOnly(
                 "io.quarkus:quarkus-core:$quarkusVersion",
                 "io.quarkus.arc:arc:$quarkusVersion",
