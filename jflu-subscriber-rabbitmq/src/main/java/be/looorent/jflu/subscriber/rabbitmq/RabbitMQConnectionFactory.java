@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
@@ -24,6 +25,12 @@ class RabbitMQConnectionFactory {
     private static final int MAXIMUM_CONNECTION_ATTEMPTS = 30;
     private static final int CONNECTION_ATTEMPT_INTERVAL_IN_MS = 1000;
     private static final boolean DEFAULT_WAIT_FOR_CONNECTION = true;
+
+    private final ConsumptionExceptionHandler consumptionExceptionHandler;
+
+    public RabbitMQConnectionFactory(ConsumptionExceptionHandler consumptionExceptionHandler) {
+        this.consumptionExceptionHandler = consumptionExceptionHandler;
+    }
 
     Connection connect(Properties properties) {
         boolean waitForConnection = ofNullable(WAIT_FOR_CONNECTION.readFrom(properties)).map(Boolean::parseBoolean).orElse(DEFAULT_WAIT_FOR_CONNECTION);
@@ -71,7 +78,7 @@ class RabbitMQConnectionFactory {
     }
 
     private DefaultExceptionHandler handleChannelExceptions() {
-        return new RabbitMQExceptionHandler();
+        return new RabbitMQExceptionHandler(consumptionExceptionHandler);
     }
 
     private void waitOrStop(int attempt, RuntimeException error) {

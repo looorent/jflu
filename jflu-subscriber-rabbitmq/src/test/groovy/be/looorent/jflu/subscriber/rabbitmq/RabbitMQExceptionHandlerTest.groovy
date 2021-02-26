@@ -14,7 +14,7 @@ class RabbitMQExceptionHandlerTest extends Specification {
 
     def "loading an exception handler without a consumption exception handler"() {
         given: "an exception handler"
-        RabbitMQExceptionHandler handler = new RabbitMQExceptionHandler()
+        RabbitMQExceptionHandler handler = new RabbitMQExceptionHandler(null)
 
         when: "an exception of type 'ConsumptionException' is raised"
         ConsumptionException exception = new ConsumptionException(new Event(null, null), new Exception())
@@ -24,9 +24,9 @@ class RabbitMQExceptionHandlerTest extends Specification {
         thrown RuntimeException
     }
 
-    def "loading an exception handler with a custom consumption exception handler"() {
+    def "loading an exception handler with a reflective custom consumption exception handler"() {
         given: "an exception handler with a consumption exception class defined"
-        RabbitMQExceptionHandler handler = new RabbitMQExceptionHandler() {
+        RabbitMQExceptionHandler handler = new RabbitMQExceptionHandler(null) {
             @Override
             protected String readConsumptionExceptionHandlerClassName() {
                 return "${DummyConsumptionExceptionHandler.class.name}"
@@ -41,9 +41,21 @@ class RabbitMQExceptionHandlerTest extends Specification {
         thrown DummyException
     }
 
-    static class DummyException extends Exception {
 
+    def "loading an exception handler with a manual consumption exception handler"() {
+        given: "an exception handler with a consumption exception class defined"
+        RabbitMQExceptionHandler handler = new RabbitMQExceptionHandler(new DummyConsumptionExceptionHandler())
+
+        when: "an exception of type 'ConsumptionException' is raised"
+        ConsumptionException exception = new ConsumptionException(new Event(null, null), new Exception())
+        handler.handleConsumerException(Mock(Channel), exception, null, null, null)
+
+        then: "an exception of type DummyException is thrown"
+        thrown DummyException
     }
+
+
+    static class DummyException extends Exception {}
 
     static class DummyConsumptionExceptionHandler implements ConsumptionExceptionHandler {
         @Override

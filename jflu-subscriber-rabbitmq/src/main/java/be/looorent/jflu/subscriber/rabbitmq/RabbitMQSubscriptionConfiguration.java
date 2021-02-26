@@ -35,9 +35,9 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
     private final String exchangeName;
     private final String queueName;
 
-    public RabbitMQSubscriptionConfiguration(Properties properties) throws RabbitMQConnectionException {
+    public RabbitMQSubscriptionConfiguration(Properties properties, ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
         try {
-            connection = new RabbitMQConnectionFactory().connect(properties);
+            connection = new RabbitMQConnectionFactory(exceptionHandler).connect(properties);
             channel = createChannel(connection, properties);
             queueName = createQueue(channel, properties);
             exchangeName = connectExchange(properties);
@@ -48,7 +48,11 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
     }
 
     public static final RabbitMQSubscriptionConfiguration createFromSystemProperties() throws RabbitMQConnectionException {
-        return new RabbitMQSubscriptionConfiguration(readPropertiesFromEnvironment());
+        return createFromSystemProperties(null);
+    }
+
+    public static final RabbitMQSubscriptionConfiguration createFromSystemProperties(ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
+        return new RabbitMQSubscriptionConfiguration(readPropertiesFromEnvironment(), exceptionHandler);
     }
 
     private String connectExchange(Properties properties) throws IOException {
