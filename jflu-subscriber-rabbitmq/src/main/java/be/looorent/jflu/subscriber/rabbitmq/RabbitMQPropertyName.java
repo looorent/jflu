@@ -1,5 +1,6 @@
 package be.looorent.jflu.subscriber.rabbitmq;
 
+import java.util.Map;
 import java.util.Properties;
 
 import static java.lang.System.getenv;
@@ -10,7 +11,7 @@ import static java.util.stream.Collectors.toMap;
  * All properties that must be set to initialize a proper instance of all RabbitMQ implementations.
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
-enum RabbitMQPropertyName {
+public enum RabbitMQPropertyName {
 
     USERNAME("rabbitmq.username"),
     PASSWORD("rabbitmq.password"),
@@ -61,5 +62,15 @@ enum RabbitMQPropertyName {
                                     return value == null ? "" : value;
                                })));
         return properties;
+    }
+
+    public static final Properties merge(Properties properties, Map<RabbitMQPropertyName, String> otherProperties) {
+        Properties merged = new Properties(properties);
+        if (otherProperties != null) {
+            for (Map.Entry<RabbitMQPropertyName, String> keyAndValue : otherProperties.entrySet()) {
+                merged.setProperty(keyAndValue.getKey().getPropertyName(), keyAndValue.getValue());
+            }
+        }
+        return merged;
     }
 }

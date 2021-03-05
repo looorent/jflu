@@ -12,4 +12,19 @@ public interface QueueListener {
      */
     void listen(SubscriptionRepository subscriptionRepository);
 
+    /**
+     * Stops consuming a queue. If the method "listen" has never occurred, nothing happens.
+     * @throws IllegalArgumentException if the listener is not listening
+     */
+    void stop();
+
+    /**
+     * Deletes the queue
+     */
+    void deleteQueue();
+
+    /**
+     * @return true if the queue is listening; false otherwise
+     */
+    boolean isListening();
 }

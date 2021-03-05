@@ -14,6 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Optional;
+
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 /**
  * RabbitMQ implementation to consume messages from a dedicated queue.
@@ -25,6 +29,8 @@ class RabbitMQQueueListener implements QueueListener {
 
     private final RabbitMQSubscriptionConfiguration configuration;
     private final ObjectMapper jsonMapper;
+    private Optional<String> consumerTag;
+    private boolean listening;
 
     public RabbitMQQueueListener(RabbitMQSubscriptionConfiguration configuration) {
         if (configuration == null) {
@@ -32,6 +38,7 @@ class RabbitMQQueueListener implements QueueListener {
         }
         this.configuration = configuration;
         this.jsonMapper = Configuration.getInstance().getDefaultJsonMapper();
+        this.consumerTag = empty();
     }
 
     @Override
@@ -42,8 +49,7 @@ class RabbitMQQueueListener implements QueueListener {
 
         try {
             final Channel channel = configuration.getChannel();
-
-            channel.basicConsume(configuration.getQueueName(), false, new DefaultConsumer(channel) {
+            consumerTag = of(channel.basicConsume(configuration.getQueueName(), false, new DefaultConsumer(channel) {
                 @Override
                 public void handleDelivery(String consumerTag,
                                            Envelope envelope,
@@ -61,10 +67,49 @@ class RabbitMQQueueListener implements QueueListener {
                         throw new ConsumptionException(event, e);
                     }
                 }
-            });
+            }));
+            listening = true;
+            LOG.debug("Consumer Tag is {}", consumerTag.orElse(null));
         } catch (IOException e) {
             LOG.error("An error occurred when consuming events", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void stop() {
+        if (!listening) {
+            throw new IllegalArgumentException("A queue cannot be stopped when it is not listening.");
+        }
+
+        try {
+            if (consumerTag.isPresent()) {
+                String tag = consumerTag.get();
+                LOG.debug("Stopping consumer with tag {}", tag);
+                configuration.getChannel().basicCancel(tag);
+            } else {
+                LOG.warn("Trying to stop a consumer, but it has not received any tag (so it probably never started, or stop() has been called twice)");
+            }
+            listening = false;
+        } catch (IOException e) {
+            LOG.warn("Error when stopping consumer", e);
+        }
+    }
+
+    @Override
+    public void deleteQueue() {
+        String queueName = configuration.getQueueName();
+        try {
+            LOG.info("Deleting queue: {}...", queueName);
+            configuration.getChannel().queueDelete(queueName);
+            LOG.info("Deleting queue: {} : Done", queueName);
+        } catch (IOException e) {
+            LOG.warn("Error when deleting queue: {}", queueName, e);
+        }
+    }
+
+    @Override
+    public boolean isListening() {
+        return false;
     }
 }

@@ -10,11 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static be.looorent.jflu.subscriber.rabbitmq.RabbitMQPropertyName.*;
 import static java.lang.Integer.parseInt;
+import static java.util.Collections.emptyMap;
 import static java.util.Optional.ofNullable;
 
 /**
@@ -51,8 +54,13 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
         return createFromSystemProperties(null);
     }
 
+    public static final RabbitMQSubscriptionConfiguration createFromSystemProperties(ConsumptionExceptionHandler exceptionHandler,
+                                                                                     Map<RabbitMQPropertyName, String> overridesAttributes) throws RabbitMQConnectionException {
+        return new RabbitMQSubscriptionConfiguration(merge(readPropertiesFromEnvironment(), overridesAttributes), exceptionHandler);
+    }
+
     public static final RabbitMQSubscriptionConfiguration createFromSystemProperties(ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
-        return new RabbitMQSubscriptionConfiguration(readPropertiesFromEnvironment(), exceptionHandler);
+        return createFromSystemProperties(exceptionHandler, emptyMap());
     }
 
     private String connectExchange(Properties properties) throws IOException {
