@@ -1,20 +1,15 @@
-def repoUser = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
-def repoPassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhUser")
-
-apply plugin: "io.codearte.nexus-staging"
-
-buildscript {
-    repositories {
-        mavenCentral()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:$nexusVersion"
-        classpath "org.beryx:badass-jlink-plugin:$jlinkVersion"
-    }
+plugins {
+    id "idea"
+    id "java-library"
+    id "groovy"
+    id "maven-publish"
+    id "signing"
+    id "com.github.ben-manes.versions" version "$outdatedVersion"
+    id "org.beryx.jlink" version "$jlinkVersion" apply false
 }
+
+def sonatypeUsername = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
+def sonatypePassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword")
 
 def moduleProjects = [
         "jflu-core",
@@ -26,8 +21,9 @@ def moduleProjects = [
         "jflu-store"
 ]
 
-
 subprojects {
+    group "net.commuty"
+
     apply plugin: "java-library"
     apply plugin: "groovy"
     apply plugin: "idea"
@@ -36,17 +32,24 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "1.0.3"
+    version "1.0.4"
 
     repositories {
         mavenCentral()
         mavenLocal()
     }
 
+    java.modularity.inferModulePath = false
+
+    java {
+        withJavadocJar()
+        withSourcesJar()
+    }
+
     dependencies {
         api "org.slf4j:slf4j-api:$slf4jVersion"
 
-        testCompile (
+        testImplementation (
                 "org.codehaus.groovy:groovy-all:$groovyVersion",
                 "org.junit.jupiter:junit-jupiter-api:$junitVersion",
                 "org.junit.vintage:junit-vintage-engine:$junitVersion",
@@ -91,87 +94,67 @@ subprojects {
 
     publishing {
         publications {
-            maven(MavenPublication) {
+            mavenJava(MavenPublication) {
+                artifactId = project.name
                 from components.java
-            }
-        }
-    }
-
-    if (project.hasProperty("release")) {
-        allprojects {
-            apply plugin: "signing"
-            apply plugin: "maven"
-
-            task sourcesJar(type: Jar, dependsOn: classes) {
-                archiveClassifier = "sources"
-                from sourceSets.main.allSource
-            }
-
-            task javadocJar(type: Jar, dependsOn: javadoc) {
-                archiveClassifier = "javadoc"
-                from javadoc.destinationDir
-            }
-
-            artifacts {
-                archives sourcesJar
-                archives javadocJar
-            }
-
-            jar {
-                manifest {
-                    attributes "Implementation-Version": archiveVersion, "provider": gradle
+                versionMapping {
+                    usage("java-api") {
+                        fromResolutionOf("runtimeClasspath")
+                    }
+                    usage("java-runtime") {
+                        fromResolutionResult()
+                    }
                 }
-            }
 
-            signing {
-                sign configurations.archives
-            }
-
-            uploadArchives {
-                repositories {
-                    mavenDeployer {
-                        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-                        repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                            authentication(userName: repoUser, password: repoPassword)
+                pom {
+                    name = project.name
+                    description = project.description
+                    url = "https://github.com/looorent/jflu"
+                    licenses {
+                        license {
+                            name = "The MIT License (MIT)"
+                            url = "http://opensource.org/licenses/MIT"
                         }
-
-                        pom.project {
-                            name project.name
-                            description project.description
-                            packaging "jar"
-                            url "https://github.com/looorent/jflu"
-
-                            scm {
-                                connection "scm:git:https://github.com/looorent/jflu"
-                                developerConnection "scm:git:git@github.com:looorent/jflu.git"
-                                url "https://github.com/looorent/jflu"
-                            }
-
-                            licenses {
-                                license {
-                                    name "The MIT License (MIT)"
-                                    url "http://opensource.org/licenses/MIT"
-                                    distribution "repo"
-                                }
-                            }
-
-                            developers {
-                                developer {
-                                    id = "looorent"
-                                    name = "Lorent Lempereur"
-                                    email = "lorent.lempereur.dev@gmail.com"
-                                }
-                            }
+                    }
+                    developers {
+                        developer {
+                            id = "looorent"
+                            name = "Lorent Lempereur"
+                            email = "lorent.lempereur.dev@gmail.com"
                         }
+                    }
+                    scm {
+                        connection = "scm:git:https://github.com/looorent/jflu"
+                        developerConnection = "scm:git:git@github.com:looorent/jflu.git"
+                        url = "https://github.com/looorent/jflu"
                     }
                 }
             }
         }
+
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+                allowInsecureProtocol=true
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+
+    apply plugin: "signing"
+    signing {
+        sign publishing.publications.mavenJava
     }
 }
 
+
 project(":jflu-core") {
+    description = "JFlu core elements"
     dependencies {
         implementation (
                 "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion",
@@ -185,52 +168,60 @@ project(":jflu-producer-hibernate") {
     description = "JFlu Hibernate Interceptor to generate events from entities"
 
     dependencies {
-        compile project(":jflu-core")
+        implementation project(":jflu-core")
         compileOnly "org.hibernate:hibernate-core:$hibernateVersion"
     }
 }
 
 project(":jflu-producer-rabbitmq") {
+    description = "JFlu Connector to emit event to RabbitMQ"
+
     dependencies {
-        compile project(":jflu-core")
+        implementation(
+                project(":jflu-core"),
+                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        )
         api (
                 "com.rabbitmq:amqp-client:$rabbitmqVersion"
         )
-        implementation(
-                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        )
-        testCompile "com.github.stefanbirkner:system-rules:$systemRulesVersion"
+        testImplementation "com.github.stefanbirkner:system-rules:$systemRulesVersion"
     }
 }
 
 project(":jflu-producer-springmvc") {
+    description = "JFlu Connector to emit event when Spring controllers are called"
     dependencies {
-        compile project(":jflu-core")
+        implementation (
+                project(":jflu-core"),
+                "javax.servlet:javax.servlet-api:$servletVersion"
+        )
         compileOnly "org.springframework:spring-webmvc:$springVersion"
-        implementation "javax.servlet:javax.servlet-api:$servletVersion"
     }
 }
 
 project(":jflu-subscriber-rabbitmq") {
+    description = "JFlu Connector to listen events from RabbitMQ"
     dependencies {
-        compile project(":jflu-core")
+        implementation (
+                project(":jflu-core"),
+                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        )
         api (
                 "com.rabbitmq:amqp-client:$rabbitmqVersion"
-        )
-        implementation(
-                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         )
     }
 }
 
 project(":jflu-subscriber-reflection") {
+    description = "JFlu Connector that allow developers to automatically subscribe to queues using reflection"
     dependencies {
-        compile project(":jflu-core")
+        implementation project(":jflu-core")
         implementation "org.reflections:reflections:$reflectionVersion"
     }
 }
 
 project(":jflu-producer-rabbitmq-quarkus") {
+    description = "JFlu Connector for RabbitMQ on Quarkus"
     jar {
         archiveBaseName = "jflu-producer-rabbitmq-quarkus"
     }
@@ -238,7 +229,7 @@ project(":jflu-producer-rabbitmq-quarkus") {
     dependencies {
         api project(":jflu-core")
         api project(":jflu-producer-rabbitmq")
-        compileOnly(
+        compileOnly (
                 "io.quarkus:quarkus-core:$quarkusVersion",
                 "io.quarkus.arc:arc:$quarkusVersion",
                 "io.quarkus:quarkus-arc:$quarkusVersion"
@@ -247,9 +238,10 @@ project(":jflu-producer-rabbitmq-quarkus") {
 }
 
 project(":jflu-producer-rabbitmq-quarkus-deployment") {
+    description = "JFlu Connector for RabbitMQ on Quarkus - deployment"
     dependencies {
-        compile project(":jflu-producer-rabbitmq-quarkus")
-        compileOnly(
+        implementation project(":jflu-producer-rabbitmq-quarkus")
+        compileOnly (
                 "io.quarkus:quarkus-core-deployment:$quarkusVersion",
                 "io.quarkus:quarkus-arc-deployment:$quarkusVersion"
         )
@@ -257,11 +249,14 @@ project(":jflu-producer-rabbitmq-quarkus-deployment") {
 }
 
 project(":jflu-store") {
+    description = "JFlu Connector for RabbitMQ on Quarkus - deployment"
+
     apply plugin: "java"
     apply plugin: "org.beryx.jlink"
+    apply plugin: "application"
 
-    sourceCompatibility = JavaVersion.VERSION_13
-    targetCompatibility = JavaVersion.VERSION_13
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 
     jlink {
         addExtraDependencies (
@@ -273,11 +268,10 @@ project(":jflu-store") {
     mainClassName = "jflu.subscriber.store/be.looorent.jflu.store.EventStore"
 
     dependencies {
-        compile project(":jflu-core")
-        compile project(":jflu-subscriber-rabbitmq")
-        compile project(":jflu-producer-rabbitmq")
-
-        implementation(
+        implementation (
+                project(":jflu-core"),
+                project(":jflu-subscriber-rabbitmq"),
+                project(":jflu-producer-rabbitmq"),
                 "com.google.guava:guava:$guavaVersion",
                 "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
                 "org.liquibase:liquibase-core:$liquibaseVersion",
@@ -288,18 +282,11 @@ project(":jflu-store") {
         )
     }
 
-    apply plugin: "application"
     task replay(type: JavaExec) {
         classpath sourceSets.main.runtimeClasspath
-        main = "be.looorent.jflu.store.ReplayService"
+        mainClass = "be.looorent.jflu.store.ReplayService"
         if (project.hasProperty("firstEventId")) {
             args Eval.me(firstEventId)
         }
     }
-}
-
-nexusStaging {
-    username = repoUser
-    password = repoPassword
-    packageGroup = "be.looorent"
 }

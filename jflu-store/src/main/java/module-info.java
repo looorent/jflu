@@ -1,7 +1,6 @@
 module jflu.subscriber.store {
     requires org.slf4j;
     requires liquibase.core;
-    requires postgresql;
     requires logback.core;
     requires logback.classic;
     requires java.sql;

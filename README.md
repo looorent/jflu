@@ -17,7 +17,7 @@ This project is decoupled in a set of JAR you can pick up depending on your own 
 
 All librairies are available on Maven Central. For example, `jflu-subscriber-rabbitmq` can be included in your dependencies like this (Gradle example):
 ```groovy
-compile "be.looorent:jflu-subscriber-rabbitmq:1.0.3"
+implementation "be.looorent:jflu-subscriber-rabbitmq:1.0.4"
 ```
 
 ## `jflu-core`
@@ -264,21 +264,12 @@ where `<firstEventId>` if the store id of the first event to replay (default: 0)
 
 You can also use the `ReplayService` programmatically.
 
-### Instanciating EventConsumers differently
-
-If you want to create your `EventConsumer`s differently, you can override a method of `be.looorent.jflu.subscriber.reflection.SubscriptionScanner` that uses reflection by default: `protected Optional<EventConsumer> createSubscriber(Class<? extends EventConsumer> type)`
-
-For example, if you use Guice to handle dependency injection, you can use a different implementation of `SubscriptionScanner`:
-
-```java
-
-```
 
 ## Release
 
-Base on this [great article](https://nemerosa.ghost.io/2015/07/01/publishing-to-the-maven-central-using-gradle/)
 ```shell
-./gradlew -Prelease uploadArchives closeAndReleaseRepository
+./gradlew clean build
+./gradlew publish
 ```
 
 ## Quarkus support
@@ -287,7 +278,6 @@ TODO
 
 ## TODO
 
-* Make "replay" a real gradle task
 * documentation
 * more tests
 * Handle associations when creating entity event
