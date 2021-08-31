@@ -4,6 +4,7 @@ import be.looorent.jflu.*
 import com.fasterxml.jackson.databind.ObjectMapper
 import spock.lang.Specification
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 import static be.looorent.jflu.EventKind.ENTITY_CHANGE
@@ -151,9 +152,9 @@ class EntityEventSerializationTest extends Specification {
         entityData.userMetadata["aString"].get(String) == of("pouet")
         entityData.userMetadata["aLong"].get(Long) == of(42L)
         entityData.userMetadata["aUUID"].get(UUID) == of(UUID.fromString("5546fe3d-b2b2-48c4-a794-2ac02dba888d"))
-        entityData.userMetadata["a8601Date"].get(LocalDateTime) == of(LocalDateTime.of(2018,07,19,8,14,3))
-        entityData.userMetadata["aRubyDate"].get(LocalDateTime) == of(LocalDateTime.of(2018,07,19,13,27,30))
-
+        entityData.userMetadata["a8601Date"].get(LocalDateTime) == of(LocalDateTime.of(2018,7,19,8,14,3))
+        entityData.userMetadata["aRubyDate"].get(LocalDateTime) == of(LocalDateTime.of(2018,7,19,13,27,30))
+        entityData.userMetadata["aRubyDay"].get(LocalDate) == of(LocalDate.of(2021,9,20))
     }
 
     def "parsing multiple changes return the right type"() {

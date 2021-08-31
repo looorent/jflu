@@ -3,6 +3,7 @@ package be.looorent.jflu;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
@@ -30,6 +31,11 @@ public class Payload {
         Object valueToCast = payload;
         if(clazz.equals(LocalDateTime.class)) {
             Optional<LocalDateTime> date = TimestampConverter.convertToLocalDateTime(String.valueOf(payload));
+            if(date.isPresent()) {
+                valueToCast = date.get();
+            }
+        } else if(clazz.equals(LocalDate.class)) {
+            Optional<LocalDate> date = TimestampConverter.convertToLocalDate(String.valueOf(payload));
             if(date.isPresent()) {
                 valueToCast = date.get();
             }
