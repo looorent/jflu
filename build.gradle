@@ -89,69 +89,7 @@ subprojects {
     test {
         useJUnitPlatform()
     }
-
-    apply plugin: "maven-publish"
-
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                artifactId = project.name
-                from components.java
-                versionMapping {
-                    usage("java-api") {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-                    usage("java-runtime") {
-                        fromResolutionResult()
-                    }
-                }
-
-                pom {
-                    name = project.name
-                    description = project.description
-                    url = "https://github.com/looorent/jflu"
-                    licenses {
-                        license {
-                            name = "The MIT License (MIT)"
-                            url = "http://opensource.org/licenses/MIT"
-                        }
-                    }
-                    developers {
-                        developer {
-                            id = "looorent"
-                            name = "Lorent Lempereur"
-                            email = "lorent.lempereur.dev@gmail.com"
-                        }
-                    }
-                    scm {
-                        connection = "scm:git:https://github.com/looorent/jflu"
-                        developerConnection = "scm:git:git@github.com:looorent/jflu.git"
-                        url = "https://github.com/looorent/jflu"
-                    }
-                }
-            }
-        }
-
-        repositories {
-            maven {
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
-                allowInsecureProtocol=true
-                credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
-                }
-            }
-        }
-    }
-
-    apply plugin: "signing"
-    signing {
-        sign publishing.publications.mavenJava
-    }
 }
-
 
 project(":jflu-core") {
     description = "JFlu core elements"
@@ -288,5 +226,68 @@ project(":jflu-store") {
         if (project.hasProperty("firstEventId")) {
             args Eval.me(firstEventId)
         }
+    }
+}
+
+subprojects {
+    apply plugin: "maven-publish"
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                artifactId = project.name
+                from components.java
+                versionMapping {
+                    usage("java-api") {
+                        fromResolutionOf("runtimeClasspath")
+                    }
+                    usage("java-runtime") {
+                        fromResolutionResult()
+                    }
+                }
+
+                pom {
+                    name = project.name
+                    description = project.description
+                    url = "https://github.com/looorent/jflu"
+                    licenses {
+                        license {
+                            name = "The MIT License (MIT)"
+                            url = "http://opensource.org/licenses/MIT"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "looorent"
+                            name = "Lorent Lempereur"
+                            email = "lorent.lempereur.dev@gmail.com"
+                        }
+                    }
+                    scm {
+                        connection = "scm:git:https://github.com/looorent/jflu"
+                        developerConnection = "scm:git:git@github.com:looorent/jflu.git"
+                        url = "https://github.com/looorent/jflu"
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
+                allowInsecureProtocol=true
+                credentials {
+                    username sonatypeUsername
+                    password sonatypePassword
+                }
+            }
+        }
+    }
+
+    apply plugin: "signing"
+    signing {
+        sign publishing.publications.mavenJava
     }
 }
