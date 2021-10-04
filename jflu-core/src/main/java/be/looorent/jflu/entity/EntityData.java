@@ -28,6 +28,7 @@ public class EntityData implements EventData {
     private final String entityName;
     private final EntityActionName actionName;
     private final Map<String, Payload> userMetadata;
+    private final Map<String, Payload> requestMetadata;
 
     private final Map<String, Object> associations;
 
@@ -46,18 +47,20 @@ public class EntityData implements EventData {
     private final Map<String, String> associationTypes;
 
     @JsonCreator
-    public EntityData(@JsonProperty("entityId")     Object id,
-                      @JsonProperty("requestId")    UUID requestId,
-                      @JsonProperty("entityName")   String entityName,
-                      @JsonProperty("actionName")   EntityActionName actionName,
-                      @JsonProperty("userMetadata") Map<String, Payload> userMetadata,
-                      @JsonProperty("associations") Map<String, Object> associations,
-                      @JsonProperty("changes")      Map<String, EntityChange> changes) {
+    public EntityData(@JsonProperty("entityId")        Object id,
+                      @JsonProperty("requestId")       UUID requestId,
+                      @JsonProperty("entityName")      String entityName,
+                      @JsonProperty("actionName")      EntityActionName actionName,
+                      @JsonProperty("userMetadata")    Map<String, Payload> userMetadata,
+                      @JsonProperty("requestMetadata") Map<String, Payload> requestMetadata,
+                      @JsonProperty("associations")    Map<String, Object> associations,
+                      @JsonProperty("changes")         Map<String, EntityChange> changes) {
         this.id = id;
         this.requestId = requestId;
         this.entityName = entityName;
         this.actionName = actionName;
         this.userMetadata = ofNullable(userMetadata).orElseGet(Collections::emptyMap);
+        this.requestMetadata = ofNullable(requestMetadata).orElseGet(Collections::emptyMap);
         this.associations = ofNullable(associations).orElseGet(Collections::emptyMap);
         this.changes = changes;
         this.associationIds = Association.reduce(this.associations, Association::isId, Association::castAssociationId);
@@ -82,6 +85,10 @@ public class EntityData implements EventData {
 
     public Map<String, Payload> getUserMetadata() {
         return userMetadata;
+    }
+
+    public Map<String, Payload> getRequestMetadata() {
+        return requestMetadata;
     }
 
     public <T> Optional<T> getUserMetadataFor(String name, Class<T> clazz) {

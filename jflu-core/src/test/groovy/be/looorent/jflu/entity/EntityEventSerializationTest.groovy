@@ -11,6 +11,7 @@ import static be.looorent.jflu.EventKind.ENTITY_CHANGE
 import static be.looorent.jflu.EventStatus.NEW
 import static be.looorent.jflu.entity.EntityActionName.CREATE
 import static java.time.Month.APRIL
+import static java.util.Collections.emptyMap
 import static java.util.Optional.empty
 import static java.util.Optional.of
 import static java.util.UUID.randomUUID
@@ -55,6 +56,7 @@ class EntityEventSerializationTest extends Specification {
 
         parsedEntity.id                      == entity.id
         parsedEntity.requestId               == entity.requestId
+        parsedEntity.requestMetadata         == emptyMap()
         parsedEntity.entityName              == entity.entityName
         parsedEntity.actionName              == entity.actionName
         parsedEntity.changes.size()          == entity.changes.size()
@@ -87,6 +89,7 @@ class EntityEventSerializationTest extends Specification {
         EntityData entity = (EntityData) data
         entity.id == 42
         entity.requestId == null
+        entity.requestMetadata == emptyMap()
         entity.entityName == "Animal"
         entity.actionName == CREATE
         entity.userMetadata == [ custom: new Payload(true) ]
@@ -94,6 +97,28 @@ class EntityEventSerializationTest extends Specification {
         entity.associationIds == [ owner_id: 42, child_id: 1 ]
         entity.associationTypes == [ owner_type: "User" ]
         entity.changes == [name: new EntityChange([null, new Payload("KnapKnap")]), color: new EntityChange([null, new Payload("Brown")])]
+    }
+
+
+    def "parsing an event from a JSON file (including request metadata) works"() {
+        when: "an event is parsed from a JSON file"
+        Event event = this.class.getResource("entity_event_with_request_metadata.json").withInputStream { inputStream ->
+            jsonMapper.readValue inputStream, Event
+        }
+
+        then: "this event has correct properties"
+        EventMetadata metadata = event.metadata
+        EventData data = event.data
+
+        metadata.id.toString() == "f9a218b1-e772-4a9f-ac62-3247a02c41a1"
+        data instanceof EntityData
+        EntityData entity = (EntityData) data
+        entity.id == 42
+        entity.requestId == UUID.fromString("68d39f52-2760-40a8-bbba-a85d7a5fbb01")
+        entity.requestMetadata.size() == 3
+        entity.requestMetadata.get("delegate").getPayload() == true
+        entity.requestMetadata.get("path").getPayload() == "/animals"
+        entity.requestMetadata.get("currentUserId").getPayload() == 1234
     }
 
     def "parking an event with a String entityId works"() {

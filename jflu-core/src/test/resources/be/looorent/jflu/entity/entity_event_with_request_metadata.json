@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "id": "f9a218b1-e772-4a9f-ac62-3247a02c41a1",
+    "name": "create animal",
+    "emitter": "pet-store",
+    "timestamp": "2016-04-23T18:25:43.000Z",
+    "kind": "entity_change",
+    "status": "new"
+  },
+  "data": {
+    "id": 42,
+    "entityName": "Animal",
+    "actionName": "create",
+    "requestId": "68d39f52-2760-40a8-bbba-a85d7a5fbb01",
+    "requestMetadata": {
+      "delegate": true,
+      "path": "/animals",
+      "currentUserId": 1234
+    },
+    "changes": {
+      "name": [null, "KnapKnap"]
+    }
+  }
+}

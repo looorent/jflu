@@ -51,6 +51,7 @@ public class EntityEventFactory {
                 CREATE,
                 null,
                 null,
+                null,
                 changes));
     }
 
@@ -62,6 +63,7 @@ public class EntityEventFactory {
                 null,
                 entityType.getSimpleName(),
                 DESTROY,
+                null,
                 null,
                 null,
                 new HashMap<>()));
@@ -82,6 +84,7 @@ public class EntityEventFactory {
                 null,
                 entityType.getSimpleName(),
                 CREATE,
+                null,
                 null,
                 null,
                 changes));
