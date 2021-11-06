@@ -37,6 +37,9 @@ public class ProducerRuntimeConfiguration {
     @ConfigItem(defaultValue = "false")
     public boolean waitForConnection;
 
+    @ConfigItem(defaultValue = "false")
+    public boolean useSsl;
+
     @Override
     public String toString() {
         return "ProducerRuntimeConfiguration{" +
@@ -49,6 +52,7 @@ public class ProducerRuntimeConfiguration {
                 ", emitter='" + emitter + '\'' +
                 ", exchangeDurable=" + exchangeDurable +
                 ", waitForConnection=" + waitForConnection +
+                ", useSsl=" + useSsl +
                 '}';
     }
 }

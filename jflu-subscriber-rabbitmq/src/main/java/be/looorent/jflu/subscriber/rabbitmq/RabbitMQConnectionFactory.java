@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
@@ -74,6 +76,7 @@ class RabbitMQConnectionFactory {
         factory.setHost(HOST.readFrom(properties));
         factory.setPort(Integer.parseInt(PORT.readFrom(properties)));
         factory.setExceptionHandler(handleChannelExceptions());
+        configureSSL(properties, factory);
         return factory;
     }
 
@@ -97,6 +100,16 @@ class RabbitMQConnectionFactory {
         } catch (InterruptedException e1) {
             LOG.error("Error when waiting for a connection", e1);
             throw new RuntimeException(e1);
+        }
+    }
+
+    private void configureSSL(Properties properties, ConnectionFactory factory) {
+        if (USE_SSL.readBooleanFrom(properties)) {
+            try {
+                factory.useSslProtocol();
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+                LOG.error("Error when configuring SSL", e);
+            }
         }
     }
 }

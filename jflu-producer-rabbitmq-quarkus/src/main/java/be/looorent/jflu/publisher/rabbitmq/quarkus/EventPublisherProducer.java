@@ -33,6 +33,7 @@ public class EventPublisherProducer {
             EXCHANGE_NAME.writeTo(properties, runtimeConfiguration.exchangeName);
             EXCHANGE_DURABLE.writeTo(properties, runtimeConfiguration.exchangeDurable);
             WAIT_FOR_CONNECTION.writeTo(properties, runtimeConfiguration.waitForConnection);
+            USE_SSL.writeTo(properties, runtimeConfiguration.useSsl);
             return new RabbitMQEventTopicPublisher(properties);
         } else {
             LOGGER.info("JFlu is disabled. EventPublisher will not publish anywhere.");

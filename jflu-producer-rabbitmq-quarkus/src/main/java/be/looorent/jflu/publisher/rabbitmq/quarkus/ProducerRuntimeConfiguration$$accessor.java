@@ -76,6 +76,14 @@ public final class ProducerRuntimeConfiguration$$accessor {
         ((ProducerRuntimeConfiguration)__instance).waitForConnection = waitForConnection;
     }
 
+    public static boolean get_useSsl(Object __instance) {
+        return ((ProducerRuntimeConfiguration)__instance).useSsl;
+    }
+
+    public static void set_useSsl(Object __instance, boolean useSsl) {
+        ((ProducerRuntimeConfiguration)__instance).useSsl = useSsl;
+    }
+
     private ProducerRuntimeConfiguration$$accessor() { }
     public static Object construct() {
         return new ProducerRuntimeConfiguration();

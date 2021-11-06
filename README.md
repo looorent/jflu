@@ -17,7 +17,7 @@ This project is decoupled in a set of JAR you can pick up depending on your own 
 
 All librairies are available on Maven Central. For example, `jflu-subscriber-rabbitmq` can be included in your dependencies like this (Gradle example):
 ```groovy
-implementation "be.looorent:jflu-subscriber-rabbitmq:1.0.6"
+implementation "be.looorent:jflu-subscriber-rabbitmq:1.0.7"
 ```
 
 ## `jflu-core`
@@ -145,6 +145,7 @@ To initialize an instance of `RabbitMQEventPublisher`, several properties must b
 * `rabbitmq.exchange-name`
 * `rabbitmq.exchange-durable`
 * `rabbitmq.wait-for-connection`
+* `rabbitmq.use-ssl`
 
 ## jflu-subscriber-rabbitmq
 
@@ -169,6 +170,7 @@ To initialize the subscription configuration, several properties must be provide
 * `rabbitmq.prefetch-size`
 * `rabbitmq.queue-durable`
 * `rabbitmq.wait-for-connection`
+* `rabbitmq.use-ssl`
 
 By default, you can use a RabbitMQ implementation by setting this environment variable:
 ```
@@ -244,6 +246,7 @@ This container must depend on a broker and PostgreSQL. For example, using `docke
       - RABBITMQ_QUEUE_NAME: <xxx>
       - RABBITMQ_QUEUE_DURABLE: <xxx>
       - RABBITMQ_WAIT_FOR_CONNECTION: <xxx>
+      - RABBITMQ_USE_SSL: true
       - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration
     links:
       - db

@@ -6,8 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Predicate;
 
 import static be.looorent.jflu.publisher.rabbitmq.RabbitMQPropertyName.*;
 import static java.lang.Thread.sleep;
@@ -65,7 +68,18 @@ class RabbitMQConnectionFactory {
         factory.setVirtualHost(VIRTUAL_HOST.readFrom(properties));
         factory.setHost(HOST.readFrom(properties));
         factory.setPort(Integer.parseInt(PORT.readFrom(properties)));
+        configureSSL(properties, factory);
         return factory;
+    }
+
+    private void configureSSL(Properties properties, ConnectionFactory factory) {
+        if (USE_SSL.readBooleanFrom(properties)) {
+            try {
+                factory.useSslProtocol();
+            } catch (NoSuchAlgorithmException | KeyManagementException e) {
+               LOG.error("Error when configuring SSL", e);
+            }
+        }
     }
 
     private void waitOrStop(int attempt, RuntimeException error) {

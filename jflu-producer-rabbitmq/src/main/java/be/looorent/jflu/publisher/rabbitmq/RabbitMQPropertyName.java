@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import static java.lang.System.getenv;
 import static java.util.Arrays.stream;
+import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.toMap;
 
 /**
@@ -19,7 +20,9 @@ public enum RabbitMQPropertyName {
     VIRTUAL_HOST("rabbitmq.virtual-host"),
     EXCHANGE_NAME("rabbitmq.exchange-name"),
     EXCHANGE_DURABLE("rabbitmq.exchange-durable"),
-    WAIT_FOR_CONNECTION("rabbitmq.wait-for-connection");
+    WAIT_FOR_CONNECTION("rabbitmq.wait-for-connection"),
+    USE_SSL("rabbitmq.use-ssl")
+    ;
 
     private final String propertyName;
 
@@ -32,6 +35,16 @@ public enum RabbitMQPropertyName {
             throw new IllegalArgumentException("properties must not be null");
         }
         return properties.getProperty(propertyName);
+    }
+
+    public boolean readBooleanFrom(Properties properties) {
+        String textValue = readFrom(properties);
+        return ofNullable(textValue)
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .filter(value -> !value.isEmpty())
+                .map(Boolean::parseBoolean)
+                .orElse(false);
     }
 
     public void writeTo(Properties properties, Object value) {
