@@ -8,7 +8,7 @@ import org.jboss.logging.Logger;
 public class ProducerRecorder {
     private static final Logger LOGGER = Logger.getLogger(ProducerRecorder.class);
     public void configureBuild(ProducerBuildConfiguration buildConfig, BeanContainer container) {
-        LOGGER.infof("JFLU enabled? -> %b", buildConfig.enabled);
+        LOGGER.infof("JFLU Producer enabled? -> %b", buildConfig.enabled);
     }
 
     public void configureRuntime(ProducerRuntimeConfiguration runtimeConfig,

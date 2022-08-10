@@ -22,7 +22,6 @@ import static java.util.stream.Collectors.toMap;
  */
 public class EntityData implements EventData {
 
-    @JsonDeserialize(using = EventSerializer.IdDeserializer.class)
     private final Object id;
     private final UUID requestId;
     private final String entityName;
@@ -37,17 +36,15 @@ public class EntityData implements EventData {
     /**
      * View of associations where all keys ends with `_id` or `Id`
      */
-    @JsonIgnore
     private final Map<String, Long> associationIds;
 
     /**
      * View of associations where all keys ends with `_type` or `Type`
      */
-    @JsonIgnore
     private final Map<String, String> associationTypes;
 
     @JsonCreator
-    public EntityData(@JsonProperty("entityId")        Object id,
+    public EntityData(@JsonDeserialize(using = EventSerializer.IdDeserializer.class) @JsonProperty("entityId")        Object id,
                       @JsonProperty("requestId")       UUID requestId,
                       @JsonProperty("entityName")      String entityName,
                       @JsonProperty("actionName")      EntityActionName actionName,
@@ -100,6 +97,7 @@ public class EntityData implements EventData {
         return unmodifiableMap(associations);
     }
 
+    @JsonIgnore
     public Map<String, Long> getAssociationIds() {
         return unmodifiableMap(associationIds);
     }
@@ -116,6 +114,7 @@ public class EntityData implements EventData {
         return associationIds.containsKey(id);
     }
 
+    @JsonIgnore
     public Map<String, String> getAssociationTypes() {
         return unmodifiableMap(associationTypes);
     }

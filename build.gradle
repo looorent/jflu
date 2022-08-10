@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.quarkus.extension:gradle-extension-plugin:$quarkusVersion"
+    }
+}
+
 plugins {
     id "idea"
     id "java-library"
@@ -32,7 +43,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "1.0.7"
+    version "1.0.8"
 
     repositories {
         mavenCentral()
@@ -164,7 +175,14 @@ project(":jflu-producer-rabbitmq-quarkus") {
         archiveBaseName = "jflu-producer-rabbitmq-quarkus"
     }
 
+    apply plugin: "io.quarkus.extension"
+
+    quarkusExtension {
+        deploymentModule = 'deployment'
+    }
+
     dependencies {
+        implementation platform("io.quarkus:quarkus-bom:$quarkusVersion")
         api project(":jflu-core")
         api project(":jflu-producer-rabbitmq")
         compileOnly (
@@ -185,6 +203,44 @@ project(":jflu-producer-rabbitmq-quarkus-deployment") {
         )
     }
 }
+
+
+project(":jflu-subscriber-rabbitmq-quarkus") {
+    description = "JFlu Subscriber for RabbitMQ on Quarkus"
+    jar {
+        archiveBaseName = "jflu-susbcriber-rabbitmq-quarkus"
+    }
+
+    apply plugin: "io.quarkus.extension"
+
+    quarkusExtension {
+        deploymentModule = 'deployment'
+    }
+
+    dependencies {
+        implementation platform("io.quarkus:quarkus-bom:$quarkusVersion")
+        api project(":jflu-core")
+        api project(":jflu-subscriber-rabbitmq")
+        compileOnly (
+                "io.quarkus:quarkus-core:$quarkusVersion",
+                "io.quarkus.arc:arc:$quarkusVersion",
+                "io.quarkus:quarkus-arc:$quarkusVersion"
+        )
+    }
+}
+
+project(":jflu-subscriber-rabbitmq-quarkus-deployment") {
+    description = "JFlu subscriber for RabbitMQ on Quarkus - deployment"
+    dependencies {
+        implementation project(":jflu-subscriber-rabbitmq-quarkus")
+        compileOnly (
+                "io.quarkus:quarkus-core-deployment:$quarkusVersion",
+                "io.quarkus:quarkus-arc-deployment:$quarkusVersion"
+        )
+    }
+}
+
+
 
 project(":jflu-store") {
     description = "JFlu Connector for RabbitMQ on Quarkus - deployment"

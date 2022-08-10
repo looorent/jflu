@@ -277,7 +277,9 @@ You can also use the `ReplayService` programmatically.
 
 ## Quarkus support
 
-TODO
+Support:
+* the RabbitMQ Producer
+* the RabbitMQ Subscriber, partially (without runtime configuration)
 
 ## TODO
 
