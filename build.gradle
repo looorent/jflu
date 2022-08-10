@@ -1,11 +1,11 @@
 buildscript {
     repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
+        mavenCentral()
+        gradlePluginPortal()
     }
     dependencies {
         classpath "io.quarkus.extension:gradle-extension-plugin:$quarkusVersion"
+        classpath "org.kordamp.gradle:jandex-gradle-plugin:$jandexVersion"
     }
 }
 
@@ -38,12 +38,13 @@ subprojects {
     apply plugin: "java-library"
     apply plugin: "groovy"
     apply plugin: "idea"
+    apply plugin: "org.kordamp.gradle.jandex"
 
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "1.0.8"
+    version "1.0.9"
 
     repositories {
         mavenCentral()
@@ -177,10 +178,6 @@ project(":jflu-producer-rabbitmq-quarkus") {
 
     apply plugin: "io.quarkus.extension"
 
-    quarkusExtension {
-        deploymentModule = 'deployment'
-    }
-
     dependencies {
         implementation platform("io.quarkus:quarkus-bom:$quarkusVersion")
         api project(":jflu-core")
@@ -212,10 +209,6 @@ project(":jflu-subscriber-rabbitmq-quarkus") {
     }
 
     apply plugin: "io.quarkus.extension"
-
-    quarkusExtension {
-        deploymentModule = 'deployment'
-    }
 
     dependencies {
         implementation platform("io.quarkus:quarkus-bom:$quarkusVersion")

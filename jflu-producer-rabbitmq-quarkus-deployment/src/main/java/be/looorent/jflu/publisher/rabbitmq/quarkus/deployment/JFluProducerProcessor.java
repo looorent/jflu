@@ -9,10 +9,12 @@ import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerBuildConfiguration;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRecorder;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRuntimeConfiguration;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
+import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import org.jboss.logging.Logger;
 
@@ -60,6 +62,13 @@ public class JFluProducerProcessor {
                 EventKind.class,
                 EventStatus.class);
     }
+//
+//    @BuildStep
+//    void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
+//        indexDependency.produce(new IndexDependencyBuildItem("be.looorent", "jflu-producer-rabbitmq-quarkus"));
+//        indexDependency.produce(new IndexDependencyBuildItem("be.looorent", "jflu-core"));
+//        indexDependency.produce(new IndexDependencyBuildItem("be.looorent", "jflu-producer-rabbitmq"));
+//    }
 
     static class IsEnabled implements BooleanSupplier {
         ProducerBuildConfiguration configuration;
