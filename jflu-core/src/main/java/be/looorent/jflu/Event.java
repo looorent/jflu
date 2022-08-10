@@ -13,16 +13,12 @@ import java.util.UUID;
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class Event  {
-
-    @JsonProperty("meta")
     private final EventMetadata metadata;
-
-    @JsonDeserialize(using = EventSerializer.EventDataDeserializer.class)
     private final EventData data;
 
     @JsonCreator
     public Event(@JsonProperty("meta") EventMetadata metadata,
-                 @JsonProperty("data") EventData data) {
+                 @JsonDeserialize(using = EventSerializer.EventDataDeserializer.class) @JsonProperty("data") EventData data) {
         this.metadata = metadata;
         this.data = data;
     }
@@ -46,6 +42,7 @@ public class Event  {
         return Objects.hash(metadata);
     }
 
+    @JsonProperty("meta")
     public EventMetadata getMetadata() {
         return metadata;
     }

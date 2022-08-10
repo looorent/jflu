@@ -15,7 +15,6 @@ public class EventMetadata {
     private final UUID id;
     private final String name;
     private final String emitter;
-    @JsonDeserialize(using = EventSerializer.TimestampDeserializer.class)
     private final LocalDateTime timestamp;
     private final EventKind kind;
     private final EventStatus status;
@@ -24,7 +23,7 @@ public class EventMetadata {
     public EventMetadata(@JsonProperty("id") UUID id,
                          @JsonProperty("name") String name,
                          @JsonProperty("emitter") String emitter,
-                         @JsonProperty("timestamp") LocalDateTime timestamp,
+                         @JsonDeserialize(using = EventSerializer.TimestampDeserializer.class) @JsonProperty("timestamp") LocalDateTime timestamp,
                          @JsonProperty("kind") EventKind kind,
                          @JsonProperty("status") EventStatus status) {
         this.id = id;

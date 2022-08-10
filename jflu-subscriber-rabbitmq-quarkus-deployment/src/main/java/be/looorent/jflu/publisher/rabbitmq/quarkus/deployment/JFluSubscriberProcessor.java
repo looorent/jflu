@@ -5,9 +5,9 @@ import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
 import be.looorent.jflu.entity.EntityData;
 import be.looorent.jflu.manual.ManualData;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerBuildConfiguration;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRecorder;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRuntimeConfiguration;
+import be.looorent.jflu.publisher.rabbitmq.quarkus.SubscriberBuildConfiguration;
+import be.looorent.jflu.publisher.rabbitmq.quarkus.SubscriberRecorder;
+import be.looorent.jflu.publisher.rabbitmq.quarkus.SubscriberRuntimeConfiguration;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -18,9 +18,9 @@ import org.jboss.logging.Logger;
 
 import java.util.function.BooleanSupplier;
 
-public class JFluProducerProcessor {
-    private static final Logger LOGGER = Logger.getLogger(JFluProducerProcessor.class);
-    private static final String FEATURE_NAME = "jflu-producer";
+public class JFluSubscriberProcessor {
+    private static final Logger LOGGER = Logger.getLogger(JFluSubscriberProcessor.class);
+    private static final String FEATURE_NAME = "jflu-subscriber";
 
     @BuildStep(onlyIf = IsEnabled.class)
     FeatureBuildItem feature() {
@@ -29,26 +29,26 @@ public class JFluProducerProcessor {
 
     @Record(ExecutionTime.STATIC_INIT)
     @BuildStep(onlyIf = IsEnabled.class)
-    public void configureBuild(ProducerRecorder recorder,
-                               ProducerBuildConfiguration buildConfiguration,
+    public void configureBuild(SubscriberRecorder recorder,
+                               SubscriberBuildConfiguration buildConfiguration,
                                BeanContainerBuildItem beanContainer) {
-        LOGGER.infof("Configure Build of JFlu - RabbitMQ producer: %s", buildConfiguration);
+        LOGGER.infof("Configure Build of JFlu - RabbitMQ subscriber: %s", buildConfiguration);
         recorder.configureBuild(buildConfiguration, beanContainer.getValue());
     }
 
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep(onlyIf = IsEnabled.class)
-    public void configureProducer(ProducerRecorder recorder,
-                                  ProducerRuntimeConfiguration runtimeConfiguration,
-                                  ProducerBuildConfiguration buildConfiguration,
+    public void configureProducer(SubscriberRecorder recorder,
+                                  SubscriberRuntimeConfiguration runtimeConfiguration,
+                                  SubscriberBuildConfiguration buildConfiguration,
                                   BeanContainerBuildItem beanContainer) {
-        LOGGER.infof("Configure Runtime of JFlu - RabbitMQ producer: %s", runtimeConfiguration);
+        LOGGER.infof("Configure Runtime of JFlu - RabbitMQ subscriber: %s", runtimeConfiguration);
         recorder.configureRuntime(runtimeConfiguration, buildConfiguration, beanContainer.getValue());
     }
 
     @BuildStep(onlyIf = IsEnabled.class)
     public ReflectiveClassBuildItem configureNativeReflection() {
-        LOGGER.infof("Configure Runtime of JFlu Producer - Native build");
+        LOGGER.infof("Configure Runtime of JFlu Subscriber - Native build");
         return new ReflectiveClassBuildItem(false, false,
                 Event.class,
                 EventMetadata.class,
@@ -62,7 +62,7 @@ public class JFluProducerProcessor {
     }
 
     static class IsEnabled implements BooleanSupplier {
-        ProducerBuildConfiguration configuration;
+        SubscriberBuildConfiguration configuration;
 
         public boolean getAsBoolean() {
             return configuration.enabled;
