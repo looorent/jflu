@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.8] - 2022-08-09
 
-* Support for Quarkus `2.11.2
-* Support for Quarkus native image build
+* Support for Quarkus `2.11.2`
+* Support for Quarkus native image build (producer only)
 
 ## [1.0.7] - 2021-11-06
 

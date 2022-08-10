@@ -286,8 +286,8 @@ subprojects {
         }
     }
 
-//    apply plugin: "signing"
-//    signing {
-//        sign publishing.publications.mavenJava
-//    }
+    apply plugin: "signing"
+    signing {
+        sign publishing.publications.mavenJava
+    }
 }
