@@ -2,7 +2,7 @@ package be.looorent.jflu.publisher.rabbitmq.quarkus;
 
 import java.util.OptionalInt;
 
-public final class ProducerRuntimeConfiguration$$accessor {
+public final class ProducerRuntimeConfiguration$accessor {
     @SuppressWarnings("unchecked")
     public static Object get_username(Object __instance) {
         return ((ProducerRuntimeConfiguration)__instance).username;
@@ -84,7 +84,7 @@ public final class ProducerRuntimeConfiguration$$accessor {
         ((ProducerRuntimeConfiguration)__instance).useSsl = useSsl;
     }
 
-    private ProducerRuntimeConfiguration$$accessor() { }
+    private ProducerRuntimeConfiguration$accessor() { }
     public static Object construct() {
         return new ProducerRuntimeConfiguration();
     }

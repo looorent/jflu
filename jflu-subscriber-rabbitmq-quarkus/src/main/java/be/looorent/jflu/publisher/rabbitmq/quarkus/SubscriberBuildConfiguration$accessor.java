@@ -1,6 +1,6 @@
 package be.looorent.jflu.publisher.rabbitmq.quarkus;
 
-public class SubscriberBuildConfiguration$$accessor {
+public class SubscriberBuildConfiguration$accessor {
 
     @SuppressWarnings("unchecked")
     public static boolean get_enabled(Object __instance) {
@@ -11,7 +11,7 @@ public class SubscriberBuildConfiguration$$accessor {
         ((SubscriberBuildConfiguration)__instance).enabled = enabled;
     }
 
-    private SubscriberBuildConfiguration$$accessor() {}
+    private SubscriberBuildConfiguration$accessor() {}
     public static Object construct() {
         return new SubscriberBuildConfiguration();
     }

@@ -1,6 +1,6 @@
 package be.looorent.jflu.publisher.rabbitmq.quarkus;
 
-public final class ProducerBuildConfiguration$$accessor {
+public final class ProducerBuildConfiguration$accessor {
 
     @SuppressWarnings("unchecked")
     public static boolean get_enabled(Object __instance) {
@@ -11,7 +11,7 @@ public final class ProducerBuildConfiguration$$accessor {
         ((ProducerBuildConfiguration)__instance).enabled = enabled;
     }
 
-    private ProducerBuildConfiguration$$accessor() {}
+    private ProducerBuildConfiguration$accessor() {}
     public static Object construct() {
         return new ProducerBuildConfiguration();
     }
