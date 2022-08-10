@@ -18,7 +18,7 @@ import static java.util.Optional.of;
 
 public class EventSerializer {
 
-    static class TimestampDeserializer extends JsonDeserializer<LocalDateTime> {
+    public static class TimestampDeserializer extends JsonDeserializer<LocalDateTime> {
 
         @Override
         public LocalDateTime deserialize(JsonParser parser, DeserializationContext context) throws IOException {
@@ -28,7 +28,7 @@ public class EventSerializer {
 
     }
 
-    static class EventDataDeserializer extends JsonDeserializer<EventData> {
+    public static class EventDataDeserializer extends JsonDeserializer<EventData> {
 
         @Override
         public EventData deserialize(JsonParser parser, DeserializationContext context) throws IOException {

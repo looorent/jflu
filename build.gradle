@@ -32,7 +32,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "1.0.7"
+    version "1.0.8"
 
     repositories {
         mavenCentral()
@@ -286,8 +286,8 @@ subprojects {
         }
     }
 
-    apply plugin: "signing"
-    signing {
-        sign publishing.publications.mavenJava
-    }
+//    apply plugin: "signing"
+//    signing {
+//        sign publishing.publications.mavenJava
+//    }
 }
