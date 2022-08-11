@@ -1,4 +1,4 @@
-package be.looorent.jflu.publisher.rabbitmq.quarkus;
+package be.looorent.jflu.subscriber.rabbitmq.quarkus;
 
 import io.quarkus.arc.runtime.BeanContainer;
 import io.quarkus.runtime.annotations.Recorder;

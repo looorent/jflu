@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -61,6 +60,26 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
 
     public static final RabbitMQSubscriptionConfiguration createFromSystemProperties(ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
         return createFromSystemProperties(exceptionHandler, emptyMap());
+    }
+
+    public static final RabbitMQSubscriptionConfiguration fromBootstraper(RabbitMQSubscriptionBootstraper bootstraper, ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
+        Properties properties = new Properties();
+        USERNAME.writeTo(properties, bootstraper.getUsername());
+        PASSWORD.writeTo(properties, bootstraper.getPassword());
+        HOST.writeTo(properties, bootstraper.getHost());
+        PORT.writeTo(properties, bootstraper.getPort());
+        VIRTUAL_HOST.writeTo(properties, bootstraper.getVirtualHost());
+        EXCHANGE_NAME.writeTo(properties, bootstraper.getExchangeName());
+        QUEUE_NAME.writeTo(properties, bootstraper.getQueueName());
+        PREFETCH_SIZE.writeTo(properties, bootstraper.getPrefetchSize());
+        DURABLE_QUEUE.writeTo(properties, bootstraper.getDurableQueue());
+        WAIT_FOR_CONNECTION.writeTo(properties, bootstraper.getWaitForConnection());
+        USE_SSL.writeTo(properties, bootstraper.getUseSsl());
+
+        return new RabbitMQSubscriptionConfiguration(
+                properties,
+                exceptionHandler
+        );
     }
 
     private String connectExchange(Properties properties) throws IOException {

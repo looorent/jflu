@@ -14,6 +14,7 @@ import static java.util.Optional.ofNullable;
 
 public class Payload {
 
+    @JsonValue
     private Object payload;
 
     @JsonCreator
@@ -68,7 +69,6 @@ public class Payload {
         return new Payload(null);
     }
 
-    @JsonValue
     public Object getPayload() {
         return payload;
     }

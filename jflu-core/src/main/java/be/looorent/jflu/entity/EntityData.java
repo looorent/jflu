@@ -10,11 +10,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.unmodifiableMap;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * When an event represents a CRUD operation on an entity, it can use this class as {@link EventData} implementation.
@@ -36,11 +34,13 @@ public class EntityData implements EventData {
     /**
      * View of associations where all keys ends with `_id` or `Id`
      */
+    @JsonIgnore
     private final Map<String, Long> associationIds;
 
     /**
      * View of associations where all keys ends with `_type` or `Type`
      */
+    @JsonIgnore
     private final Map<String, String> associationTypes;
 
     @JsonCreator
@@ -97,7 +97,6 @@ public class EntityData implements EventData {
         return unmodifiableMap(associations);
     }
 
-    @JsonIgnore
     public Map<String, Long> getAssociationIds() {
         return unmodifiableMap(associationIds);
     }
@@ -114,7 +113,6 @@ public class EntityData implements EventData {
         return associationIds.containsKey(id);
     }
 
-    @JsonIgnore
     public Map<String, String> getAssociationTypes() {
         return unmodifiableMap(associationTypes);
     }

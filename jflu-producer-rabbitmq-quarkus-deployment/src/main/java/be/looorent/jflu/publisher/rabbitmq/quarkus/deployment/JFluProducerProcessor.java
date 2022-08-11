@@ -3,11 +3,20 @@ package be.looorent.jflu.publisher.rabbitmq.quarkus.deployment;
 import be.looorent.jflu.*;
 import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
+import be.looorent.jflu.entity.Auditable;
 import be.looorent.jflu.entity.EntityData;
+import be.looorent.jflu.entity.EntityEventFactory;
 import be.looorent.jflu.manual.ManualData;
+import be.looorent.jflu.manual.ManualEventFactory;
+import be.looorent.jflu.publisher.EventUnpublisher;
+import be.looorent.jflu.publisher.rabbitmq.RabbitMQConnectionFactory;
+import be.looorent.jflu.publisher.rabbitmq.RabbitMQPropertyName;
+import be.looorent.jflu.publisher.rabbitmq.quarkus.EventFactoryProducer;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerBuildConfiguration;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRecorder;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRuntimeConfiguration;
+import be.looorent.jflu.request.RequestEventFactory;
+import be.looorent.jflu.subscriber.*;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -16,6 +25,7 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import org.jboss.logging.Logger;
 
+import java.util.EventListener;
 import java.util.function.BooleanSupplier;
 
 public class JFluProducerProcessor {
@@ -49,7 +59,7 @@ public class JFluProducerProcessor {
     @BuildStep(onlyIf = IsEnabled.class)
     public ReflectiveClassBuildItem configureNativeReflection() {
         LOGGER.infof("Configure Runtime of JFlu Producer - Native build");
-        return new ReflectiveClassBuildItem(false, false,
+        return new ReflectiveClassBuildItem(true, true,
                 Event.class,
                 EventMetadata.class,
                 EventData.class,
@@ -58,15 +68,28 @@ public class JFluProducerProcessor {
                 EventDataDeserializer.class,
                 TimestampDeserializer.class,
                 EventKind.class,
-                EventStatus.class);
+                EventStatus.class,
+
+                // below this line, not sure these are required
+                Auditable.class,
+                BrokerSubscriptionConfiguration.class,
+                BrokerSubscriptionConfigurationProvider.class,
+                ConsumptionException.class,
+                EntityData.class,
+                EntityEventFactory.class,
+                EventListener.class,
+                EventMappingKind.class,
+                EventSerializer.class,
+                EventUnpublisher.class,
+                ManualEventFactory.class,
+                QueueListener.class,
+                RabbitMQConnectionFactory.class,
+                RabbitMQPropertyName.class,
+                RequestEventFactory.class,
+                Subscription.class,
+                SubscriptionQuery.class
+        );
     }
-//
-//    @BuildStep
-//    void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
-//        indexDependency.produce(new IndexDependencyBuildItem("be.looorent", "jflu-producer-rabbitmq-quarkus"));
-//        indexDependency.produce(new IndexDependencyBuildItem("be.looorent", "jflu-core"));
-//        indexDependency.produce(new IndexDependencyBuildItem("be.looorent", "jflu-producer-rabbitmq"));
-//    }
 
     static class IsEnabled implements BooleanSupplier {
         ProducerBuildConfiguration configuration;

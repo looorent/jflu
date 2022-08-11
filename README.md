@@ -279,10 +279,4 @@ You can also use the `ReplayService` programmatically.
 
 Support:
 * the RabbitMQ Producer
-* the RabbitMQ Subscriber, partially (without runtime configuration)
-
-## TODO
-
-* documentation
-* more tests
-* Handle associations when creating entity event
+* the RabbitMQ Subscriber

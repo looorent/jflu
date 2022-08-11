@@ -15,7 +15,7 @@ import java.io.IOException;
  * defined by a {@link SubscriptionQuery}.
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
-class RabbitMQSubscriptionRepository extends SubscriptionRepository {
+public class RabbitMQSubscriptionRepository extends SubscriptionRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMQSubscriptionRepository.class);
 

@@ -1,4 +1,4 @@
-package be.looorent.jflu.publisher.rabbitmq.quarkus;
+package be.looorent.jflu.subscriber.rabbitmq.quarkus;
 
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigRoot;

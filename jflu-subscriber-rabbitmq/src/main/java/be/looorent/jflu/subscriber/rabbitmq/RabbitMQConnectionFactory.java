@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.TimeoutException;
 
@@ -21,7 +20,7 @@ import static java.util.Optional.ofNullable;
  * Attempt to connect RabbitMQ and wait if needed.
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
-class RabbitMQConnectionFactory {
+public class RabbitMQConnectionFactory {
 
     private static final Logger LOG = LoggerFactory.getLogger(RabbitMQConnectionFactory.class);
     private static final int MAXIMUM_CONNECTION_ATTEMPTS = 30;

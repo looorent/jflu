@@ -25,18 +25,18 @@ public class EventPublisherProducer {
         if (isEnabled()) {
             LOGGER.info("Instanciate singleton EventPublisher of type RabbitMQEventTopicPublisher");
             Properties properties = new Properties();
-            USERNAME.writeTo(properties, runtimeConfiguration.username.get());
-            PASSWORD.writeTo(properties, runtimeConfiguration.password.get());
+            USERNAME.writeTo(properties, runtimeConfiguration.username.orElse(""));
+            PASSWORD.writeTo(properties, runtimeConfiguration.password.orElse(""));
             HOST.writeTo(properties, runtimeConfiguration.host);
             PORT.writeTo(properties, runtimeConfiguration.port.orElse(0));
-            VIRTUAL_HOST.writeTo(properties, runtimeConfiguration.virtualHost.get());
+            VIRTUAL_HOST.writeTo(properties, runtimeConfiguration.virtualHost.orElse(""));
             EXCHANGE_NAME.writeTo(properties, runtimeConfiguration.exchangeName);
             EXCHANGE_DURABLE.writeTo(properties, runtimeConfiguration.exchangeDurable);
             WAIT_FOR_CONNECTION.writeTo(properties, runtimeConfiguration.waitForConnection);
             USE_SSL.writeTo(properties, runtimeConfiguration.useSsl);
             return new RabbitMQEventTopicPublisher(properties);
         } else {
-            LOGGER.info("JFlu is disabled. EventPublisher will not publish anywhere.");
+            LOGGER.info("JFlu-producer is disabled. EventPublisher will not publish anywhere.");
             return new EventUnpublisher();
         }
     }

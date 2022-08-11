@@ -16,6 +16,7 @@ public class EntityChange {
     private static final int BEFORE_VALUE_INDEX = 0;
     private static final int AFTER_VALUE_INDEX = 1;
 
+    @JsonValue
     private List<Payload> changes;
 
     @JsonCreator
@@ -56,7 +57,6 @@ public class EntityChange {
         return changes.toString();
     }
 
-    @JsonValue
     public List<Payload> getChanges() {
         return changes;
     }

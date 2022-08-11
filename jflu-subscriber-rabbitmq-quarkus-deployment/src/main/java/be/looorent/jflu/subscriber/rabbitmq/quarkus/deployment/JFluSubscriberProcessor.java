@@ -1,13 +1,20 @@
-package be.looorent.jflu.publisher.rabbitmq.quarkus.deployment;
+package be.looorent.jflu.subscriber.rabbitmq.quarkus.deployment;
 
 import be.looorent.jflu.*;
 import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
+import be.looorent.jflu.entity.Auditable;
 import be.looorent.jflu.entity.EntityData;
+import be.looorent.jflu.entity.EntityEventFactory;
 import be.looorent.jflu.manual.ManualData;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.SubscriberBuildConfiguration;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.SubscriberRecorder;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.SubscriberRuntimeConfiguration;
+import be.looorent.jflu.manual.ManualEventFactory;
+import be.looorent.jflu.publisher.EventUnpublisher;
+import be.looorent.jflu.request.RequestEventFactory;
+import be.looorent.jflu.subscriber.*;
+import be.looorent.jflu.subscriber.rabbitmq.*;
+import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberBuildConfiguration;
+import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberRecorder;
+import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberRuntimeConfiguration;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -16,6 +23,7 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import org.jboss.logging.Logger;
 
+import java.util.EventListener;
 import java.util.function.BooleanSupplier;
 
 public class JFluSubscriberProcessor {
@@ -49,7 +57,7 @@ public class JFluSubscriberProcessor {
     @BuildStep(onlyIf = IsEnabled.class)
     public ReflectiveClassBuildItem configureNativeReflection() {
         LOGGER.infof("Configure Runtime of JFlu Subscriber - Native build");
-        return new ReflectiveClassBuildItem(false, false,
+        return new ReflectiveClassBuildItem(true, true,
                 Event.class,
                 EventMetadata.class,
                 EventData.class,
@@ -58,7 +66,33 @@ public class JFluSubscriberProcessor {
                 EventDataDeserializer.class,
                 TimestampDeserializer.class,
                 EventKind.class,
-                EventStatus.class);
+                EventStatus.class,
+
+                // below this line, not sure these are required
+                Auditable.class,
+                BrokerSubscriptionConfiguration.class,
+                BrokerSubscriptionConfigurationProvider.class,
+                ConsumptionException.class,
+                EntityData.class,
+                EntityEventFactory.class,
+                EventListener.class,
+                EventMappingKind.class,
+                EventSerializer.class,
+                EventSerializer.class,
+                EventUnpublisher.class,
+                ManualEventFactory.class,
+                QueueListener.class,
+                RabbitMQConnectionException.class,
+                RabbitMQConnectionFactory.class,
+                RabbitMQExceptionHandler.class,
+                RabbitMQPropertyName.class,
+                RabbitMQSubscriptionBootstraper.class,
+                RabbitMQSubscriptionConfiguration.class,
+                RabbitMQSubscriptionRepository.class,
+                RequestEventFactory.class,
+                Subscription.class,
+                SubscriptionQuery.class
+        );
     }
 
     static class IsEnabled implements BooleanSupplier {

@@ -54,7 +54,9 @@ public enum RabbitMQPropertyName {
         if (properties == null) {
             throw new IllegalArgumentException("properties must not be null");
         }
-        properties.setProperty(propertyName, String.valueOf(value));
+        if (value != null) {
+            properties.setProperty(propertyName, String.valueOf(value));
+        }
     }
 
     public String getPropertyName() {

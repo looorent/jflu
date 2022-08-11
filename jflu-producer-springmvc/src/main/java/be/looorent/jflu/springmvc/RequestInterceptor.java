@@ -2,7 +2,6 @@ package be.looorent.jflu.springmvc;
 
 import be.looorent.jflu.publisher.EventPublisher;
 import be.looorent.jflu.request.RequestEventFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -77,7 +76,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
         return request.getParameterMap()
                 .entrySet()
                 .stream()
-                .filter(entry -> entry.getKey() != JFLU_REQUEST_ID && entry.getKey() != JFLU_START_TIME)
+                .filter(entry -> !JFLU_REQUEST_ID.equals(entry.getKey()) && !JFLU_START_TIME.equals(entry.getKey()))
                 .collect(toMap(Map.Entry::getKey, entry -> Arrays.asList(entry.getValue())));
     }
 }

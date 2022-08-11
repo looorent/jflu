@@ -13,6 +13,7 @@ import java.util.UUID;
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
 public class Event  {
+    @JsonProperty("meta")
     private final EventMetadata metadata;
     private final EventData data;
 
@@ -42,7 +43,6 @@ public class Event  {
         return Objects.hash(metadata);
     }
 
-    @JsonProperty("meta")
     public EventMetadata getMetadata() {
         return metadata;
     }
