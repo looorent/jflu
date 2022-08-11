@@ -44,7 +44,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_1_8
 
     group = "be.looorent"
-    version "1.0.13"
+    version "1.1.0"
 
     repositories {
         mavenCentral()
@@ -178,6 +178,10 @@ project(":jflu-producer-rabbitmq-quarkus") {
 
     apply plugin: "io.quarkus.extension"
 
+    quarkusExtension {
+        deploymentModule = 'jflu-producer-rabbitmq-quarkus-deployment'
+    }
+
     dependencies {
         implementation platform("io.quarkus:quarkus-bom:$quarkusVersion")
         api project(":jflu-core")
@@ -209,6 +213,10 @@ project(":jflu-subscriber-rabbitmq-quarkus") {
     }
 
     apply plugin: "io.quarkus.extension"
+
+    quarkusExtension {
+        deploymentModule = 'jflu-subscriber-rabbitmq-quarkus-deployment'
+    }
 
     dependencies {
         implementation platform("io.quarkus:quarkus-bom:$quarkusVersion")
