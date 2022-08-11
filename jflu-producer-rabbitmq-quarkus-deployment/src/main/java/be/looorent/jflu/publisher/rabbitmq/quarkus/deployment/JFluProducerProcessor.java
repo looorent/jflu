@@ -1,17 +1,16 @@
 package be.looorent.jflu.publisher.rabbitmq.quarkus.deployment;
 
+import be.looorent.jflu.EventSerializer;
 import be.looorent.jflu.*;
 import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
-import be.looorent.jflu.entity.Auditable;
-import be.looorent.jflu.entity.EntityData;
-import be.looorent.jflu.entity.EntityEventFactory;
+import be.looorent.jflu.entity.*;
+import be.looorent.jflu.entity.EventSerializer.IdDeserializer;
 import be.looorent.jflu.manual.ManualData;
 import be.looorent.jflu.manual.ManualEventFactory;
 import be.looorent.jflu.publisher.EventUnpublisher;
 import be.looorent.jflu.publisher.rabbitmq.RabbitMQConnectionFactory;
 import be.looorent.jflu.publisher.rabbitmq.RabbitMQPropertyName;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.EventFactoryProducer;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerBuildConfiguration;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRecorder;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRuntimeConfiguration;
@@ -67,8 +66,12 @@ public class JFluProducerProcessor {
                 EntityData.class,
                 EventDataDeserializer.class,
                 TimestampDeserializer.class,
+                IdDeserializer.class,
+                Payload.class,
                 EventKind.class,
                 EventStatus.class,
+                EntityActionName.class,
+                EntityChange.class,
 
                 // below this line, not sure these are required
                 Auditable.class,

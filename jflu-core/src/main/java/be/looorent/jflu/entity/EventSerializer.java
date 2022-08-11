@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Lorent Lempereur {@literal <lorent.lempereur.dev@gmail.com>}
  */
-class EventSerializer {
+public class EventSerializer {
 
-    static class IdDeserializer extends JsonDeserializer<Object> {
+    public static class IdDeserializer extends JsonDeserializer<Object> {
 
         private static final Logger LOG = LoggerFactory.getLogger(IdDeserializer.class);
 

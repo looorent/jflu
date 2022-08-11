@@ -73,7 +73,6 @@ public class ProducerRuntimeConfiguration {
     public String toString() {
         return "ProducerRuntimeConfiguration{" +
                 "username=" + username +
-                ", password=" + password +
                 ", host='" + host + '\'' +
                 ", port=" + port +
                 ", virtualHost=" + virtualHost +

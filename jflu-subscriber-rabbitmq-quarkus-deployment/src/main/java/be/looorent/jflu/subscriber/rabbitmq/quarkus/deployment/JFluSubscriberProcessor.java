@@ -1,17 +1,18 @@
 package be.looorent.jflu.subscriber.rabbitmq.quarkus.deployment;
 
+import be.looorent.jflu.EventSerializer;
 import be.looorent.jflu.*;
 import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
-import be.looorent.jflu.entity.Auditable;
-import be.looorent.jflu.entity.EntityData;
-import be.looorent.jflu.entity.EntityEventFactory;
+import be.looorent.jflu.entity.*;
+import be.looorent.jflu.entity.EventSerializer.IdDeserializer;
 import be.looorent.jflu.manual.ManualData;
 import be.looorent.jflu.manual.ManualEventFactory;
 import be.looorent.jflu.publisher.EventUnpublisher;
 import be.looorent.jflu.request.RequestEventFactory;
 import be.looorent.jflu.subscriber.*;
 import be.looorent.jflu.subscriber.rabbitmq.*;
+import be.looorent.jflu.subscriber.rabbitmq.quarkus.RabbitMQSubscriptionBootstraperProducer;
 import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberBuildConfiguration;
 import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberRecorder;
 import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberRuntimeConfiguration;
@@ -45,11 +46,11 @@ public class JFluSubscriberProcessor {
     }
 
     @Record(ExecutionTime.RUNTIME_INIT)
-    @BuildStep(onlyIf = IsEnabled.class)
-    public void configureProducer(SubscriberRecorder recorder,
-                                  SubscriberRuntimeConfiguration runtimeConfiguration,
-                                  SubscriberBuildConfiguration buildConfiguration,
-                                  BeanContainerBuildItem beanContainer) {
+    @BuildStep
+    public void configureSubscriber(SubscriberRecorder recorder,
+                                    SubscriberRuntimeConfiguration runtimeConfiguration,
+                                    SubscriberBuildConfiguration buildConfiguration,
+                                    BeanContainerBuildItem beanContainer) {
         LOGGER.infof("Configure Runtime of JFlu - RabbitMQ subscriber: %s", runtimeConfiguration);
         recorder.configureRuntime(runtimeConfiguration, buildConfiguration, beanContainer.getValue());
     }
@@ -65,8 +66,12 @@ public class JFluSubscriberProcessor {
                 EntityData.class,
                 EventDataDeserializer.class,
                 TimestampDeserializer.class,
+                IdDeserializer.class,
+                Payload.class,
                 EventKind.class,
                 EventStatus.class,
+                EntityActionName.class,
+                EntityChange.class,
 
                 // below this line, not sure these are required
                 Auditable.class,
@@ -87,6 +92,7 @@ public class JFluSubscriberProcessor {
                 RabbitMQExceptionHandler.class,
                 RabbitMQPropertyName.class,
                 RabbitMQSubscriptionBootstraper.class,
+                RabbitMQSubscriptionBootstraperProducer.class,
                 RabbitMQSubscriptionConfiguration.class,
                 RabbitMQSubscriptionRepository.class,
                 RequestEventFactory.class,

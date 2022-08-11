@@ -14,5 +14,6 @@ public class SubscriberRecorder {
     public void configureRuntime(SubscriberRuntimeConfiguration runtimeConfig,
                                  SubscriberBuildConfiguration buildConfig,
                                  BeanContainer container) {
+        container.instance(RabbitMQSubscriptionBootstraperProducer.class).init(runtimeConfig, buildConfig);
     }
 }

@@ -75,4 +75,20 @@ public class SubscriberRuntimeConfiguration {
      */
     @ConfigItem(defaultValue = "false")
     public boolean useSsl;
+
+    @Override
+    public String toString() {
+        return "SubscriberRuntimeConfiguration{" +
+                "username=" + username +
+                ", host='" + host + '\'' +
+                ", port=" + port +
+                ", virtualHost=" + virtualHost +
+                ", exchangeName='" + exchangeName + '\'' +
+                ", queueName='" + queueName + '\'' +
+                ", prefetchSize=" + prefetchSize +
+                ", durableQueue=" + durableQueue +
+                ", waitForConnection=" + waitForConnection +
+                ", useSsl=" + useSsl +
+                '}';
+    }
 }
