@@ -21,6 +21,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
+import io.quarkus.deployment.builditem.ServiceStartBuildItem;
 import io.quarkus.deployment.builditem.nativeimage.ReflectiveClassBuildItem;
 import org.jboss.logging.Logger;
 
@@ -47,12 +48,13 @@ public class JFluSubscriberProcessor {
 
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep
-    public void configureSubscriber(SubscriberRecorder recorder,
-                                    SubscriberRuntimeConfiguration runtimeConfiguration,
-                                    SubscriberBuildConfiguration buildConfiguration,
-                                    BeanContainerBuildItem beanContainer) {
+    public ServiceStartBuildItem configureSubscriber(SubscriberRecorder recorder,
+                                                     SubscriberRuntimeConfiguration runtimeConfiguration,
+                                                     SubscriberBuildConfiguration buildConfiguration,
+                                                     BeanContainerBuildItem beanContainer) {
         LOGGER.infof("Configure Runtime of JFlu - RabbitMQ subscriber: %s", runtimeConfiguration);
         recorder.configureRuntime(runtimeConfiguration, buildConfiguration, beanContainer.getValue());
+        return new ServiceStartBuildItem("");
     }
 
     @BuildStep(onlyIf = IsEnabled.class)
