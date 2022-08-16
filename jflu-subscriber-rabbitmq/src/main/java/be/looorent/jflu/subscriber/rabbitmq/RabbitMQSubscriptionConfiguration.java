@@ -62,7 +62,7 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
         return createFromSystemProperties(exceptionHandler, emptyMap());
     }
 
-    public static final RabbitMQSubscriptionConfiguration fromBootstraper(RabbitMQSubscriptionBootstraper bootstraper, ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
+    public static final RabbitMQSubscriptionConfiguration fromBootstraper(RabbitMQSubscriptionBootstraper bootstraper, Map<RabbitMQPropertyName, String> overridesAttributes, ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
         Properties properties = new Properties();
         USERNAME.writeTo(properties, bootstraper.getUsername());
         PASSWORD.writeTo(properties, bootstraper.getPassword());
@@ -77,7 +77,7 @@ public class RabbitMQSubscriptionConfiguration implements BrokerSubscriptionConf
         USE_SSL.writeTo(properties, bootstraper.getUseSsl());
 
         return new RabbitMQSubscriptionConfiguration(
-                properties,
+                merge(properties, overridesAttributes),
                 exceptionHandler
         );
     }
