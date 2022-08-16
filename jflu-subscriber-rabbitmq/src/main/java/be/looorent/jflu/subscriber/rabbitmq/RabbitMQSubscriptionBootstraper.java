@@ -1,6 +1,9 @@
 package be.looorent.jflu.subscriber.rabbitmq;
 
+import java.util.Map;
+
 import static be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration.fromBootstraper;
+import static java.util.Collections.emptyMap;
 
 /**
  * This classes is a proxy to create and bootstrap a {@link RabbitMQSubscriptionConfiguration}
@@ -48,7 +51,11 @@ public class RabbitMQSubscriptionBootstraper {
     }
 
     public RabbitMQSubscriptionConfiguration bootstrap(ConsumptionExceptionHandler exceptionHandler) throws RabbitMQConnectionException {
-        return fromBootstraper(this, exceptionHandler);
+        return fromBootstraper(this, emptyMap(), exceptionHandler);
+    }
+
+    public RabbitMQSubscriptionConfiguration bootstrap(ConsumptionExceptionHandler exceptionHandler, Map<RabbitMQPropertyName, String> overridesAttributes) throws RabbitMQConnectionException {
+        return fromBootstraper(this, overridesAttributes, exceptionHandler);
     }
 
     public String getUsername() {
