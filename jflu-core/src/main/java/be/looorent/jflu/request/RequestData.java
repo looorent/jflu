@@ -22,6 +22,7 @@ public class RequestData implements EventData {
     private final int responseCode;
     private final String userAgent;
     private final int duration;
+    private final String overridenEmitter;
     private final Map<String, List<String>> parameters;
     private final Map<String, Payload> userMetadata;
 
@@ -33,6 +34,7 @@ public class RequestData implements EventData {
                        @JsonProperty("responseCode") int responseCode,
                        @JsonProperty("userAgent") String userAgent,
                        @JsonProperty("duration") int duration,
+                       @JsonProperty("overridenEmitter") String overridenEmitter,
                        @JsonProperty("params") Map<String, List<String>> parameters,
                        @JsonProperty("userMetadata") Map<String, Payload> userMetadata) {
         this.requestId = requestId;
@@ -42,6 +44,7 @@ public class RequestData implements EventData {
         this.responseCode = responseCode;
         this.userAgent = userAgent;
         this.duration = duration;
+        this.overridenEmitter = overridenEmitter;
         this.parameters = parameters;
         this.userMetadata = userMetadata;
     }
@@ -72,6 +75,10 @@ public class RequestData implements EventData {
 
     public int getDuration() {
         return duration;
+    }
+
+    public String getOverridenEmitter() {
+        return overridenEmitter;
     }
 
     public Map<String, List<String>> getParameters() {

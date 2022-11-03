@@ -66,6 +66,7 @@ class RequestEventSerializationTest extends Specification {
             500,
             "userAgent",
             200,
+            null,
             [
                     "name": ["pouet"],
                     "values": ["1", "2", "3"]

@@ -68,6 +68,7 @@ public class RequestInterceptor extends HandlerInterceptorAdapter {
                 response.getStatus(),
                 request.getHeader(USER_AGENT),
                 duration,
+                null,
                 extractParametersFrom(request),
                 null));
     }

@@ -36,6 +36,7 @@ public class RequestEventFactory {
                              int responseCode,
                              String userAgent,
                              int duration,
+                             String overridenEmitter,
                              Map<String, List<String>> parameters,
                              Map<String, Payload> userMetadata) {
         return new Event(createMetadata(controllerName+"."+actionName),
@@ -46,6 +47,7 @@ public class RequestEventFactory {
                     responseCode,
                     userAgent,
                     duration,
+                    overridenEmitter,
                     parameters,
                     userMetadata));
     }
