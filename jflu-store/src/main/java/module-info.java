@@ -1,8 +1,8 @@
 module jflu.subscriber.store {
     requires org.slf4j;
     requires liquibase.core;
-    requires logback.core;
-    requires logback.classic;
+    requires ch.qos.logback.core;
+    requires ch.qos.logback.classic;
     requires java.sql;
     requires com.google.common;
     requires com.fasterxml.jackson.databind;
