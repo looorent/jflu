@@ -60,7 +60,7 @@ public class JFluSubscriberProcessor {
     @BuildStep(onlyIf = IsEnabled.class)
     public ReflectiveClassBuildItem configureNativeReflection() {
         LOGGER.infof("Configure Runtime of JFlu Subscriber - Native build");
-        return new ReflectiveClassBuildItem(true, true,
+        return ReflectiveClassBuildItem.builder(
                 Event.class,
                 EventMetadata.class,
                 EventData.class,
@@ -100,7 +100,7 @@ public class JFluSubscriberProcessor {
                 RequestEventFactory.class,
                 Subscription.class,
                 SubscriptionQuery.class
-        );
+        ).methods(true).fields(true).build();
     }
 
     static class IsEnabled implements BooleanSupplier {

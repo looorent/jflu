@@ -3,9 +3,9 @@ package be.looorent.jflu.subscriber.rabbitmq.quarkus;
 import be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionBootstraper;
 import org.jboss.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class RabbitMQSubscriptionBootstraperProducer {

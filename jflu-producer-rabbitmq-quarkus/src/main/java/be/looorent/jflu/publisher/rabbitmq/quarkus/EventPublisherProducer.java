@@ -5,9 +5,9 @@ import be.looorent.jflu.publisher.EventUnpublisher;
 import be.looorent.jflu.publisher.rabbitmq.RabbitMQEventTopicPublisher;
 import org.jboss.logging.Logger;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.Dependent;
+import jakarta.enterprise.inject.Produces;
 import java.util.Properties;
 
 import static be.looorent.jflu.publisher.rabbitmq.RabbitMQPropertyName.*;
