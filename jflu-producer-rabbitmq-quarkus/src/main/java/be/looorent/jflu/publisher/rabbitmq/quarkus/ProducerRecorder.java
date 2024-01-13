@@ -14,7 +14,7 @@ public class ProducerRecorder {
     public void configureRuntime(ProducerRuntimeConfiguration runtimeConfig,
                                  ProducerBuildConfiguration buildConfig,
                                  BeanContainer container) {
-        container.instance(EventPublisherProducer.class).init(runtimeConfig, buildConfig);
-        container.instance(EventFactoryProducer.class).init(runtimeConfig, buildConfig);
+        container.beanInstance(EventPublisherProducer.class).init(runtimeConfig, buildConfig);
+        container.beanInstance(EventFactoryProducer.class).init(runtimeConfig, buildConfig);
     }
 }
