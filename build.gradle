@@ -16,7 +16,6 @@ plugins {
     id "maven-publish"
     id "signing"
     id "com.github.ben-manes.versions" version "$outdatedVersion"
-    id "org.beryx.jlink" version "$jlinkVersion" apply false
 }
 
 def sonatypeUsername = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
@@ -28,8 +27,7 @@ def moduleProjects = [
         "jflu-producer-rabbitmq",
         "jflu-producer-springmvc",
         "jflu-subscriber-rabbitmq",
-        "jflu-subscriber-reflection",
-        "jflu-store"
+        "jflu-subscriber-reflection"
 ]
 
 subprojects {
@@ -79,6 +77,9 @@ subprojects {
         exclude "module-info.java"
         options.compilerArgs = ["--release", "8"]
     }
+
+
+    ["compileTestJava", "test", "javadoc"].each { tasks.named(it) {dependsOn "jandex" } }
 
     if (name in moduleProjects) {
         task compileModuleInfoJava(type: JavaCompile) {
@@ -238,51 +239,6 @@ project(":jflu-subscriber-rabbitmq-quarkus-deployment") {
                 "io.quarkus:quarkus-core-deployment:$quarkusVersion",
                 "io.quarkus:quarkus-arc-deployment:$quarkusVersion"
         )
-    }
-}
-
-
-
-project(":jflu-store") {
-    description = "JFlu Connector for RabbitMQ on Quarkus - deployment"
-
-    apply plugin: "java"
-    apply plugin: "org.beryx.jlink"
-    apply plugin: "application"
-
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-
-    jlink {
-        addExtraDependencies (
-                "jackson"
-        )
-        options = ["--strip-java-debug-attributes", "--compress", "2", "--no-header-files", "--no-man-pages"]
-    }
-
-    mainClassName = "jflu.subscriber.store/be.looorent.jflu.store.EventStore"
-
-    dependencies {
-        implementation (
-                project(":jflu-core"),
-                project(":jflu-subscriber-rabbitmq"),
-                project(":jflu-producer-rabbitmq"),
-                "com.google.guava:guava:$guavaVersion",
-                "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion",
-                "org.liquibase:liquibase-core:$liquibaseVersion",
-                "org.postgresql:postgresql:$postgresVersion",
-                "ch.qos.logback:logback-classic:$logbackVersion",
-                "ch.qos.logback:logback-core:$logbackVersion",
-                "javax.servlet:javax.servlet-api:$servletVersion"
-        )
-    }
-
-    task replay(type: JavaExec) {
-        classpath sourceSets.main.runtimeClasspath
-        mainClass = "be.looorent.jflu.store.ReplayService"
-        if (project.hasProperty("firstEventId")) {
-            args Eval.me(firstEventId)
-        }
     }
 }
 

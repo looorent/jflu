@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 * Support for the new API of `BeanContainer` (https://github.com/quarkusio/quarkus/issues/35744)
 * Upgrade dependencies
+* Remove project jflu-event-store
+* Remove the use of JLink
 
 ## [3.0.0] - 2023-05-09
 

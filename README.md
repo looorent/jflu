@@ -154,8 +154,6 @@ This JAR defines consumers to work with RabbitMQ.
 Based on all `EventConsumer` defined in your codebase, this implementation register them
 to a queue by binding them automatically with routing keys. This read all the valid `@EventMapping` annotation in `EventConsumer` implementations to bind them to the broker.
 
-Note that `jflu-store` is a typical use of subscribers.
-
 ### Getting started
 
 To initialize the subscription configuration, several properties must be provided (they are read from environment variables automatically):
@@ -199,74 +197,6 @@ If you want to handle this exception yourself, you can create your own implement
 CONSUMPTION_EXCEPTION_HANDLER_IMPLEMENTATION=your.custom.ExceptionHandler
 ```
 This class must be instantiable.
-
-## jflu-store
-
-Implementation for a JVM event-store that uses PostgreSQL.
-Listens for `new` (where `status=new`) events and store them into a database.
-
-### Getting started: Deploy the event store
-
-This implementation is Broker-agnostic. Therefore, you must provide:
-* An implementation of `BrokerSubscriptionConfiguration`. _e.g._ by adding `jflu-subscriber-rabbitmq` as a JAR dependency (which is already included with `jflu-store` by default)
-* `BROKER_SUBSCRIPTION_IMPLEMENTATION`: an environment variable that specifies which subclass of `BrokerSubscriptionConfiguration` to use. _e.g._ `be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration`
-
-
-For instance, this project can be deployed in a Docker container:
-```
-FROM cogniteev/gradle
-
-RUN apt-get update && \
-  apt-get install -y git && \
-  git clone https://github.com/looorent/jflu.git
-
-WORKDIR /data/jflu
-
-CMD ["gradle", "jflu-store:run"]
-```
-
-This container must depend on a broker and PostgreSQL. For example, using `docker-compose`:
-
-```
-  event-store:
-    build: event_store
-    container_name: event-store
-    env:
-      - DATABASE_HOST: <xxx>
-      - DATABASE_NAME: <xxx>
-      - DATABASE_USERNAME: <xxx>
-      - DATABASE_PORT: <xxx>
-      - DATABASE_PASSWORD: <xxx>
-      - RABBITMQ_USERNAME: <xxx>
-      - RABBITMQ_PASSWORD: <xxx>
-      - RABBITMQ_HOST: <xxx>
-      - RABBITMQ_PORT: <xxx>
-      - RABBITMQ_VIRTUAL_HOST: <xxx>
-      - RABBITMQ_EXCHANGE_NAME: <xxx>
-      - RABBITMQ_QUEUE_NAME: <xxx>
-      - RABBITMQ_QUEUE_DURABLE: <xxx>
-      - RABBITMQ_WAIT_FOR_CONNECTION: <xxx>
-      - RABBITMQ_USE_SSL: true
-      - BROKER_SUBSCRIPTION_IMPLEMENTATION=be.looorent.jflu.subscriber.rabbitmq.RabbitMQSubscriptionConfiguration
-    links:
-      - db
-      - rabbitmq
-```
-where:
-* `event_store` contains your `Dockerfile`
-* `db` is a PostgreSQL serviceEventMappingKind
-* `rabbitmq` is a RabbitMQ service (you can use any broker depending on the implementation you provide)
-
-### Getting started: Replay events
-
-To replay events from the store, use a gradle task such as:
-```
-gradle replay -PfirstEventId=<firstEventId>
-```
-where `<firstEventId>` if the store id of the first event to replay (default: 0). Therefore, you can replay events from a specific moment in time.
-
-You can also use the `ReplayService` programmatically.
-
 
 ## Release
 
