@@ -6,7 +6,6 @@ For now, events are generated from:
 * Entity CRUD operations
 * HTTP requests
 
-This requires Java 8. However, feel free to propose any _Pull Request_ to make it compatible with Java 7 if you need it (or simply fork it for your own use).
 
 This project is decoupled in a set of JAR you can pick up depending on your own dependency needs. Default implementation are provided for:
 * Hibernate
@@ -17,7 +16,7 @@ This project is decoupled in a set of JAR you can pick up depending on your own 
 
 All librairies are available on Maven Central. For example, `jflu-subscriber-rabbitmq` can be included in your dependencies like this (Gradle example):
 ```groovy
-implementation "be.looorent:jflu-subscriber-rabbitmq:3.0.2"
+implementation "be.looorent:jflu-subscriber-rabbitmq:3.0.3"
 ```
 
 ## `jflu-core`
@@ -201,8 +200,11 @@ This class must be instantiable.
 ## Release
 
 ```shell
-./gradlew clean build
+./gradlew build 
+./gradlew jreleaserConfig
+./gradlew clean
 ./gradlew publish
+./gradlew jreleaserFullRelease
 ```
 
 ## Quarkus support

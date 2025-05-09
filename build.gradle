@@ -14,12 +14,9 @@ plugins {
     id "java-library"
     id "groovy"
     id "maven-publish"
-    id "signing"
     id "com.github.ben-manes.versions" version "$outdatedVersion"
+    id "org.jreleaser" version "$jReleaserVersion"
 }
-
-def sonatypeUsername = hasProperty("ossrhUser") ? ossrhUser : System.getenv("ossrhUser")
-def sonatypePassword = hasProperty("ossrhPassword") ? ossrhPassword : System.getenv("ossrhPassword")
 
 def moduleProjects = [
         "jflu-core",
@@ -29,6 +26,9 @@ def moduleProjects = [
         "jflu-subscriber-rabbitmq",
         "jflu-subscriber-reflection"
 ]
+
+group = "be.looorent"
+version "3.0.3"
 
 subprojects {
     group "net.commuty"
@@ -42,7 +42,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_21
 
     group = "be.looorent"
-    version "3.0.2"
+    version "3.0.3"
 
     repositories {
         mavenCentral()
@@ -65,6 +65,7 @@ subprojects {
                 "org.junit.vintage:junit-vintage-engine:$junitVersion",
                 "org.spockframework:spock-core:$spockVersion",
                 "cglib:cglib-nodep:$cglibVersion",
+                "net.bytebuddy:byte-buddy:$byteBuddyVersion",
                 "org.objenesis:objenesis:$objenesisVersion"
         )
     }
@@ -75,9 +76,7 @@ subprojects {
 
     compileJava {
         exclude "module-info.java"
-        options.compilerArgs = ["--release", "8"]
     }
-
 
     ["compileTestJava", "test", "javadoc"].each { tasks.named(it) {dependsOn "jandex" } }
 
@@ -244,7 +243,6 @@ project(":jflu-subscriber-rabbitmq-quarkus-deployment") {
 
 subprojects {
     apply plugin: "maven-publish"
-
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -287,20 +285,30 @@ subprojects {
 
         repositories {
             maven {
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-                url = version.endsWith("SNAPSHOT") ? snapshotsRepoUrl : releasesRepoUrl
-                allowInsecureProtocol=true
-                credentials {
-                    username sonatypeUsername
-                    password sonatypePassword
+                url = layout.buildDirectory.dir('staging-deploy')
+            }
+        }
+    }
+
+    apply plugin: "org.jreleaser"
+    jreleaser {
+        gitRootSearch = true
+        signing {
+            active = "ALWAYS"
+            armored = true
+        }
+        deploy {
+            maven {
+                mavenCentral {
+                    sonatype {
+                        active = "ALWAYS"
+                        url = "https://central.sonatype.com/api/v1/publisher"
+                        stagingRepository('build/staging-deploy')
+                    }
                 }
             }
         }
     }
 
-    apply plugin: "signing"
-    signing {
-        sign publishing.publications.mavenJava
-    }
 }
+
