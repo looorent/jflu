@@ -1,7 +1,7 @@
 package be.looorent.jflu.publisher.rabbitmq.quarkus.deployment;
 
-import be.looorent.jflu.EventSerializer;
 import be.looorent.jflu.*;
+import be.looorent.jflu.EventSerializer;
 import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
 import be.looorent.jflu.entity.*;
@@ -13,7 +13,6 @@ import be.looorent.jflu.publisher.rabbitmq.RabbitMQConnectionFactory;
 import be.looorent.jflu.publisher.rabbitmq.RabbitMQPropertyName;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerBuildConfiguration;
 import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRecorder;
-import be.looorent.jflu.publisher.rabbitmq.quarkus.ProducerRuntimeConfiguration;
 import be.looorent.jflu.request.RequestEventFactory;
 import be.looorent.jflu.subscriber.*;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
@@ -38,21 +37,16 @@ public class JFluProducerProcessor {
 
     @Record(ExecutionTime.STATIC_INIT)
     @BuildStep(onlyIf = IsEnabled.class)
-    public void configureBuild(ProducerRecorder recorder,
-                               ProducerBuildConfiguration buildConfiguration,
-                               BeanContainerBuildItem beanContainer) {
-        LOGGER.infof("Configure Build of JFlu - RabbitMQ producer: %s", buildConfiguration);
-        recorder.configureBuild(buildConfiguration, beanContainer.getValue());
+    public void configureBuild(ProducerRecorder recorder, BeanContainerBuildItem beanContainer) {
+        LOGGER.infof("Configure Build of JFlu - RabbitMQ producer");
+        recorder.configureBuild(beanContainer.getValue());
     }
 
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep(onlyIf = IsEnabled.class)
-    public void configureProducer(ProducerRecorder recorder,
-                                  ProducerRuntimeConfiguration runtimeConfiguration,
-                                  ProducerBuildConfiguration buildConfiguration,
-                                  BeanContainerBuildItem beanContainer) {
-        LOGGER.infof("Configure Runtime of JFlu - RabbitMQ producer: %s", runtimeConfiguration);
-        recorder.configureRuntime(runtimeConfiguration, buildConfiguration, beanContainer.getValue());
+    public void configureProducer(ProducerRecorder recorder, BeanContainerBuildItem beanContainer) {
+        LOGGER.infof("Configure Runtime of JFlu - RabbitMQ producer");
+        recorder.configureRuntime(beanContainer.getValue());
     }
 
     @BuildStep(onlyIf = IsEnabled.class)
@@ -98,7 +92,7 @@ public class JFluProducerProcessor {
         ProducerBuildConfiguration configuration;
 
         public boolean getAsBoolean() {
-            return configuration.enabled;
+            return configuration.enabled();
         }
     }
 }

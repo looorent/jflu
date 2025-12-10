@@ -17,7 +17,7 @@ public class EventFactoryProducer {
     @Produces
     @Dependent
     public ManualEventFactory produceManualEventFactory() {
-        String emitter = isEnabled() ? runtimeConfiguration.emitter : "[JFluDisabled]";
+        String emitter = isEnabled() ? runtimeConfiguration.emitter() : "[JFluDisabled]";
         LOGGER.infof("Instanciate manual event factory for emitter='%s'", emitter);
         return new ManualEventFactory(emitter);
     }
@@ -28,6 +28,6 @@ public class EventFactoryProducer {
     }
 
     private boolean isEnabled() {
-        return buildConfiguration != null && buildConfiguration.enabled;
+        return buildConfiguration != null && buildConfiguration.enabled();
     }
 }

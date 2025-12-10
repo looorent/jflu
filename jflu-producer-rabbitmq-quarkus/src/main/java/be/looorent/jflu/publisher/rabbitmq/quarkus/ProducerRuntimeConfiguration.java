@@ -1,86 +1,67 @@
 package be.looorent.jflu.publisher.rabbitmq.quarkus;
 
-import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
 
 import java.util.Optional;
 import java.util.OptionalInt;
 
 import static io.quarkus.runtime.annotations.ConfigPhase.RUN_TIME;
 
-@ConfigRoot(name = "jflu.producer.rabbitmq", phase = RUN_TIME)
-public class ProducerRuntimeConfiguration {
+@ConfigMapping(prefix = "quarkus.jflu.producer.rabbitmq")
+@ConfigRoot(phase = RUN_TIME)
+public interface ProducerRuntimeConfiguration {
     /**
      * RabbitMQ's username
      */
-    @ConfigItem
-    public Optional<String> username;
+    Optional<String> username();
 
     /**
      * RabbitMQ's password
      */
-    @ConfigItem
-    public Optional<String> password;
+    Optional<String> password();
 
     /**
      * RabbitMQ's host
      */
-    @ConfigItem
-    public String host;
+    String host();
 
     /**
      * RabbitMQ's port
      */
-    @ConfigItem(defaultValue = "5672")
-    public OptionalInt port;
+    @WithDefault("5672")
+    OptionalInt port();
 
     /**
      * RabbitMQ's virtual host
      */
-    @ConfigItem(defaultValue = "/")
-    public Optional<String> virtualHost;
+    @WithDefault("/")
+    Optional<String> virtualHost();
     /**
      * RabbitMQ's exchange name
      */
-    @ConfigItem
-    public String exchangeName;
+    String exchangeName();
 
     /**
      * Name of emitter for each event
      */
-    @ConfigItem
-    public String emitter;
+    String emitter();
 
     /**
      * Whether the event must be flagged with "exchange durable" or not
      */
-    @ConfigItem
-    public boolean exchangeDurable;
+    boolean exchangeDurable();
 
     /**
      * Wait for RabbitMQ to be reachable
      */
-    @ConfigItem(defaultValue = "false")
-    public boolean waitForConnection;
+    @WithDefault("false")
+    boolean waitForConnection();
 
     /**
      * Use SSL with the RabbitMQ's management API or not
      */
-    @ConfigItem(defaultValue = "false")
-    public boolean useSsl;
-
-    @Override
-    public String toString() {
-        return "ProducerRuntimeConfiguration{" +
-                "username=" + username +
-                ", host='" + host + '\'' +
-                ", port=" + port +
-                ", virtualHost=" + virtualHost +
-                ", exchangeName='" + exchangeName + '\'' +
-                ", emitter='" + emitter + '\'' +
-                ", exchangeDurable=" + exchangeDurable +
-                ", waitForConnection=" + waitForConnection +
-                ", useSsl=" + useSsl +
-                '}';
-    }
+    @WithDefault("false")
+    boolean useSsl();
 }
