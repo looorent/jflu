@@ -1,7 +1,7 @@
 package be.looorent.jflu.subscriber.rabbitmq.quarkus.deployment;
 
-import be.looorent.jflu.EventSerializer;
 import be.looorent.jflu.*;
+import be.looorent.jflu.EventSerializer;
 import be.looorent.jflu.EventSerializer.EventDataDeserializer;
 import be.looorent.jflu.EventSerializer.TimestampDeserializer;
 import be.looorent.jflu.entity.*;
@@ -15,7 +15,6 @@ import be.looorent.jflu.subscriber.rabbitmq.*;
 import be.looorent.jflu.subscriber.rabbitmq.quarkus.RabbitMQSubscriptionBootstraperProducer;
 import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberBuildConfiguration;
 import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberRecorder;
-import be.looorent.jflu.subscriber.rabbitmq.quarkus.SubscriberRuntimeConfiguration;
 import io.quarkus.arc.deployment.BeanContainerBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -39,21 +38,16 @@ public class JFluSubscriberProcessor {
 
     @Record(ExecutionTime.STATIC_INIT)
     @BuildStep(onlyIf = IsEnabled.class)
-    public void configureBuild(SubscriberRecorder recorder,
-                               SubscriberBuildConfiguration buildConfiguration,
-                               BeanContainerBuildItem beanContainer) {
-        LOGGER.infof("Configure Build of JFlu - RabbitMQ subscriber: %s", buildConfiguration);
-        recorder.configureBuild(buildConfiguration, beanContainer.getValue());
+    public void configureBuild(SubscriberRecorder recorder, BeanContainerBuildItem beanContainer) {
+        LOGGER.infof("Configure Build of JFlu - RabbitMQ subscriber");
+        recorder.configureBuild(beanContainer.getValue());
     }
 
     @Record(ExecutionTime.RUNTIME_INIT)
     @BuildStep
-    public ServiceStartBuildItem configureSubscriber(SubscriberRecorder recorder,
-                                                     SubscriberRuntimeConfiguration runtimeConfiguration,
-                                                     SubscriberBuildConfiguration buildConfiguration,
-                                                     BeanContainerBuildItem beanContainer) {
-        LOGGER.infof("Configure Runtime of JFlu - RabbitMQ subscriber: %s", runtimeConfiguration);
-        recorder.configureRuntime(runtimeConfiguration, buildConfiguration, beanContainer.getValue());
+    public ServiceStartBuildItem configureSubscriber(SubscriberRecorder recorder, BeanContainerBuildItem beanContainer) {
+        LOGGER.infof("Configure Runtime of JFlu - RabbitMQ subscriber");
+        recorder.configureRuntime(beanContainer.getValue());
         return new ServiceStartBuildItem("");
     }
 
@@ -107,7 +101,7 @@ public class JFluSubscriberProcessor {
         SubscriberBuildConfiguration configuration;
 
         public boolean getAsBoolean() {
-            return configuration.enabled;
+            return configuration.enabled();
         }
     }
 }
