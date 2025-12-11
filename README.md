@@ -16,7 +16,7 @@ This project is decoupled in a set of JAR you can pick up depending on your own 
 
 All librairies are available on Maven Central. For example, `jflu-subscriber-rabbitmq` can be included in your dependencies like this (Gradle example):
 ```groovy
-implementation "be.looorent:jflu-subscriber-rabbitmq:3.0.4"
+implementation "be.looorent:jflu-subscriber-rabbitmq:3.0.6"
 ```
 
 ## `jflu-core`
@@ -203,8 +203,8 @@ This class must be instantiable.
 ./gradlew build 
 ./gradlew jreleaserConfig
 ./gradlew clean
-./gradlew publish
-./gradlew jreleaserFullRelease
+./gradlew publishAllPublicationsToStagingRepository
+./gradlew :jreleaserFullRelease
 ```
 
 ## Quarkus support

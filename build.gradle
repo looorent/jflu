@@ -28,7 +28,7 @@ def moduleProjects = [
 ]
 
 group = "be.looorent"
-version "3.0.4"
+version "3.0.6"
 
 subprojects {
     group "net.commuty"
@@ -42,7 +42,7 @@ subprojects {
     targetCompatibility = JavaVersion.VERSION_21
 
     group = "be.looorent"
-    version "3.0.4"
+    version "3.0.6"
 
     repositories {
         mavenCentral()
@@ -285,30 +285,35 @@ subprojects {
 
         repositories {
             maven {
-                url = layout.buildDirectory.dir('staging-deploy')
+                name = "Staging"
+                url = rootProject.layout.buildDirectory.dir('staging-deploy')
             }
         }
     }
+}
 
-    apply plugin: "org.jreleaser"
-    jreleaser {
-        gitRootSearch = true
-        signing {
-            active = "ALWAYS"
-            armored = true
-        }
-        deploy {
-            maven {
-                mavenCentral {
-                    sonatype {
-                        active = "ALWAYS"
-                        url = "https://central.sonatype.com/api/v1/publisher"
-                        stagingRepository('build/staging-deploy')
-                    }
+apply plugin: "org.jreleaser"
+jreleaser {
+    gitRootSearch = true
+    signing {
+        active = "ALWAYS"
+        armored = true
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = "ALWAYS"
+                    url = "https://central.sonatype.com/api/v1/publisher"
+                    stagingRepository('build/staging-deploy')
                 }
             }
         }
     }
-
+    release {
+        github {
+            overwrite = true
+        }
+    }
 }
 
